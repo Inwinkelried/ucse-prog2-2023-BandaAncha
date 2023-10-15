@@ -1,0 +1,58 @@
+Nota Importante: Todas las entidades tienen fecha de creación y fecha de última actualización. Siempre se actualizan con la fecha del sistema.
+
+1. Entidades
+
+Productos
+
+Cada producto tiene un código único, tipo (golosinas, bebidas, cigarrillos, comestibles, higiene y salud), nombre, peso unitario, precio unitario, stock mínimo y cantidad en stock.
+Camiones
+
+Cada camión tiene una patente única, peso máximo y costo por kilómetro.
+Clientes
+
+Los clientes pueden generar pedidos. Cada pedido incluye una lista de productos elegidos con sus cantidades y la ciudad de entrega. Los pedidos comienzan en estado PENDIENTE y pueden ser marcados como CANCELADOS, pero nunca se eliminan completamente.
+2. Operaciones sobre las Entidades
+
+CRUD de Productos, Camiones y Clientes
+
+Implementar operaciones CRUD completas para productos, camiones y clientes.
+Pedidos
+
+Los pedidos se inician en estado PENDIENTE y pueden ser marcados como CANCELADOS.
+Un operador valida manualmente si hay suficiente stock para iniciar el envío. Si hay suficiente stock, el pedido se marca como ACEPTADO, pero el stock no se descuenta de inmediato. No se puede cancelar un pedido una vez que ha sido aceptado.
+Envíos
+
+Un conductor de un camión puede seleccionar pedidos aprobados y generar un nuevo envío. El envío comienza en estado A DESPACHAR.
+El estado del envío cambia a EN RUTA cuando el camión inicia el viaje. El conductor puede hacer múltiples paradas, registrando la ciudad y los kilómetros recorridos.
+Cuando llega a destino, el envío se marca como DESPACHADO. En este punto, se descuenta el stock de los productos enviados y el pedido se marca como ENVIADO.
+3. Informes para Gerencia
+
+Lista de Productos con Stock Bajo
+
+Se puede filtrar por tipo de producto.
+Lista de Pedidos
+
+Se puede filtrar por código de envío, estado y rango de fecha de creación.
+Lista de Envíos
+
+Se puede filtrar por patente de camión, estado, ciudad (última parada) y rango de fecha de creación.
+4. Resumen para Gráficos
+
+Pedidos
+
+Mostrar cantidades por estado.
+Envíos
+
+Mostrar cantidades por estado.
+Beneficios
+
+Calcular montos totales en un rango de fechas (suma de pedidos y resta de costos de envío).
+5. Notas Técnicas
+
+Generar un contenedor de MongoDB para la base de datos.
+Desarrollar una aplicación en GoLang para la API.
+Implementar una aplicación HTML para la interfaz de usuario.
+Cumplir con la estructura de archivos vista en clases en la API.
+Evitar el uso de tipos de datos nativos en los parámetros.
+Aplicar cuidado especial en el estilo de código.
+Agregar todas las validaciones necesarias en todos los servicios.
