@@ -1,4 +1,4 @@
-module main.go
+module github.com/Inwinkelried/ucse-prog2-2023-BandaAncha
 
 go 1.21.0
 

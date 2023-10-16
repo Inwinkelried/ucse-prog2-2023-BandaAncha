@@ -8,14 +8,13 @@ import (
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
-	"main.go/model"
 )
 
 type CamionRepositoryInterface interface {
 	ObtenerCamiones() ([]model.Camion, error)
 	EliminarCamion(id primitive.ObjectID) (*mongo.DeleteResult, error)
-	InsertarAula(camion model.Camion) (*mongo.InsertOneResult, error)
-	ModificarAula(camion model.Camion) (*mongo.UpdateResult, error)
+	InsertarCamion(camion model.Camion) (*mongo.InsertOneResult, error)
+	ModificarCamion(camion model.Camion) (*mongo.UpdateResult, error)
 }
 type CamionRepository struct {
 	db DB
@@ -46,4 +45,28 @@ func (repo CamionRepository) ObtenerCamiones() ([]model.Camion, error) {
 		Camiones = append(Camiones, Camion)
 	}
 	return Camiones, err
+}
+
+// Metodo para instertar un camion nuevo
+func (repo CamionRepository) InsertarCamion(camion model.Camion) (*mongo.InsertOneResult, error) {
+	lista := repo.db.GetClient().Database("BandaAncha").Collection("Camiones")
+	resultado, err := lista.InsertOne(context.TODO(), camion)
+	return resultado, err
+}
+
+// Metodo para modificar un camion
+func (repo CamionRepository) ModificarCamion(camion model.Camion) (*mongo.UpdateResult, error) {
+	lista := repo.db.GetClient().Database("BandaAncha").Collection("Camiones")
+	filtro := bson.M{"_id": camion.ID}
+	entity := bson.M{"$set": bson.M{"nombre": camion.Patente}}
+	resultado, err := lista.UpdateOne(context.TODO(), filtro, entity)
+	return resultado, err
+}
+
+// Metodo para eliminar un camion
+func (repo CamionRepository) EliminarCamion(id primitive.ObjectID) (*mongo.DeleteResult, error) {
+	lista := repo.db.GetClient().Database("BandaAncha").Collection("Camiones")
+	filtro := bson.M{"_id": id}
+	resultado, err := lista.DeleteOne(context.TODO(), filtro)
+	return resultado, err
 }
