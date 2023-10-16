@@ -1,6 +1,8 @@
 package dto
 
-import "time"
+import (
+	"time"
+)
 
 type Camion struct {
 	ID                string
@@ -10,3 +12,5 @@ type Camion struct {
 	FechaCreacion     time.Time
 	FechaModificacion time.Time
 }
+
+func NewCamion()
