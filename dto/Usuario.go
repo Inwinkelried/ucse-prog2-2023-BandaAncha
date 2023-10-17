@@ -1,11 +1,23 @@
 package dto
 
-import "time"
+import (
+	"github.com/Inwinkelried/ucse-prog2-2023-BandaAncha/clients/responses"
+)
 
 type Usuario struct {
-	ID                string
-	Nombre            string
-	Pedidos           []Pedido
-	FechaCreacion     time.Time
-	FechaModificacion time.Time
+	Codigo   string `json:codigo`
+	Email    string `json:email`
+	Username string `json:username`
+	Rol      string `json:rol`
+}
+
+func NewUser(userInfo *responses.UserInfo) Usuario {
+	usuario := Usuario{}
+	if userInfo != nil {
+		usuario.Codigo = userInfo.Codigo
+		usuario.Username = userInfo.Username
+		usuario.Email = userInfo.Email
+		usuario.Rol = userInfo.Rol
+	}
+	return usuario
 }
