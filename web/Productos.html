@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Lista de Productos</title>
+</head>
+<body>
+    <h1>Lista de Productos</h1>
+    <table border="1">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Nombre</th>
+                <th>Precio Unitario</th>
+                <th>Stock Mínimo</th>
+                <th>Stock Actual</th>
+                <th></th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            </tbody>
+    </table>
+    <script>
+        // Función para cargar los productos
+        function cargarProductos() {
+            // Obtenemos los productos de la API
+            fetch("api/productos")
+                .then(response => response.json())
+                .then(productos => {
+                    // Recorremos los productos y los agregamos a la tabla
+                    productos.forEach(producto => {
+                        let fila = document.createElement("tr");
+                        fila.innerHTML = `
+                            <td>${producto.id}</td>
+                            <td>${producto.nombre}</td>
+                            <td>${producto.precioUnitario}</td>
+                            <td>${producto.stockMinimo}</td>
+                            <td>${producto.stockActual}</td>
+                            <td><button type="button" onclick="editarProducto(${producto.id})">Editar</button></td>
+                            <td><button type="button" onclick="borrarProducto(${producto.id})">Borrar</button></td>
+                        `;
+                        document.querySelector("tbody").appendChild(fila);
+                    });
+                });
+        }
+
+        // Función para editar un producto
+        function editarProducto(id) {
+            // Redireccionamos a la pantalla de edición
+            window.location.href = "editar-producto.html?id=" + id;
+        }
+
+        // Función para borrar un producto
+        function borrarProducto(id) {
+            // Confirmamos la eliminación
+            if (confirm("¿Estás seguro de que quieres borrar este producto?")) {
+                // Eliminamos el producto de la API
+                fetch("api/productos/" + id, {
+                    method: "DELETE"
+                })
+                    .then(response => {
+                        // Actualizamos la tabla
+                        cargarProductos();
+                    });
+            }
+        }
+
+        // Cargamos los productos al inicio
+        cargarProductos();
+    </script>
+</body>
+</html>
