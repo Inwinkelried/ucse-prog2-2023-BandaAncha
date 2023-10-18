@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Ejemplo de Formulario</title>
+</head>
+<body>
+    <h1>Formulario de Contacto</h1>
+    
+    <form action="procesar.php" method="post">
+        <!-- Campo de texto -->
+        <label for="nombre">Nombre:</label>
+        <input type="text" id="nombre" name="nombre" required>
+        
+        <!-- Campo de correo electrónico -->
+        <label for="email">Correo Electrónico:</label>
+        <input type="email" id="email" name="email" required>
+        
+        <!-- Casilla de verificación -->
+        <label>¿Desea recibir nuestro boletín?</label>
+        <input type="checkbox" id="boletin" name="boletin">
+        
+        <!-- Botón de radio -->
+        <label>Género:</label>
+        <input type="radio" id="masculino" name="genero" value="masculino">
+        <label for="masculino">Masculino</label>
+        <input type="radio" id="femenino" name="genero" value="femenino">
+        <label for="femenino">Femenino</label>
+        
+        <!-- Área de texto -->
+        <label for="comentarios">Comentarios:</label>
+        <textarea id="comentarios" name="comentarios" rows="4" cols="50"></textarea>
+        
+        <!-- Menú desplegable -->
+        <label for="pais">País:</label>
+        <select id="pais" name="pais">
+            <option value="usa">Estados Unidos</option>
+            <option value="canada">Canadá</option>
+            <option value="mexico">México</option>
+            <!-- Agrega más opciones según sea necesario -->
+        </select>
+        
+        <!-- Botón de envío -->
+        <input type="submit" value="Enviar">
+    </form>
+</body>
+</html>
