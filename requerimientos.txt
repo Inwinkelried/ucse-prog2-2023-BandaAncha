@@ -1,5 +1,33 @@
 Nota Importante: Todas las entidades tienen fecha de creación y fecha de última actualización. Siempre se actualizan con la fecha del sistema.
 
+los servicios usan repositorios, no otros servicios.
+El repositorio debe buscar el objeto completo. Luego el servicio filtra lo que necesita
+
+Para el login:
+FRONT: 
+login.html
+
+login.js:
+1- pega a un server con user y pass 
+2- si fue ok, 
+	1. guarda el token en localstorage (bd dentro del navegador)
+	2. redirige a index.html
+
+BACK:
+request.js: hace todas las peticiones al backend
+- 401: REDIRIGE A LOGIN HTML
+
+SERVIDORES:
+- SERVIDOR DE USUARIOS:
+- BACKEND EN GO
+
+login.html y register.html (nos lo da maxi) pega al servidor de usuarios, y el server devuelve un token. (lo hacemos nosotros)  
+Si la pegada es privada, agrego el token. Sino, no.
+get user info (token) devuelve el id, mail y blabla (copiamos de github)
+
+
+
+
 1. Entidades
 
 Producto
