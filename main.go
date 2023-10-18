@@ -10,8 +10,9 @@ import (
 )
 
 var (
-	camionHandler *handlers.CamionHandler
-	router        *gin.Engine
+	camionHandler   *handlers.CamionHandler
+	productoHandler *handlers.ProductoHandler
+	router          *gin.Engine
 )
 
 func main() {
@@ -35,11 +36,19 @@ func mappingRoutes() {
 
 	//Listado de rutas
 	groupCamion := router.Group("/trucks")
+	groupProducto := router.Group("/products")
 	//Uso del middleware para todas las rutas del grupo
 	//group.Use(authMiddleware.ValidateToken)
-
 	//group.Use(middlewares.CORSMiddleware())
 
+	//PRODUCTOS
+	groupProducto.GET("/", camionHandler.ObtenerCamiones)
+	//group.GET("/:id", aulaHandler.ObtenerAulaPorID)
+	groupProducto.POST("/", camionHandler.InsertarCamion)
+	groupProducto.PUT("/:id", camionHandler.ModificarCamion)
+	groupProducto.DELETE("/:id", camionHandler.EliminarCamion)
+
+	//CAMIONES
 	groupCamion.GET("/", camionHandler.ObtenerCamiones)
 	//group.GET("/:id", aulaHandler.ObtenerAulaPorID)
 	groupCamion.POST("/", camionHandler.InsertarCamion)
@@ -49,11 +58,18 @@ func mappingRoutes() {
 }
 func dependencies() {
 	var database repositories.DB
+	database = repositories.NewMongoDB()
+
+	//CAMIONES
 	var camionRepo repositories.CamionRepositoryInterface
 	var camionService services.CamionInterface
-
-	database = repositories.NewMongoDB()
 	camionRepo = repositories.NewCamionRepository(database)
 	camionService = services.NewCamionService(camionRepo)
 	camionHandler = handlers.NewCamionHandler(camionService)
+	//PRODUCTOS
+	var productoRepo repositories.ProductoRepositoryInterface
+	var productoService services.ProductoInterface
+	productoRepo = repositories.NewProductoRepository(database)
+	productoService = services.NewProductoService(productoRepo)
+	productoHandler = handlers.NewProductoHandler(productoService)
 }
