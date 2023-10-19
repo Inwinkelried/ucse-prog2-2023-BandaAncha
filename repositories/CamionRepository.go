@@ -58,7 +58,7 @@ func (repo CamionRepository) InsertarCamion(camion model.Camion) (*mongo.InsertO
 func (repo CamionRepository) ModificarCamion(camion model.Camion) (*mongo.UpdateResult, error) {
 	lista := repo.db.GetClient().Database("BandaAncha").Collection("Camiones")
 	filtro := bson.M{"_id": camion.ID}
-	entity := bson.M{"$set": bson.M{"nombre": camion.Patente}}
+	entity := bson.M{"$set": bson.M{"CostoPorKilometro": camion.CostoKm}}
 	resultado, err := lista.UpdateOne(context.TODO(), filtro, entity)
 	return resultado, err
 }
