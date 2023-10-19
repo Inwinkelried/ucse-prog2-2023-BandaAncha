@@ -20,7 +20,7 @@ func NewProductoHandler(productoService services.ProductoInterface) *ProductoHan
 }
 func (handler *ProductoHandler) ObtenerProductos(c *gin.Context) {
 	productos := handler.ProductoService.ObtenerProductos()
-	log.Printf("[handler:ProductoHandler][method:ObtenerProductos][productos:%v][cantidad:%s]", productos, len(productos))
+	log.Printf("[handler:ProductoHandler][method:ObtenerProductos][productos:%v][cantidad:%d]", productos, len(productos))
 	c.JSON(http.StatusOK, productos)
 }
 func (handler *ProductoHandler) InsertarProducto(c *gin.Context) {

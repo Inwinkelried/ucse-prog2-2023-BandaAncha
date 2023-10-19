@@ -8,7 +8,7 @@ import (
 
 type PedidoServiceInterface interface {
 	ObtenerPedidos() []*dto.Pedido
-	InstertarPedido(pedido *dto.Pedido) bool
+	InsertarPedido(pedido *dto.Pedido) bool
 	EliminarPedido(id string) bool
 	ModificarPedido(pedido *dto.Pedido) bool
 }
@@ -22,7 +22,7 @@ func NewPedidoService(pedidoRepository repositories.PedidoRepositoryInterface) *
 		pedidoRepository: pedidoRepository,
 	}
 }
-func (service PedidoService) ObtenerPedidos() *[]dto.Pedido {
+func (service PedidoService) ObtenerPedidos() []*dto.Pedido {
 	pedidosDB, _ := service.pedidoRepository.ObtenerPedidos()
 	var pedidos []*dto.Pedido
 	for _, pedidodDB := range pedidosDB {

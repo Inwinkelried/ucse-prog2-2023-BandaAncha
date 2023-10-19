@@ -21,9 +21,7 @@ type PedidoRepository struct {
 }
 
 func NewPedidoRepository(db DB) *PedidoRepository {
-	return &PedidoRepository{
-		db: db,
-	}
+	return &PedidoRepository{db: db}
 }
 func (repo PedidoRepository) ObtenerPedidos() ([]model.Pedido, error) {
 	lista := repo.db.GetClient().Database("BandaAncha").Collection("Pedidos")

@@ -12,6 +12,7 @@ import (
 var (
 	camionHandler   *handlers.CamionHandler
 	productoHandler *handlers.ProductoHandler
+	pedidoHandler   *handlers.PedidoHandler
 	router          *gin.Engine
 )
 
@@ -37,16 +38,22 @@ func mappingRoutes() {
 	//Listado de rutas
 	groupCamion := router.Group("/trucks")
 	groupProducto := router.Group("/products")
+	groupPedido := router.Group("/orders")
 	//Uso del middleware para todas las rutas del grupo
 	//group.Use(authMiddleware.ValidateToken)
 	//group.Use(middlewares.CORSMiddleware())
-
-	//PRODUCTOS
-	groupProducto.GET("/", camionHandler.ObtenerCamiones)
+	//PEDIDOS
+	groupPedido.GET("/", pedidoHandler.ObtenerPedidos)
 	//group.GET("/:id", aulaHandler.ObtenerAulaPorID)
-	groupProducto.POST("/", camionHandler.InsertarCamion)
-	groupProducto.PUT("/:id", camionHandler.ModificarCamion)
-	groupProducto.DELETE("/:id", camionHandler.EliminarCamion)
+	groupPedido.POST("/", pedidoHandler.InsertarPedido)
+	groupPedido.PUT("/:id", pedidoHandler.ModificarPedido)
+	groupPedido.DELETE("/:id", pedidoHandler.EliminarPedido)
+	//PRODUCTOS
+	groupProducto.GET("/", productoHandler.ObtenerProductos)
+	//group.GET("/:id", aulaHandler.ObtenerAulaPorID)
+	groupProducto.POST("/", productoHandler.InsertarProducto)
+	groupProducto.PUT("/:id", productoHandler.ModificarProducto)
+	groupProducto.DELETE("/:id", productoHandler.EliminarProducto)
 
 	//CAMIONES
 	groupCamion.GET("/", camionHandler.ObtenerCamiones)
@@ -72,4 +79,11 @@ func dependencies() {
 	productoRepo = repositories.NewProductoRepository(database)
 	productoService = services.NewProductoService(productoRepo)
 	productoHandler = handlers.NewProductoHandler(productoService)
+	//PEDIDOS
+	var pedidoRepo repositories.PedidoRepositoryInterface
+	var pedidoService services.PedidoServiceInterface
+	pedidoRepo = repositories.NewPedidoRepository(database)
+	pedidoService = services.NewPedidoService(pedidoRepo)
+	pedidoHandler = handlers.NewPedidoHandler(pedidoService)
+
 }
