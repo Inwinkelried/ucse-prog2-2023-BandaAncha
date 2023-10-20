@@ -34,10 +34,12 @@ func (service *EnvioService) InsertarEnvio(envio *dto.Envio) bool {
 	return true
 }
 func (service *EnvioService) EnRutaEnvio(envio *dto.Envio) bool {
-	service.envioRepository.EnRutaEnvio(envio.GetModel())
+	envio.Estado = "En Ruta"
+	service.envioRepository.ActualizarEnvio(envio.GetModel())
 	return true
 }
 func (service *EnvioService) DespachadoEnvio(envio *dto.Envio) bool {
-	service.envioRepository.DespachadoEnvio(envio.GetModel())
+	envio.Estado = "Despachado"
+	service.envioRepository.ActualizarEnvio(envio.GetModel())
 	return true
 }

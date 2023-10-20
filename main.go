@@ -56,10 +56,7 @@ func mappingRoutes() {
 	groupPedido.GET("/", pedidoHandler.ObtenerPedidos)
 	//group.GET("/:id", aulaHandler.ObtenerAulaPorID)
 	groupPedido.POST("/", pedidoHandler.InsertarPedido)
-	groupPedido.PUT("/Confirm/:id", pedidoHandler.AceptarPedido)
-	groupPedido.PUT("/Cancel/:id", pedidoHandler.CancelarPedido)
-	groupPedido.PUT("/Send/:id", pedidoHandler.ParaEnviarPedido)
-	groupPedido.PUT("/Sent/:id", pedidoHandler.EnviadoPedido)
+	groupPedido.GET("/Approved", pedidoHandler.ObtenerPedidosAprobados)
 
 	//PRODUCTOS
 	groupProducto.GET("/", productoHandler.ObtenerProductos)
