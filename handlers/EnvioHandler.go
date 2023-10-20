@@ -34,13 +34,23 @@ func (handler *EnvioHandler) InsertarEnvio(c *gin.Context) {
 	resultado := handler.envioService.InsertarEnvio(&envio)
 	c.JSON(http.StatusCreated, resultado)
 }
-func (handler *EnvioHandler) ModificarEnvio(c *gin.Context) {
+func (handler *EnvioHandler) DespachadoEnvio(c *gin.Context) {
 	var envio dto.Envio
 	if err := c.ShouldBindJSON(&envio); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 	envio.ID = c.Param("id")
-	resultado := handler.envioService.ModificarEnvio(&envio)
+	resultado := handler.envioService.DespachadoEnvio(&envio)
+	c.JSON(http.StatusCreated, resultado)
+}
+func (handler *EnvioHandler) EnRutaEnvio(c *gin.Context) {
+	var envio dto.Envio
+	if err := c.ShouldBindJSON(&envio); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+	envio.ID = c.Param("id")
+	resultado := handler.envioService.EnRutaEnvio(&envio)
 	c.JSON(http.StatusCreated, resultado)
 }

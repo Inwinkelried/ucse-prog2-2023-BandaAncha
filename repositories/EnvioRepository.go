@@ -13,7 +13,8 @@ import (
 type EnvioRepositoryInterface interface {
 	ObtenerEnvios() ([]model.Envio, error)
 	InsertarEnvio(envio model.Envio) (*mongo.InsertOneResult, error)
-	ModificarEnvio(envio model.Envio) (*mongo.UpdateResult, error)
+	EnRutaEnvio(envio model.Envio) (*mongo.UpdateResult, error)
+	DespachadoEnvio(envio model.Envio) (*mongo.UpdateResult, error)
 }
 type EnvioRepository struct {
 	db DB
@@ -54,10 +55,17 @@ func (repo EnvioRepository) InsertarEnvio(envio model.Envio) (*mongo.InsertOneRe
 }
 
 // Metodo para modificar un envio. Este metodo es el que me permite actualizar el estado del envio
-func (repo EnvioRepository) ModificarEnvio(envio model.Envio) (*mongo.UpdateResult, error) {
+func (repo EnvioRepository) EnRutaEnvio(envio model.Envio) (*mongo.UpdateResult, error) {
 	lista := repo.db.GetClient().Database("BandaAncha").Collection("Envios")
 	filtro := bson.M{"_id": envio.ID}
-	entity := bson.M{"$set": bson.M{"Estado": envio.Estado, "FechaModificacion": time.Now()}}
+	entity := bson.M{"$set": bson.M{"Estado": "En Ruta", "FechaModificacion": time.Now()}}
+	resultado, err := lista.UpdateOne(context.TODO(), filtro, entity)
+	return resultado, err
+}
+func (repo EnvioRepository) DespachadoEnvio(envio model.Envio) (*mongo.UpdateResult, error) {
+	lista := repo.db.GetClient().Database("BandaAncha").Collection("Envios")
+	filtro := bson.M{"_id": envio.ID}
+	entity := bson.M{"$set": bson.M{"Estado": "Despachado", "FechaModificacion": time.Now()}}
 	resultado, err := lista.UpdateOne(context.TODO(), filtro, entity)
 	return resultado, err
 }

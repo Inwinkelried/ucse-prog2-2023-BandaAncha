@@ -8,7 +8,8 @@ import (
 type EnvioServiceInterface interface {
 	ObtenerEnvios() []*dto.Envio
 	InsertarEnvio(envio *dto.Envio) bool
-	ModificarEnvio(envio *dto.Envio) bool
+	EnRutaEnvio(envio *dto.Envio) bool
+	DespachadoEnvio(envio *dto.Envio) bool
 }
 type EnvioService struct {
 	envioRepository repositories.EnvioRepositoryInterface
@@ -32,7 +33,11 @@ func (service *EnvioService) InsertarEnvio(envio *dto.Envio) bool {
 	service.envioRepository.InsertarEnvio(envio.GetModel())
 	return true
 }
-func (service *EnvioService) ModificarEnvio(envio *dto.Envio) bool {
-	service.envioRepository.ModificarEnvio(envio.GetModel())
+func (service *EnvioService) EnRutaEnvio(envio *dto.Envio) bool {
+	service.envioRepository.EnRutaEnvio(envio.GetModel())
+	return true
+}
+func (service *EnvioService) DespachadoEnvio(envio *dto.Envio) bool {
+	service.envioRepository.DespachadoEnvio(envio.GetModel())
 	return true
 }

@@ -3,14 +3,15 @@ package services
 import (
 	"github.com/Inwinkelried/ucse-prog2-2023-BandaAncha/dto"
 	"github.com/Inwinkelried/ucse-prog2-2023-BandaAncha/repositories"
-	"github.com/Inwinkelried/ucse-prog2-2023-BandaAncha/utils"
 )
 
 type PedidoServiceInterface interface {
 	ObtenerPedidos() []*dto.Pedido
 	InsertarPedido(pedido *dto.Pedido) bool
-	EliminarPedido(id string) bool
-	ModificarPedido(pedido *dto.Pedido) bool
+	AceptarPedido(pedido *dto.Pedido) bool
+	CancelarPedido(pedido *dto.Pedido) bool
+	ParaEnviarPedido(pedido *dto.Pedido) bool
+	EnviadoPedido(pedido *dto.Pedido) bool
 }
 
 type PedidoService struct {
@@ -35,11 +36,19 @@ func (service PedidoService) InsertarPedido(pedido *dto.Pedido) bool {
 	service.pedidoRepository.InsertarPedido(pedido.GetModel())
 	return true
 }
-func (service PedidoService) ModificarPedido(pedido *dto.Pedido) bool {
-	service.pedidoRepository.ModificarPedido(pedido.GetModel())
+func (service PedidoService) AceptarPedido(pedido *dto.Pedido) bool {
+	service.pedidoRepository.AceptarPedido(pedido.GetModel())
 	return true
 }
-func (service PedidoService) EliminarPedido(id string) bool {
-	service.pedidoRepository.EliminarPedido(utils.GetObjectIDFromStringID(id))
+func (service PedidoService) CancelarPedido(pedido *dto.Pedido) bool {
+	service.pedidoRepository.CancelarPedido(pedido.GetModel())
+	return true
+}
+func (service PedidoService) EnviadoPedido(pedido *dto.Pedido) bool {
+	service.pedidoRepository.EnviadoPedido(pedido.GetModel())
+	return true
+}
+func (service PedidoService) ParaEnviarPedido(pedido *dto.Pedido) bool {
+	service.pedidoRepository.EnviadoPedido(pedido.GetModel())
 	return true
 }

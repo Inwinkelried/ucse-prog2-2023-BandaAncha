@@ -49,13 +49,18 @@ func mappingRoutes() {
 	groupEnvio.GET("/", envioHandler.ObtenerEnvios)
 	//group.GET("/:id", aulaHandler.ObtenerAulaPorID)
 	groupEnvio.POST("/", envioHandler.InsertarEnvio)
-	groupEnvio.PUT("/:id", envioHandler.ModificarEnvio)
+	groupEnvio.PUT("/SetDespachado/:id", envioHandler.DespachadoEnvio)
+	groupEnvio.PUT("/SetEnRuta/:id", envioHandler.EnRutaEnvio)
+
 	//PEDIDOS
 	groupPedido.GET("/", pedidoHandler.ObtenerPedidos)
 	//group.GET("/:id", aulaHandler.ObtenerAulaPorID)
 	groupPedido.POST("/", pedidoHandler.InsertarPedido)
-	groupPedido.PUT("/:id", pedidoHandler.ModificarPedido)
-	groupPedido.DELETE("/:id", pedidoHandler.EliminarPedido)
+	groupPedido.PUT("/Confirm/:id", pedidoHandler.AceptarPedido)
+	groupPedido.PUT("/Cancel/:id", pedidoHandler.CancelarPedido)
+	groupPedido.PUT("/Send/:id", pedidoHandler.ParaEnviarPedido)
+	groupPedido.PUT("/Sent/:id", pedidoHandler.EnviadoPedido)
+
 	//PRODUCTOS
 	groupProducto.GET("/", productoHandler.ObtenerProductos)
 	//group.GET("/:id", aulaHandler.ObtenerAulaPorID)
