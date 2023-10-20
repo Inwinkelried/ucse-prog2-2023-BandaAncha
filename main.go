@@ -13,6 +13,7 @@ var (
 	camionHandler   *handlers.CamionHandler
 	productoHandler *handlers.ProductoHandler
 	pedidoHandler   *handlers.PedidoHandler
+	envioHandler    *handlers.EnvioHandler
 	router          *gin.Engine
 )
 
@@ -39,9 +40,16 @@ func mappingRoutes() {
 	groupCamion := router.Group("/trucks")
 	groupProducto := router.Group("/products")
 	groupPedido := router.Group("/orders")
+	groupEnvio := router.Group("/shippings")
 	//Uso del middleware para todas las rutas del grupo
 	//group.Use(authMiddleware.ValidateToken)
 	//group.Use(middlewares.CORSMiddleware())
+
+	//ENVIO
+	groupEnvio.GET("/", envioHandler.ObtenerEnvios)
+	//group.GET("/:id", aulaHandler.ObtenerAulaPorID)
+	groupEnvio.POST("/", envioHandler.InsertarEnvio)
+	groupEnvio.PUT("/:id", envioHandler.ModificarEnvio)
 	//PEDIDOS
 	groupPedido.GET("/", pedidoHandler.ObtenerPedidos)
 	//group.GET("/:id", aulaHandler.ObtenerAulaPorID)
@@ -66,6 +74,12 @@ func mappingRoutes() {
 func dependencies() {
 	var database repositories.DB
 	database = repositories.NewMongoDB()
+	//ENVIO
+	var envioRepo repositories.EnvioRepositoryInterface
+	var envioService services.EnvioServiceInterface
+	envioRepo = repositories.NewEnvioRepository(database)
+	envioService = services.NewEnvioService(envioRepo)
+	envioHandler = handlers.NewEnvioHandler(envioService)
 
 	//CAMIONES
 	var camionRepo repositories.CamionRepositoryInterface

@@ -3,6 +3,7 @@ package repositories
 import (
 	"context"
 	"fmt"
+	"time"
 
 	"github.com/Inwinkelried/ucse-prog2-2023-BandaAncha/model"
 	"go.mongodb.org/mongo-driver/bson"
@@ -58,7 +59,7 @@ func (repo CamionRepository) InsertarCamion(camion model.Camion) (*mongo.InsertO
 func (repo CamionRepository) ModificarCamion(camion model.Camion) (*mongo.UpdateResult, error) {
 	lista := repo.db.GetClient().Database("BandaAncha").Collection("Camiones")
 	filtro := bson.M{"_id": camion.ID}
-	entity := bson.M{"$set": bson.M{"CostoPorKilometro": camion.CostoKm}}
+	entity := bson.M{"$set": bson.M{"CostoPorKilometro": camion.CostoKm, "FechaModificacion": time.Now()}}
 	resultado, err := lista.UpdateOne(context.TODO(), filtro, entity)
 	return resultado, err
 }

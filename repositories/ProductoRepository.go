@@ -3,6 +3,7 @@ package repositories
 import (
 	"context"
 	"fmt"
+	"time"
 
 	"github.com/Inwinkelried/ucse-prog2-2023-BandaAncha/model"
 	"go.mongodb.org/mongo-driver/bson"
@@ -56,7 +57,7 @@ func (repo ProductoRepository) InsertarProducto(Producto model.Producto) (*mongo
 func (repo ProductoRepository) ModificarProducto(Producto model.Producto) (*mongo.UpdateResult, error) {
 	lista := repo.db.GetClient().Database("BandaAncha").Collection("Productos")
 	filtro := bson.M{"_id": Producto.ID}
-	entity := bson.M{"$set": bson.M{"nombre": Producto.Nombre}}
+	entity := bson.M{"$set": bson.M{"nombre": Producto.Nombre, "FechaModificacion": time.Now()}}
 	resultado, err := lista.UpdateOne(context.TODO(), filtro, entity)
 	return resultado, err
 }
