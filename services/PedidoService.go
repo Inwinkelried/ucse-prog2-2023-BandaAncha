@@ -8,7 +8,10 @@ import (
 type PedidoServiceInterface interface {
 	ObtenerPedidos() []*dto.Pedido
 	InsertarPedido(pedido *dto.Pedido) bool
-
+	AceptarPedido(pedido *dto.Pedido) bool
+	CancelarPedido(pedido *dto.Pedido) bool
+	ParaEnviarPedido(pedido *dto.Pedido) bool
+	EnviadoPedido(pedido *dto.Pedido) bool
 	ObtenerPedidosAprobados() []*dto.Pedido
 }
 
@@ -21,6 +24,7 @@ func NewPedidoService(pedidoRepository repositories.PedidoRepositoryInterface) *
 		pedidoRepository: pedidoRepository,
 	}
 }
+
 func (service PedidoService) ObtenerPedidosAprobados() []*dto.Pedido {
 	pedidosDB, _ := service.pedidoRepository.ObtenerPedidosAprobados()
 	var pedidos []*dto.Pedido
@@ -41,5 +45,25 @@ func (service PedidoService) ObtenerPedidos() []*dto.Pedido {
 }
 func (service PedidoService) InsertarPedido(pedido *dto.Pedido) bool {
 	service.pedidoRepository.InsertarPedido(pedido.GetModel())
+	return true
+}
+func (service PedidoService) AceptarPedido(pedido *dto.Pedido) bool {
+	service.pedidoRepository.AceptarPedido(pedido.GetModel())
+	return true
+}
+func (service PedidoService) CancelarPedido(pedido *dto.Pedido) bool {
+	if pedido.Estado == "Pendiente" {
+		service.pedidoRepository.CancelarPedido(pedido.GetModel())
+		return true
+	} else {
+		return false
+	}
+}
+func (service PedidoService) EnviadoPedido(pedido *dto.Pedido) bool {
+	service.pedidoRepository.EnviadoPedido(pedido.GetModel())
+	return true
+}
+func (service PedidoService) ParaEnviarPedido(pedido *dto.Pedido) bool {
+	service.pedidoRepository.ParaEnviarPedido(pedido.GetModel())
 	return true
 }

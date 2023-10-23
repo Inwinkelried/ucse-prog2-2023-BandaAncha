@@ -40,3 +40,43 @@ func (handler *PedidoHandler) InsertarPedido(c *gin.Context) {
 	resultado := handler.pedidoService.InsertarPedido(&pedido)
 	c.JSON(http.StatusCreated, resultado)
 }
+func (handler *PedidoHandler) AceptarPedido(c *gin.Context) {
+	var pedido dto.Pedido
+	if err := c.ShouldBindJSON(&pedido); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+	pedido.ID = c.Param("id")
+	resultado := handler.pedidoService.AceptarPedido(&pedido)
+	c.JSON(http.StatusCreated, resultado)
+}
+func (handler *PedidoHandler) CancelarPedido(c *gin.Context) {
+	var pedido dto.Pedido
+	if err := c.ShouldBindJSON(&pedido); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+	pedido.ID = c.Param("id")
+	resultado := handler.pedidoService.CancelarPedido(&pedido)
+	c.JSON(http.StatusCreated, resultado)
+}
+func (handler *PedidoHandler) EnviadoPedido(c *gin.Context) {
+	var pedido dto.Pedido
+	if err := c.ShouldBindJSON(&pedido); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+	pedido.ID = c.Param("id")
+	resultado := handler.pedidoService.EnviadoPedido(&pedido)
+	c.JSON(http.StatusCreated, resultado)
+}
+func (handler *PedidoHandler) ParaEnviarPedido(c *gin.Context) {
+	var pedido dto.Pedido
+	if err := c.ShouldBindJSON(&pedido); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+	pedido.ID = c.Param("id")
+	resultado := handler.pedidoService.ParaEnviarPedido(&pedido)
+	c.JSON(http.StatusCreated, resultado)
+}

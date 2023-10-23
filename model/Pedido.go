@@ -12,6 +12,6 @@ type Pedido struct {
 	Cantidad          int                `bson:"cantidad"`
 	FechaCreacion     time.Time          `bson:"fechaCreacion,omitempty"`
 	FechaModificacion time.Time          `bson:"fechaModificacion,omitempty"`
-	Estado            string             `bson:"estado"`
+	Estado            string             `bson:"Estado"`
 	Destino           string             `bson:"destino"`
 }
