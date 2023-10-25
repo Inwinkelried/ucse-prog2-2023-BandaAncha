@@ -9,7 +9,7 @@ import (
 type Envio struct {
 	ID                primitive.ObjectID `bson:"_id,omitempty"`
 	IDcamion          string             `bson:"id_camion"`
-	IDpedido          string             `bson:"id_pedido"`
+	Pedidos           []Pedido           `bson:"pedidos"`
 	Paradas           []Parada           `bson:"paradas"`
 	Estado            string             `bson:"estado"`
 	FechaCreacion     time.Time          `bson:"fecha_creacion"`

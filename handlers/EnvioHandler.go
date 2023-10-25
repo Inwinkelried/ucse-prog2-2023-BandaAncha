@@ -19,6 +19,56 @@ func NewEnvioHandler(envioService services.EnvioServiceInterface) *EnvioHandler 
 		envioService: envioService,
 	}
 }
+
+// FALTA PROBAR
+func (handler *EnvioHandler) AgregarParada(c *gin.Context) {
+	user := dto.NewUser(utils.GetUserInfoFromContext(c))
+	id := c.Param("id")
+	var parada dto.Parada
+	if err := c.ShouldBindJSON(&parada); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+	envio := dto.Envio{
+		ID: id,
+		Paradas: []dto.Parada{
+			parada,
+		},
+	}
+	operacion, err := handler.envioService.AgregarParada(&envio)
+	if err != nil {
+		log.Printf("[handler:EnvioHandler][method:AgregarParada][envio:%+v][user:%s]", err.Error(), user.Codigo)
+
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+	if !operacion {
+		log.Printf("[handler:EnvioHandler][method:AgregarParada][envio:%+v][user:%s]", err.Error(), user.Codigo)
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()}) //es correcto devolver bad request aca?
+		return
+	}
+
+	log.Printf("[handler:EnvioHandler][method:AgregarParada][envio:%+v][user:%s]", envio, user.Codigo)
+
+	c.JSON(http.StatusOK, envio)
+}
+
+// FALTA PROBAR
+func (handler *EnvioHandler) ObtenerEnvioPorID(c *gin.Context) {
+	user := dto.NewUser(utils.GetUserInfoFromContext(c))
+	id := c.Param("id")
+	//invocamos al metodo
+	envio, err := handler.envioService.ObtenerEnvioPorID(&dto.Envio{ID: id})
+	if err != nil {
+		log.Printf("[handler:EnvioHandler][method:ObtenerEnvioPorId][envio:%+v][user:%s]", err.Error(), user.Codigo)
+
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+	//Agregamos un log para indicar informacion
+	c.JSON(http.StatusOK, envio)
+}
+
 func (handler *EnvioHandler) ObtenerEnvios(c *gin.Context) {
 	user := dto.NewUser(utils.GetUserInfoFromContext(c))
 	envios := handler.envioService.ObtenerEnvios()

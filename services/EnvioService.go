@@ -7,9 +7,11 @@ import (
 
 type EnvioServiceInterface interface {
 	ObtenerEnvios() []*dto.Envio
+	ObtenerEnvioPorID(envio *dto.Envio) (*dto.Envio, error)
 	InsertarEnvio(envio *dto.Envio) bool
 	EnRutaEnvio(envio *dto.Envio) bool
 	DespachadoEnvio(envio *dto.Envio) bool
+	AgregarParada(envio *dto.Envio) (bool, error)
 }
 type EnvioService struct {
 	envioRepository repositories.EnvioRepositoryInterface
@@ -20,6 +22,30 @@ func NewEnvioService(envioRepository repositories.EnvioRepositoryInterface) *Env
 		envioRepository: envioRepository,
 	}
 }
+func (service *EnvioService) AgregarParada(envio *dto.Envio) (bool, error) {
+	envioDB, err := service.envioRepository.ObtenerEnvioPorID(envio.GetModel())
+	if err != nil {
+		return false, err
+	}
+	envioDB.Paradas = append(envioDB.Paradas, envio.Paradas[0].GetModel())
+	service.envioRepository.ActualizarEnvio(envioDB)
+	//Actualizamos el envio en la base de datos, que ahora tiene la nueva parada
+	return true, err
+}
+func (service *EnvioService) ObtenerEnvioPorID(envioConID *dto.Envio) (*dto.Envio, error) {
+	envioDB, err := service.envioRepository.ObtenerEnvioPorID(envioConID.GetModel())
+
+	var envio *dto.Envio
+
+	if err != nil {
+		return nil, err
+	} else {
+		envio = dto.NewEnvio(envioDB)
+	}
+
+	return envio, nil
+}
+
 func (service *EnvioService) ObtenerEnvios() []*dto.Envio {
 	enviosDB, _ := service.envioRepository.ObtenerEnvios()
 	var envios []*dto.Envio
