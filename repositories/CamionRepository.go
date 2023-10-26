@@ -16,6 +16,7 @@ type CamionRepositoryInterface interface {
 	EliminarCamion(id primitive.ObjectID) (*mongo.DeleteResult, error)
 	InsertarCamion(camion model.Camion) (*mongo.InsertOneResult, error)
 	ModificarCamion(camion model.Camion) (*mongo.UpdateResult, error)
+	ObtenercamionPorID(camionABuscar model.Camion) (model.Camion, error)
 }
 type CamionRepository struct {
 	db DB
@@ -53,6 +54,23 @@ func (repo CamionRepository) InsertarCamion(camion model.Camion) (*mongo.InsertO
 	lista := repo.db.GetClient().Database("BandaAncha").Collection("Camiones")
 	resultado, err := lista.InsertOne(context.TODO(), camion)
 	return resultado, err
+}
+
+// Metodo para obtener un camion por ID
+func (repository CamionRepository) ObtenercamionPorID(camionABuscar model.Camion) (model.Camion, error) {
+	collection := repository.db.GetClient().Database("BandaAncha").Collection("Camiones")
+	filtro := bson.M{"_id": camionABuscar.ID}
+	cursor, err := collection.Find(context.TODO(), filtro)
+	defer cursor.Close(context.Background())
+	// Itera a través de los resultados
+	var camion model.Camion
+	for cursor.Next(context.Background()) {
+		err := cursor.Decode(&camion)
+		if err != nil {
+			fmt.Printf("Error: %v\n", err)
+		}
+	}
+	return camion, err
 }
 
 // Metodo para modificar un camion

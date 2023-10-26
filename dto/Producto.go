@@ -12,10 +12,10 @@ type Producto struct {
 	CodigoProducto    string
 	Tipo              string
 	Nombre            string
-	PesoUnitario      float64
-	PrecioUnitario    float64
-	StockMinimo       float64
-	StockActual       float64
+	PesoUnitario      int
+	PrecioUnitario    int
+	StockMinimo       int
+	StockActual       int
 	FechaCreacion     time.Time
 	FechaModificacion time.Time
 }

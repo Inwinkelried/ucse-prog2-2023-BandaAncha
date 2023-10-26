@@ -9,7 +9,7 @@ type PedidoProducto struct {
 	CodigoProducto string             `bson:"codigoProducto"`
 	Tipo           string             `bson:"tipo"`
 	Nombre         string             `bson:"nombre"`
-	PesoUnitario   float64            `bson:"pesoUnitario"`
-	PrecioUnitario float64            `bson:"precioUnitario"`
-	Cantidad       float64            `bson:"cantidad"`
+	PesoUnitario   int                `bson:"pesoUnitario"`
+	PrecioUnitario int                `bson:"precioUnitario"`
+	Cantidad       int                `bson:"cantidad"`
 }

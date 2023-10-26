@@ -48,7 +48,7 @@ func mappingRoutes() {
 	//ENVIO
 	groupEnvio.GET("/", envioHandler.ObtenerEnvios)
 	//hay que probar
-	groupEnvio.GET("/:id", envioHandler.ObtenerEnvioPorID)
+
 	groupEnvio.POST("/", envioHandler.InsertarEnvio)
 	// hay q probar
 	groupEnvio.PUT("/AddStop/:id", envioHandler.AgregarParada)

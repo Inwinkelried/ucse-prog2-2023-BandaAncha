@@ -25,6 +25,8 @@ func NewPedidoService(pedidoRepository repositories.PedidoRepositoryInterface) *
 	}
 }
 
+//Necesito un metodo similar a agregar parada de envio, pero que agregue productos al pedido
+
 func (service PedidoService) ObtenerPedidosAprobados() []*dto.Pedido {
 	pedidosDB, _ := service.pedidoRepository.ObtenerPedidosAprobados()
 	var pedidos []*dto.Pedido

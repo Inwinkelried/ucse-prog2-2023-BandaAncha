@@ -10,12 +10,12 @@ type PedidoProducto struct {
 	CodigoProducto string
 	Tipo           string
 	Nombre         string
-	PesoUnitario   float64
-	PrecioUnitario float64
-	Cantidad       float64
+	PesoUnitario   int
+	PrecioUnitario int
+	Cantidad       int
 }
 
-func NewPedidoProducto(pedidoProducto model.PedidoProducto) *PedidoProducto {
+func NewPedidoProducto(pedidoProducto *model.PedidoProducto) *PedidoProducto {
 	return &PedidoProducto{
 		ID:             utils.GetStringIDFromObjectID(pedidoProducto.ID),
 		CodigoProducto: pedidoProducto.CodigoProducto,
@@ -26,6 +26,7 @@ func NewPedidoProducto(pedidoProducto model.PedidoProducto) *PedidoProducto {
 		Cantidad:       pedidoProducto.Cantidad,
 	}
 }
+
 func (pedidoProducto PedidoProducto) GetModel() model.PedidoProducto {
 	return model.PedidoProducto{
 		ID:             utils.GetObjectIDFromStringID(pedidoProducto.ID),

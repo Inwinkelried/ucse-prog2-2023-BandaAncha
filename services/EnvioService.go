@@ -2,7 +2,9 @@ package services
 
 import (
 	"github.com/Inwinkelried/ucse-prog2-2023-BandaAncha/dto"
+	"github.com/Inwinkelried/ucse-prog2-2023-BandaAncha/model"
 	"github.com/Inwinkelried/ucse-prog2-2023-BandaAncha/repositories"
+	"github.com/Inwinkelried/ucse-prog2-2023-BandaAncha/utils"
 )
 
 type EnvioServiceInterface interface {
@@ -14,7 +16,10 @@ type EnvioServiceInterface interface {
 	AgregarParada(envio *dto.Envio) (bool, error)
 }
 type EnvioService struct {
-	envioRepository repositories.EnvioRepositoryInterface
+	envioRepository    repositories.EnvioRepositoryInterface
+	camionRepository   repositories.CamionRepositoryInterface
+	pedidoRepository   repositories.PedidoRepositoryInterface
+	productoRepository repositories.ProductoRepositoryInterface
 }
 
 func NewEnvioService(envioRepository repositories.EnvioRepositoryInterface) *EnvioService {
@@ -55,9 +60,24 @@ func (service *EnvioService) ObtenerEnvios() []*dto.Envio {
 	}
 	return envios
 }
-func (service *EnvioService) InsertarEnvio(envio *dto.Envio) bool {
-	service.envioRepository.InsertarEnvio(envio.GetModel())
-	return true
+func (service *EnvioService) InsertarEnvio(envio *dto.Envio) bool { //falta probar
+	camionConID := model.Camion{ID: utils.GetObjectIDFromStringID(envio.IDcamion)}
+	camion, _ := service.camionRepository.ObtenercamionPorID(camionConID)
+	var pesototal int
+	for _, pedido := range envio.Pedidos {
+		pesopedidio, err := service.pedidoRepository.ObtenerPesoPedido(pedido.GetModel())
+		if err != nil {
+			return false
+		}
+		pesototal = pesototal + pesopedidio
+	}
+	if pesototal <= camion.PesoMaximo {
+
+		service.envioRepository.InsertarEnvio(envio.GetModel())
+		return true
+	} else {
+		return false
+	}
 }
 func (service *EnvioService) EnRutaEnvio(envio *dto.Envio) bool {
 	envio.Estado = "En Ruta"

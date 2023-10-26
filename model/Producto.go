@@ -11,10 +11,10 @@ type Producto struct {
 	CodigoProducto    string             `bson:"codigoProducto"`
 	Tipo              string             `bson:"tipo"`
 	Nombre            string             `bson:"nombre"`
-	PesoUnitario      float64            `bson:"pesoUnitario"`
-	PrecioUnitario    float64            `bson:"precioUnitario"`
-	StockMinimo       float64            `bson:"stockMinimo"`
-	StockActual       float64            `bson:"stockActual"`
+	PesoUnitario      int                `bson:"pesoUnitario"`
+	PrecioUnitario    int                `bson:"precioUnitario"`
+	StockMinimo       int                `bson:"stockMinimo"`
+	StockActual       int                `bson:"stockActual"`
 	FechaCreacion     time.Time          `bson:"fechaCreacion,omitempty"`
 	FechaModificacion time.Time          `bson:"fechaModificacion,omitempty"`
 }

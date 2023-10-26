@@ -3,6 +3,7 @@ package repositories
 import (
 	"context"
 	"fmt"
+	"time"
 
 	"github.com/Inwinkelried/ucse-prog2-2023-BandaAncha/model"
 	"go.mongodb.org/mongo-driver/bson"
@@ -18,6 +19,8 @@ type PedidoRepositoryInterface interface {
 	ParaEnviarPedido(pedido model.Pedido) (*mongo.UpdateResult, error)
 	EnviadoPedido(pedido model.Pedido) (*mongo.UpdateResult, error)
 	ObtenerPedidoPorID(pedidoAFiltrar model.Pedido) (*model.Pedido, error)
+	ObtenerPesoPedido(pedido model.Pedido) (int, error)
+	ActualizarPedido(pedido model.Pedido) (*mongo.UpdateResult, error)
 }
 type PedidoRepository struct {
 	db DB
@@ -26,9 +29,27 @@ type PedidoRepository struct {
 func NewPedidoRepository(db DB) *PedidoRepository {
 	return &PedidoRepository{db: db}
 }
+func (repo PedidoRepository) ObtenerPesoPedido(pedido model.Pedido) (int, error) {
+	//Obtener el el pedido por id, luego tomar su lista de productos. A cada producto multiplicarle su peso por la cantidad. A eso sumarlo y retornar ese total
+	pedidoObtenido, err := repo.ObtenerPedidoPorID(pedido)
+	if err != nil {
+		return 0, err
+	}
+	var pesoTotal int
+	for _, producto := range pedidoObtenido.Productos {
+		pesoTotal += producto.PesoUnitario * producto.Cantidad
+	}
+	return pesoTotal, nil
 
-// Obtencion pedidos por id
-
+}
+func (repo PedidoRepository) ActualizarPedido(pedido model.Pedido) (*mongo.UpdateResult, error) {
+	lista := repo.db.GetClient().Database("BandaAncha").Collection("Pedidos")
+	pedido.FechaModificacion = time.Now()
+	filtro := bson.M{"_id": pedido.ID}
+	entity := bson.M{"$set": pedido}
+	resultado, err := lista.UpdateOne(context.TODO(), filtro, entity)
+	return resultado, err
+}
 func (repo PedidoRepository) ObtenerPedidosAprobados() ([]model.Pedido, error) {
 	lista := repo.db.GetClient().Database("BandaAncha").Collection("Pedidos")
 	filtro := bson.M{"estado": "Aprobado"}

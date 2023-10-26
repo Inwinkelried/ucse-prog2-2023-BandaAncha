@@ -19,6 +19,7 @@ func NewPedidoHandler(pedidoService services.PedidoServiceInterface) *PedidoHand
 		pedidoService: pedidoService,
 	}
 }
+
 func (handler *PedidoHandler) ObtenerPedidosAprobados(c *gin.Context) {
 	user := dto.NewUser(utils.GetUserInfoFromContext(c))
 	pedidos := handler.pedidoService.ObtenerPedidosAprobados()

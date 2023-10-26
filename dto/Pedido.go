@@ -29,10 +29,25 @@ func NewPedido(pedido model.Pedido) *Pedido {
 func (pedido Pedido) GetModel() model.Pedido {
 	return model.Pedido{
 		ID:                utils.GetObjectIDFromStringID(pedido.ID),
-		Productos:         []model.PedidoProducto{},
+		Productos:         pedido.getProductosElegidos(),
 		Destino:           pedido.Destino,
 		Estado:            pedido.Estado,
 		FechaCreacion:     pedido.FechaCreacion,
 		FechaModificacion: pedido.FechaModificacion,
 	}
+}
+
+func (pedido Pedido) getProductosElegidos() []model.PedidoProducto {
+	var productosElegidos []model.PedidoProducto
+	for _, producto := range pedido.Productos {
+		productosElegidos = append(productosElegidos, producto.GetModel())
+	}
+	return productosElegidos
+}
+func NewProductosPedido(productosElegidos []model.PedidoProducto) []PedidoProducto {
+	var productosElegidosDto []PedidoProducto
+	for _, producto := range productosElegidos {
+		productosElegidosDto = append(productosElegidosDto, *NewPedidoProducto(&producto))
+	}
+	return productosElegidosDto
 }
