@@ -24,23 +24,6 @@ SERVIDORES:
 - SERVIDOR DE USUARIOS:
 - BACKEND EN GO
 
-1. Entidades
-	Producto
-	Cada producto tiene un 
-	- código único
-	- tipo (golosinas, bebidas, cigarrillos, comestibles, higiene y salud), 
-	- nombre, 
-	- peso unitario, 
-	- precio unitario, 
-	- stock mínimo y 
-	- cantidad en stock.
-
-	Camion
-	Cada camión tiene una patente única, peso máximo y costo por kilómetro.
-
-	Cliente
-	Los clientes pueden generar pedidos. Cada pedido incluye una lista de productos elegidos con sus cantidades y la ciudad de entrega. Los pedidos comienzan en estado PENDIENTE y pueden ser marcados como CANCELADOS, pero nunca se eliminan completamente.
-
 2. Operaciones sobre las Entidades
 	CRUD de Productos, Camiones y Clientes
 	Pedido
@@ -83,3 +66,34 @@ SERVIDORES:
 		Productos
 		Camiones
 		Clientes
+
+7. Resumen
+	-Producto
+		Alta 
+		Baja 
+		Modificacion
+		Listado
+		Lista de productos con stock menor al mínimo. Se puede filtrar por tipo de producto.
+	-Camion
+		Alta 
+		Baja 
+		Modificacion
+		Listado	
+	-Pedido
+		Alta (estado Pendiente)
+		Cancelacion (estado Cancelado)
+		Aceptar pedido
+		Lista de pedidos. Se puede filtrar por código de envío, estado, rango de fecha de creación.
+	-Envio
+		Generacion envio (DESPACHAR)
+		Mover pedido (ENVIAR)
+		Agregar parada (validaciones)
+		Cambio estado envio (En Ruta, Envio Despachado, Pedido enviado)
+		Lista de envíos: Se puede filtrar por patente de camión, estado, ciudad (última parada), rango de fechas
+	-Reportes
+		Endpoint Graficos
+
+
+
+
+
