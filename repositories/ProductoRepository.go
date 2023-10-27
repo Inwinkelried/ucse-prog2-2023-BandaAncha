@@ -3,7 +3,8 @@ package repositories
 import (
 	"context"
 	"fmt"
-	"time"
+
+	//"time"
 
 	"github.com/Inwinkelried/ucse-prog2-2023-BandaAncha/model"
 	"go.mongodb.org/mongo-driver/bson"
@@ -50,11 +51,8 @@ func (repo ProductoRepository) ObtenerProductos() ([]model.Producto, error) {
 // Metodo para obtener un producto filtrado por ID
 func (repository *ProductoRepository) ObtenerProductoPorID(productoAFiltrar model.Producto) (model.Producto, error) {
 	collection := repository.db.GetClient().Database("BandaAncha").Collection("Productos")
-
 	filtro := bson.M{"_id": productoAFiltrar.ID}
-
 	var producto model.Producto
-
 	err := collection.FindOne(context.Background(), filtro).Decode(&producto)
 
 	if err != nil {
@@ -74,7 +72,7 @@ func (repo ProductoRepository) InsertarProducto(Producto model.Producto) (*mongo
 func (repo ProductoRepository) ModificarProducto(Producto model.Producto) (*mongo.UpdateResult, error) {
 	lista := repo.db.GetClient().Database("BandaAncha").Collection("Productos")
 	filtro := bson.M{"_id": Producto.ID}
-	entity := bson.M{"$set": bson.M{"nombre": Producto.Nombre, "FechaModificacion": time.Now()}}
+	entity := bson.M{"$set": Producto}
 	resultado, err := lista.UpdateOne(context.TODO(), filtro, entity)
 	return resultado, err
 }

@@ -43,6 +43,7 @@ func (service *ProductoService) ObtenerProductoPorID(productoConID *dto.Producto
 	}
 	return producto, nil
 }
+
 func (service *ProductoService) InsertarProducto(Producto *dto.Producto) bool {
 	service.ProductoRepository.InsertarProducto(Producto.GetModel())
 	return true

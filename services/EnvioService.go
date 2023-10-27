@@ -28,14 +28,19 @@ func NewEnvioService(envioRepository repositories.EnvioRepositoryInterface) *Env
 	}
 }
 func (service *EnvioService) AgregarParada(envio *dto.Envio) (bool, error) {
-	envioDB, err := service.envioRepository.ObtenerEnvioPorID(envio.GetModel())
-	if err != nil {
-		return false, err
+	if envio.Estado != "Despachado" {
+		envioDB, err := service.envioRepository.ObtenerEnvioPorID(envio.GetModel())
+		if err != nil {
+			return false, err
+		}
+		envioDB.Paradas = append(envioDB.Paradas, envio.Paradas[0].GetModel())
+		service.envioRepository.ActualizarEnvio(envioDB)
+		//Actualizamos el envio en la base de datos, que ahora tiene la nueva parada
+		return true, err
+	} else {
+		return false, nil
 	}
-	envioDB.Paradas = append(envioDB.Paradas, envio.Paradas[0].GetModel())
-	service.envioRepository.ActualizarEnvio(envioDB)
-	//Actualizamos el envio en la base de datos, que ahora tiene la nueva parada
-	return true, err
+
 }
 func (service *EnvioService) ObtenerEnvioPorID(envioConID *dto.Envio) (*dto.Envio, error) {
 	envioDB, err := service.envioRepository.ObtenerEnvioPorID(envioConID.GetModel())
@@ -84,8 +89,18 @@ func (service *EnvioService) EnRutaEnvio(envio *dto.Envio) bool {
 	service.envioRepository.ActualizarEnvio(envio.GetModel())
 	return true
 }
-func (service *EnvioService) DespachadoEnvio(envio *dto.Envio) bool {
+func (service *EnvioService) DespachadoEnvio(envio *dto.Envio) bool { //hay que probar
 	envio.Estado = "Despachado"
+	Pedidos := envio.Pedidos
+	for _, pedido := range Pedidos {
+		Productos := pedido.Productos
+		for _, producto := range Productos {
+			productoAFiltrar := model.Producto{ID: utils.GetObjectIDFromStringID(producto.CodigoProducto)}
+			productoDB, _ := service.productoRepository.ObtenerProductoPorID(productoAFiltrar)
+			productoDB.StockActual = productoDB.StockActual - producto.Cantidad
+			service.productoRepository.ModificarProducto(productoDB)
+		}
+	}
 	service.envioRepository.ActualizarEnvio(envio.GetModel())
 	return true
 }

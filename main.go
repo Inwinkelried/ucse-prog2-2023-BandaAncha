@@ -53,9 +53,9 @@ func mappingRoutes() {
 	// hay q probar
 	groupEnvio.PUT("/AddStop/:id", envioHandler.AgregarParada)
 	//hay que probar
-	groupEnvio.PUT("/SetDespachado/:id", envioHandler.DespachadoEnvio)
+	groupEnvio.PUT("/SetDelivered/:id", envioHandler.DespachadoEnvio)
 	groupEnvio.GET("/:id", envioHandler.ObtenerEnvioPorID)
-	groupEnvio.PUT("/SetEnRuta/:id", envioHandler.EnRutaEnvio)
+	groupEnvio.PUT("/SetSent/:id", envioHandler.EnRutaEnvio)
 
 	//PEDIDOS
 	groupPedido.GET("/", pedidoHandler.ObtenerPedidos)
