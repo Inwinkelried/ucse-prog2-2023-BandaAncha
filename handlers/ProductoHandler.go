@@ -6,6 +6,7 @@ import (
 
 	"github.com/Inwinkelried/ucse-prog2-2023-BandaAncha/dto"
 	"github.com/Inwinkelried/ucse-prog2-2023-BandaAncha/services"
+	"github.com/Inwinkelried/ucse-prog2-2023-BandaAncha/utils"
 	"github.com/gin-gonic/gin"
 )
 
@@ -18,10 +19,25 @@ func NewProductoHandler(productoService services.ProductoInterface) *ProductoHan
 		ProductoService: productoService,
 	}
 }
+
 func (handler *ProductoHandler) ObtenerProductos(c *gin.Context) {
 	productos := handler.ProductoService.ObtenerProductos()
 	log.Printf("[handler:ProductoHandler][method:ObtenerProductos][productos:%v][cantidad:%d]", productos, len(productos))
 	c.JSON(http.StatusOK, productos)
+}
+func (handler *ProductoHandler) ObtenerProductoPorID(c *gin.Context) {
+	user := dto.NewUser(utils.GetUserInfoFromContext(c))
+	id := c.Param("id")
+	//invocamos al metodo
+	producto, err := handler.ProductoService.ObtenerProductoPorID(&dto.Producto{ID: id})
+	if err != nil {
+		log.Printf("[handler:ProductoHandler][method:ObtenerProductoPorId][producto:%+v][user:%s]", err.Error(), user.Codigo)
+
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+	//Agregamos un log para indicar informacion
+	c.JSON(http.StatusOK, producto)
 }
 func (handler *ProductoHandler) InsertarProducto(c *gin.Context) {
 	var producto dto.Producto

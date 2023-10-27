@@ -69,7 +69,7 @@ func (repo PedidoRepository) ObtenerPedidosAprobados() ([]model.Pedido, error) {
 func (repository *PedidoRepository) ObtenerPedidoPorID(pedidoAFiltrar model.Pedido) (*model.Pedido, error) {
 	collection := repository.db.GetClient().Database("Banda").Collection("pedidos")
 
-	filtro := bson.M{"id": pedidoAFiltrar.ID}
+	filtro := bson.M{"_id": pedidoAFiltrar.ID}
 
 	var pedido model.Pedido
 

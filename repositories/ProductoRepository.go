@@ -16,6 +16,7 @@ type ProductoRepositoryInterface interface {
 	EliminarProducto(id primitive.ObjectID) (*mongo.DeleteResult, error)
 	InsertarProducto(Producto model.Producto) (*mongo.InsertOneResult, error)
 	ModificarProducto(Producto model.Producto) (*mongo.UpdateResult, error)
+	ObtenerProductoPorID(productoAFiltrar model.Producto) (model.Producto, error)
 }
 type ProductoRepository struct {
 	db DB
@@ -44,6 +45,22 @@ func (repo ProductoRepository) ObtenerProductos() ([]model.Producto, error) {
 		productos = append(productos, Producto)
 	}
 	return productos, err
+}
+
+// Metodo para obtener un producto filtrado por ID
+func (repository *ProductoRepository) ObtenerProductoPorID(productoAFiltrar model.Producto) (model.Producto, error) {
+	collection := repository.db.GetClient().Database("BandaAncha").Collection("Productos")
+
+	filtro := bson.M{"_id": productoAFiltrar.ID}
+
+	var producto model.Producto
+
+	err := collection.FindOne(context.Background(), filtro).Decode(&producto)
+
+	if err != nil {
+		fmt.Printf("Error: %v\n", err)
+	}
+	return producto, err
 }
 
 // Metodo para instertar un Producto nuevo

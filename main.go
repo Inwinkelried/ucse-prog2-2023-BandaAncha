@@ -25,7 +25,7 @@ func main() {
 	mappingRoutes()
 
 	log.Println("Iniciando el servidor...")
-	router.Run(":8080")
+	router.Run(":8082")
 }
 func mappingRoutes() {
 	//middleware para permitir peticiones del mismo server localhost
@@ -70,6 +70,7 @@ func mappingRoutes() {
 	groupProducto.GET("/", productoHandler.ObtenerProductos)
 	//group.GET("/:id", aulaHandler.ObtenerAulaPorID)
 	groupProducto.POST("/", productoHandler.InsertarProducto)
+	groupProducto.GET("/:id", productoHandler.ObtenerProductoPorID)
 	groupProducto.PUT("/:id", productoHandler.ModificarProducto)
 	groupProducto.DELETE("/:id", productoHandler.EliminarProducto)
 

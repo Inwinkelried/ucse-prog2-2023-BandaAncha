@@ -2,7 +2,9 @@ package services
 
 import (
 	"github.com/Inwinkelried/ucse-prog2-2023-BandaAncha/dto"
+	//"github.com/Inwinkelried/ucse-prog2-2023-BandaAncha/model"
 	"github.com/Inwinkelried/ucse-prog2-2023-BandaAncha/repositories"
+	//"github.com/Inwinkelried/ucse-prog2-2023-BandaAncha/utils"
 )
 
 type PedidoServiceInterface interface {
@@ -16,7 +18,10 @@ type PedidoServiceInterface interface {
 }
 
 type PedidoService struct {
-	pedidoRepository repositories.PedidoRepositoryInterface
+	envioRepository    repositories.EnvioRepositoryInterface
+	camionRepository   repositories.CamionRepositoryInterface
+	pedidoRepository   repositories.PedidoRepositoryInterface
+	productoRepository repositories.ProductoRepositoryInterface
 }
 
 func NewPedidoService(pedidoRepository repositories.PedidoRepositoryInterface) *PedidoService {
@@ -45,10 +50,13 @@ func (service PedidoService) ObtenerPedidos() []*dto.Pedido {
 	}
 	return pedidos
 }
-func (service PedidoService) InsertarPedido(pedido *dto.Pedido) bool {
-	service.pedidoRepository.InsertarPedido(pedido.GetModel())
+
+func (service PedidoService) InsertarPedido(pedidoACrear *dto.Pedido) bool {
+
+	service.pedidoRepository.InsertarPedido(pedidoACrear.GetModel())
 	return true
 }
+
 func (service PedidoService) AceptarPedido(pedido *dto.Pedido) bool {
 	service.pedidoRepository.AceptarPedido(pedido.GetModel())
 	return true

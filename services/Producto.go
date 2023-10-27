@@ -11,6 +11,7 @@ type ProductoInterface interface {
 	InsertarProducto(Producto *dto.Producto) bool
 	EliminarProducto(id string) bool
 	ModificarProducto(Producto *dto.Producto) bool
+	ObtenerProductoPorID(productoConID *dto.Producto) (*dto.Producto, error)
 }
 type ProductoService struct {
 	ProductoRepository repositories.ProductoRepositoryInterface
@@ -29,6 +30,18 @@ func (service *ProductoService) ObtenerProductos() []*dto.Producto {
 		Productos = append(Productos, Producto)
 	}
 	return Productos
+} //cambio realizado aca, revisar
+func (service *ProductoService) ObtenerProductoPorID(productoConID *dto.Producto) (*dto.Producto, error) {
+	productoDB, err := service.ProductoRepository.ObtenerProductoPorID(productoConID.GetModel())
+
+	var producto *dto.Producto
+
+	if err != nil {
+		return nil, err
+	} else {
+		producto = dto.NewProducto(productoDB)
+	}
+	return producto, nil
 }
 func (service *ProductoService) InsertarProducto(Producto *dto.Producto) bool {
 	service.ProductoRepository.InsertarProducto(Producto.GetModel())

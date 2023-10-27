@@ -22,8 +22,8 @@ type Producto struct {
 
 func NewProducto(producto model.Producto) *Producto {
 	return &Producto{
-		ID:                utils.GetStringIDFromObjectID(producto.ID),
-		CodigoProducto:    producto.CodigoProducto,
+		ID: utils.GetStringIDFromObjectID(producto.ID),
+
 		Tipo:              producto.Tipo,
 		Nombre:            producto.Nombre,
 		PesoUnitario:      producto.PesoUnitario,
@@ -36,9 +36,9 @@ func NewProducto(producto model.Producto) *Producto {
 }
 func (producto Producto) GetModel() model.Producto {
 	return model.Producto{
-		ID:                utils.GetObjectIDFromStringID(producto.ID),
-		Tipo:              producto.Tipo,
-		CodigoProducto:    producto.CodigoProducto,
+		ID:   utils.GetObjectIDFromStringID(producto.ID),
+		Tipo: producto.Tipo,
+
 		Nombre:            producto.Nombre,
 		PesoUnitario:      producto.PesoUnitario,
 		PrecioUnitario:    producto.PrecioUnitario,
