@@ -1,12 +1,27 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <title>Explorando Camiones</title>
+    <meta name="referrer" content="origin">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="styles.css">
 </head>
+
 <body>
-    <h1>Lista de Camiones</h1>
-    <table id="tablaListado">
+    <h1 id="tituloTabla"> Lista de Camiones</h1>
+    <div class="filtros">
+        <h3>Filtro por patente</h3>
+        <div class="input-group">
+            <label for="filtroPatente">Patente:</label>
+            <input type="text" name="filtroPatente" id="filtroPatente">
+            <input type="button" value="Filtrar" id="botonFiltrar">
+        </div>
+    </div>
+
+    <table id="tablaListado" cellspacing="1" cellpading "1">
         <thead>
             <tr>
                 <th>ID</th>
@@ -17,7 +32,23 @@
                 <th>Fecha Modificacion</th>
             </tr>
         </thead>
-        <tbody></tbody>
+        <tbody> <!-- Todas las filas de datos -->
+
+        </tbody>
+        <tfoot> <!-- Todas las filas de pie -->
+            <tr>
+                <td colspan="6">
+                    <a href="form-camion.html"><button>Nuevo</button></a>
+                </td>
+            </tr>
+        </tfoot>
     </table>
+    <script src="scripts.js"></script>
 </body>
+
+</html>
+
+
+</body>
+
 </html>
