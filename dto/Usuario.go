@@ -5,10 +5,10 @@ import (
 )
 
 type Usuario struct {
-	Codigo   string `json:codigo`
-	Email    string `json:email`
-	Username string `json:username`
-	Rol      string `json:rol`
+	Codigo   string `json:"codigo"`
+	Email    string `json:"email"`
+	Username string `json:"username"`
+	Rol      string `json:"rol"`
 }
 
 func NewUser(userInfo *responses.UserInfo) Usuario {

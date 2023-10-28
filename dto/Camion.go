@@ -8,12 +8,12 @@ import (
 )
 
 type Camion struct {
-	ID                string
-	Patente           string
-	PesoMaximo        int
-	CostoKm           int
-	FechaCreacion     time.Time
-	FechaModificacion time.Time
+	ID                string    `json:"id,omitempty"`
+	Patente           string    `json:"patente"`
+	PesoMaximo        int       `json:"peso_maximo"`
+	CostoKm           int       `json:"costo_km"`
+	FechaCreacion     time.Time `json:"fecha_creacion"`
+	FechaModificacion time.Time `json:"fecha_modificacion"`
 }
 
 func NewCamion(camion model.Camion) *Camion {
