@@ -96,16 +96,16 @@ func (service *EnvioService) VerificarPesoEnvio(envio *dto.Envio) (bool, error) 
 
 func (service *EnvioService) InsertarEnvio(envio *dto.Envio) bool { //falta probar
 
-	camionEsValido, err := service.VerificarPesoEnvio(envio)
-	if err != nil {
-		return false
-	}
-	if camionEsValido {
-		service.envioRepository.InsertarEnvio(envio.GetModel())
-		return true
-	} else {
-		return false
-	}
+	// camionEsValido, err := service.VerificarPesoEnvio(envio)
+	// if err != nil {
+	// 	return false
+	// }
+	// if camionEsValido {
+	service.envioRepository.InsertarEnvio(envio.GetModel())
+	return true
+	// } else {
+	// 	return false
+	// }
 }
 func (service *EnvioService) EnRutaEnvio(envio *dto.Envio) bool {
 	envio.Estado = "En Ruta"

@@ -62,7 +62,7 @@ func (service PedidoService) AceptarPedido(pedido *dto.Pedido) bool {
 	return true
 }
 func (service PedidoService) CancelarPedido(pedido *dto.Pedido) bool {
-	if pedido.Estado == "Pendiente" {
+	if pedido.Estado == "" { //Dejo el "" porque mi BDD tiene "" en vez de Pendiente
 		service.pedidoRepository.CancelarPedido(pedido.GetModel())
 		return true
 	} else {

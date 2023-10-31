@@ -128,7 +128,7 @@ func (repo PedidoRepository) ParaEnviarPedido(pedido model.Pedido) (*mongo.Updat
 func (repo PedidoRepository) EnviadoPedido(pedido model.Pedido) (*mongo.UpdateResult, error) {
 	lista := repo.db.GetClient().Database("BandaAncha").Collection("Pedidos")
 	filtro := bson.M{"_id": pedido.ID}
-	entity := bson.M{"$set": bson.M{"estado": "Enviado"}}
+	entity := bson.M{"$set": bson.M{"Estado": "Enviado"}}
 	resultado, err := lista.UpdateOne(context.TODO(), filtro, entity)
 	return resultado, err
 }

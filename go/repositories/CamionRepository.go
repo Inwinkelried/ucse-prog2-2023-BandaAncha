@@ -18,7 +18,7 @@ type CamionRepositoryInterface interface {
 	InsertarCamion(camion model.Camion) (*mongo.InsertOneResult, error)
 	ModificarCamion(camion model.Camion) (*mongo.UpdateResult, error)
 	ObtenercamionPorID(camionABuscar model.Camion) (model.Camion, error)
-	obtenerCamiones(filtro bson.M) ([]model.Camion, error)
+
 	ObtenerCamionPorPatente(camion model.Camion) (model.Camion, error)
 }
 type CamionRepository struct {
