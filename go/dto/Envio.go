@@ -8,13 +8,13 @@ import (
 )
 
 type Envio struct {
-	ID                string
-	IDcamion          string
-	Pedidos           []string
-	Paradas           []Parada
-	Estado            string
-	FechaCreacion     time.Time
-	FechaModificacion time.Time
+	ID                string    `json:"id,omitempty"`
+	IDcamion          string    `json:"id_camion"`
+	Pedidos           []string  `json:"pedidos"`
+	Paradas           []Parada  `json:"paradas"`
+	Estado            string    `json:"estado"`
+	FechaCreacion     time.Time `json:"fecha_creacion"`
+	FechaModificacion time.Time `json:"fecha_modificacion"`
 }
 
 func NewEnvio(envio model.Envio) *Envio {

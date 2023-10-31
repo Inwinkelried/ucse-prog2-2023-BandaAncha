@@ -25,6 +25,19 @@ func (handler *PedidoHandler) ObtenerPedidosAprobados(c *gin.Context) {
 	log.Printf("[handler:PedidoHandler][method:ObtenerPedidosAprobados][cantidad:%d][user:%s]", len(pedidos), user.Codigo)
 	c.JSON(http.StatusOK, pedidos)
 }
+func (handler *PedidoHandler) ObtenerPedidoPorID(c *gin.Context) {
+	user := dto.NewUser(utils.GetUserInfoFromContext(c))
+	id := c.Param("id")
+	pedido, err := handler.pedidoService.ObtenerPedidoPorID(&dto.Pedido{ID: id})
+	if err != nil {
+		log.Printf("[handler:EnvioHandler][method:ObtenerEnvioPorId][pedido:%+v][user:%s]", err.Error(), user.Codigo)
+
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+	//Agregamos un log para indicar informacion
+	c.JSON(http.StatusOK, pedido)
+}
 func (handler *PedidoHandler) ObtenerPedidos(c *gin.Context) {
 	user := dto.NewUser(utils.GetUserInfoFromContext(c))
 	pedidos := handler.pedidoService.ObtenerPedidos()

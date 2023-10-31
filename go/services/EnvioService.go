@@ -23,9 +23,12 @@ type EnvioService struct {
 	productoRepository repositories.ProductoRepositoryInterface
 }
 
-func NewEnvioService(envioRepository repositories.EnvioRepositoryInterface) *EnvioService {
+func NewEnvioService(envioRepository repositories.EnvioRepositoryInterface, camionRepository repositories.CamionRepositoryInterface, pedidoRepository repositories.PedidoRepositoryInterface, productoRepository repositories.ProductoRepositoryInterface) *EnvioService {
 	return &EnvioService{
-		envioRepository: envioRepository,
+		envioRepository:    envioRepository,
+		camionRepository:   camionRepository,
+		pedidoRepository:   pedidoRepository,
+		productoRepository: productoRepository,
 	}
 }
 func (service *EnvioService) AgregarParada(envio *dto.Envio) (bool, error) {
@@ -68,23 +71,23 @@ func (service *EnvioService) ObtenerEnvios() []*dto.Envio {
 }
 
 func (service *EnvioService) VerificarPesoEnvio(envio *dto.Envio) (bool, error) {
-	camionConID := model.Camion{Patente: envio.IDcamion}
+	camionConID := model.Camion{Patente: envio.IDcamion} // Busco el camion por patente
 	//aca ocurre el error
 	camionEncontrado, err := service.camionRepository.ObtenerCamionPorPatente(camionConID)
 	if err != nil {
 		return false, err
 	}
-	if camionEncontrado.Patente == "" {
-		return false, nil // No se encontró ningún camión con esa patente
+	if camionEncontrado.Patente == "" { // Si no encuentra el camion...
+		return false, nil
 	}
 	var pesototal int = 0
 	for _, pedido := range envio.Pedidos {
 		pedidoAFiltrar := model.Pedido{ID: utils.GetObjectIDFromStringID(pedido)}
-		pedidoFiltrado, err := service.pedidoRepository.ObtenerPedidoPorId(pedidoAFiltrar)
+		pedidoFiltrado, err := service.pedidoRepository.ObtenerPedidoPorID(pedidoAFiltrar)
 		if err != nil {
 			return false, err
 		}
-		pesoPedido, err := service.pedidoRepository.ObtenerPesoPedido(*pedidoFiltrado)
+		pesoPedido, err := service.pedidoRepository.ObtenerPesoPedido(pedidoFiltrado)
 		pesototal = pesototal + pesoPedido
 	}
 	if pesototal <= camionEncontrado.PesoMaximo {
@@ -96,16 +99,16 @@ func (service *EnvioService) VerificarPesoEnvio(envio *dto.Envio) (bool, error) 
 
 func (service *EnvioService) InsertarEnvio(envio *dto.Envio) bool { //falta probar
 
-	// camionEsValido, err := service.VerificarPesoEnvio(envio)
-	// if err != nil {
-	// 	return false
-	// }
-	// if camionEsValido {
-	service.envioRepository.InsertarEnvio(envio.GetModel())
-	return true
-	// } else {
-	// 	return false
-	// }
+	camionEsValido, err := service.VerificarPesoEnvio(envio)
+	if err != nil {
+		return false
+	}
+	if camionEsValido {
+		service.envioRepository.InsertarEnvio(envio.GetModel())
+		return true
+	} else {
+		return false
+	}
 }
 func (service *EnvioService) EnRutaEnvio(envio *dto.Envio) bool {
 	envio.Estado = "En Ruta"
@@ -115,16 +118,7 @@ func (service *EnvioService) EnRutaEnvio(envio *dto.Envio) bool {
 
 func (service *EnvioService) DespachadoEnvio(envio *dto.Envio) (bool, error) { //hay que probar
 	envio.Estado = "Despachado"
-	// Pedidos := envio.Pedidos
-	// for _, pedido := range Pedidos {
-	// 	Productos := pedido.Productos
-	// 	for _, producto := range Productos {
-	// 		productoAFiltrar := model.Producto{ID: utils.GetObjectIDFromStringID(producto.CodigoProducto)}
-	// 		productoDB, _ := service.productoRepository.ObtenerProductoPorID(productoAFiltrar)
-	// 		productoDB.StockActual = productoDB.StockActual - producto.Cantidad
-	// 		service.productoRepository.ModificarProducto(productoDB)
-	// 	}
-	// }
+
 	service.envioRepository.ActualizarEnvio(envio.GetModel())
 	return true, nil
 }

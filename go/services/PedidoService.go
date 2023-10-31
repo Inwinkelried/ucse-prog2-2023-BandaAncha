@@ -15,6 +15,7 @@ type PedidoServiceInterface interface {
 	ParaEnviarPedido(pedido *dto.Pedido) bool
 	EnviadoPedido(pedido *dto.Pedido) bool
 	ObtenerPedidosAprobados() []*dto.Pedido
+	ObtenerPedidoPorID(pedido *dto.Pedido) (*dto.Pedido, error)
 }
 
 type PedidoService struct {
@@ -24,10 +25,26 @@ type PedidoService struct {
 	productoRepository repositories.ProductoRepositoryInterface
 }
 
-func NewPedidoService(pedidoRepository repositories.PedidoRepositoryInterface) *PedidoService {
+func NewPedidoService(envioRepository repositories.EnvioRepositoryInterface, camionRepository repositories.CamionRepositoryInterface, pedidoRepository repositories.PedidoRepositoryInterface, productoRepository repositories.ProductoRepositoryInterface) *PedidoService {
 	return &PedidoService{
-		pedidoRepository: pedidoRepository,
+		envioRepository:    envioRepository,
+		camionRepository:   camionRepository,
+		pedidoRepository:   pedidoRepository,
+		productoRepository: productoRepository,
 	}
+}
+func (service PedidoService) ObtenerPedidoPorID(pedidoConID *dto.Pedido) (*dto.Pedido, error) {
+	pedidoDB, err := service.pedidoRepository.ObtenerPedidoPorID(pedidoConID.GetModel())
+
+	var pedido *dto.Pedido
+
+	if err != nil {
+		return nil, err
+	} else {
+		pedido = dto.NewPedido(pedidoDB)
+	}
+
+	return pedido, nil
 }
 
 // Necesito un metodo similar a agregar parada de envio, pero que agregue productos al pedido

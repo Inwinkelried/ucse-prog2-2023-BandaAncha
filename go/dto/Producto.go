@@ -8,15 +8,15 @@ import (
 )
 
 type Producto struct {
-	ID                string
-	Tipo              string
-	Nombre            string
-	PesoUnitario      int
-	PrecioUnitario    int
-	StockMinimo       int
-	StockActual       int
-	FechaCreacion     time.Time
-	FechaModificacion time.Time
+	ID                string    `json:"id,omitempty"`
+	Tipo              string    `json:"tipo"`
+	Nombre            string    `json:"nombre"`
+	PesoUnitario      int       `json:"peso_unitario"`
+	PrecioUnitario    int       `json:"precio_unitario"`
+	StockMinimo       int       `json:"stock_minimo"`
+	StockActual       int       `json:"stock_actual"`
+	FechaCreacion     time.Time `json:"fecha_creacion"`
+	FechaModificacion time.Time `json:"fecha_modificacion"`
 }
 
 func NewProducto(producto model.Producto) *Producto {

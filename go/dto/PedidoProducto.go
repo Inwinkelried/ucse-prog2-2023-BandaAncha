@@ -6,13 +6,13 @@ import (
 )
 
 type PedidoProducto struct {
-	ID             string
-	CodigoProducto string
-	Tipo           string
-	Nombre         string
-	PesoUnitario   int
-	PrecioUnitario int
-	Cantidad       int
+	ID             string `json:"id,omitempty"`
+	CodigoProducto string `json:"codigo_producto"`
+	Tipo           string `json:"tipo"`
+	Nombre         string `json:"nombre"`
+	PesoUnitario   int    `json:"peso_unitario"`
+	PrecioUnitario int    `json:"precio_unitario"`
+	Cantidad       int    `json:"cantidad"`
 }
 
 func NewPedidoProducto(pedidoProducto *model.PedidoProducto) *PedidoProducto {

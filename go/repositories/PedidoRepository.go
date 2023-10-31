@@ -18,7 +18,7 @@ type PedidoRepositoryInterface interface {
 	CancelarPedido(pedido model.Pedido) (*mongo.UpdateResult, error)
 	ParaEnviarPedido(pedido model.Pedido) (*mongo.UpdateResult, error)
 	EnviadoPedido(pedido model.Pedido) (*mongo.UpdateResult, error)
-	ObtenerPedidoPorId(pedidoConId model.Pedido) (*model.Pedido, error)
+	ObtenerPedidoPorID(pedidoConId model.Pedido) (model.Pedido, error)
 	ObtenerPesoPedido(pedido model.Pedido) (int, error)
 	ActualizarPedido(pedido model.Pedido) (*mongo.UpdateResult, error)
 }
@@ -67,20 +67,20 @@ func (repo PedidoRepository) ObtenerPedidosAprobados() ([]model.Pedido, error) {
 	}
 	return Pedidos, err
 }
-func (repository *PedidoRepository) ObtenerPedidoPorID(pedidoAFiltrar model.Pedido) (*model.Pedido, error) {
-	collection := repository.db.GetClient().Database("Banda").Collection("pedidos")
-
-	filtro := bson.M{"_id": pedidoAFiltrar.ID}
-
+func (repository PedidoRepository) ObtenerPedidoPorID(pedidoABuscar model.Pedido) (model.Pedido, error) {
+	collection := repository.db.GetClient().Database("BandaAncha").Collection("Pedidos")
+	filtro := bson.M{"_id": pedidoABuscar.ID}
+	cursor, err := collection.Find(context.TODO(), filtro)
+	defer cursor.Close(context.Background())
+	// Itera a través de los resultados
 	var pedido model.Pedido
-
-	err := collection.FindOne(context.Background(), filtro).Decode(&pedido)
-
-	if err != nil {
-		return nil, err
+	for cursor.Next(context.Background()) {
+		err := cursor.Decode(&pedido)
+		if err != nil {
+			fmt.Printf("Error: %v\n", err)
+		}
 	}
-
-	return &pedido, err
+	return pedido, err
 }
 func (repo PedidoRepository) ObtenerPedidos() ([]model.Pedido, error) {
 	lista := repo.db.GetClient().Database("BandaAncha").Collection("Pedidos")
@@ -134,18 +134,3 @@ func (repo PedidoRepository) EnviadoPedido(pedido model.Pedido) (*mongo.UpdateRe
 }
 
 // ------------------------------------------------------------------------------
-func (repository *PedidoRepository) ObtenerPedidoPorId(pedidoConId model.Pedido) (*model.Pedido, error) {
-	collection := repository.db.GetClient().Database("empresa").Collection("pedidos")
-
-	filtro := bson.M{"_id": pedidoConId.ID}
-
-	var pedido model.Pedido
-
-	err := collection.FindOne(context.Background(), filtro).Decode(&pedido)
-
-	if err != nil {
-		return nil, err
-	}
-
-	return &pedido, err
-}

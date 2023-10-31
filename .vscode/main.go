@@ -66,6 +66,7 @@ func mappingRoutes() {
 	groupPedido.PUT("/Cancel/:id", pedidoHandler.CancelarPedido)
 	groupPedido.PUT("/Send/:id", pedidoHandler.ParaEnviarPedido)
 	groupPedido.PUT("/Sent/:id", pedidoHandler.EnviadoPedido)
+	groupPedido.GET("/:id", pedidoHandler.ObtenerPedidoPorID)
 	//PRODUCTOS
 	groupProducto.GET("/", productoHandler.ObtenerProductos)
 	//group.GET("/:id", aulaHandler.ObtenerAulaPorID)
@@ -86,13 +87,6 @@ func mappingRoutes() {
 func dependencies() {
 	var database repositories.DB
 	database = repositories.NewMongoDB()
-	//ENVIO
-	var envioRepo repositories.EnvioRepositoryInterface
-	var envioService services.EnvioServiceInterface
-	envioRepo = repositories.NewEnvioRepository(database)
-	envioService = services.NewEnvioService(envioRepo)
-	envioHandler = handlers.NewEnvioHandler(envioService)
-
 	//CAMIONES
 	var camionRepo repositories.CamionRepositoryInterface
 	var camionService services.CamionInterface
@@ -109,7 +103,13 @@ func dependencies() {
 	var pedidoRepo repositories.PedidoRepositoryInterface
 	var pedidoService services.PedidoServiceInterface
 	pedidoRepo = repositories.NewPedidoRepository(database)
-	pedidoService = services.NewPedidoService(pedidoRepo)
+	pedidoService = services.NewPedidoService(nil, camionRepo, pedidoRepo, productoRepo)
 	pedidoHandler = handlers.NewPedidoHandler(pedidoService)
+	//ENVIO
+	var envioRepo repositories.EnvioRepositoryInterface
+	var envioService services.EnvioServiceInterface
+	envioRepo = repositories.NewEnvioRepository(database)
+	envioService = services.NewEnvioService(envioRepo, camionRepo, pedidoRepo, productoRepo)
+	envioHandler = handlers.NewEnvioHandler(envioService)
 
 }
