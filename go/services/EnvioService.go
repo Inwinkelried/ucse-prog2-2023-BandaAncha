@@ -48,15 +48,10 @@ func (service *EnvioService) AgregarParada(envio *dto.Envio) (bool, error) {
 }
 func (service *EnvioService) ObtenerEnvioPorID(envioConID *dto.Envio) (*dto.Envio, error) {
 	envioDB, err := service.envioRepository.ObtenerEnvioPorID(envioConID.GetModel())
-
-	var envio *dto.Envio
-
 	if err != nil {
 		return nil, err
-	} else {
-		envio = dto.NewEnvio(envioDB)
 	}
-
+	var envio = dto.NewEnvio(envioDB)
 	return envio, nil
 }
 
@@ -111,14 +106,36 @@ func (service *EnvioService) InsertarEnvio(envio *dto.Envio) bool { //falta prob
 	}
 }
 func (service *EnvioService) EnRutaEnvio(envio *dto.Envio) bool {
-	envio.Estado = "En Ruta"
-	service.envioRepository.ActualizarEnvio(envio.GetModel())
+	envioParaActualizar, err := service.ObtenerEnvioPorID(envio)
+	if err != nil {
+		return false
+	}
+	envioParaActualizar.Estado = "En Ruta"
+	service.envioRepository.ActualizarEnvio(envioParaActualizar.GetModel())
 	return true
 }
 
 func (service *EnvioService) DespachadoEnvio(envio *dto.Envio) (bool, error) { //hay que probar
-	envio.Estado = "Despachado"
+	envioParaActualizar, err := service.ObtenerEnvioPorID(envio)
+	if err != nil {
+		return false, err
+	}
+	envioParaActualizar.Estado = "Despachado"
+	for _, pedido := range envioParaActualizar.Pedidos {
+		pedidoAFiltrar := model.Pedido{ID: utils.GetObjectIDFromStringID(pedido)}
+		pedidoFiltrado, err := service.pedidoRepository.ObtenerPedidoPorID(pedidoAFiltrar)
+		if err != nil {
+			return false, err
+		}
 
-	service.envioRepository.ActualizarEnvio(envio.GetModel())
+		for _, productoPedido := range pedidoFiltrado.Productos { //en stock actual le asigno la cantidad la CANTIDAD del pedidoProducto
+			productoADescontar := model.Producto{ID: utils.GetObjectIDFromStringID(productoPedido.CodigoProducto), StockActual: productoPedido.Cantidad} //Preguntarle a Maxi si esto esta bien
+			_, err := service.productoRepository.DescontarStockProducto(productoADescontar)
+			if err != nil {
+				return false, err
+			}
+		}
+	}
+	service.envioRepository.ActualizarEnvio(envioParaActualizar.GetModel())
 	return true, nil
 }

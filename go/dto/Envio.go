@@ -21,7 +21,7 @@ func NewEnvio(envio model.Envio) *Envio {
 	return &Envio{
 		ID:                utils.GetStringIDFromObjectID(envio.ID),
 		IDcamion:          envio.IDcamion,
-		Pedidos:           []string{},
+		Pedidos:           envio.Pedidos,
 		Paradas:           []Parada{},
 		Estado:            "A despachar",
 		FechaCreacion:     time.Now(),

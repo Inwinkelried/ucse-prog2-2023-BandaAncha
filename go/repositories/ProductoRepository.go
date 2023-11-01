@@ -18,6 +18,7 @@ type ProductoRepositoryInterface interface {
 	InsertarProducto(Producto model.Producto) (*mongo.InsertOneResult, error)
 	ModificarProducto(Producto model.Producto) (*mongo.UpdateResult, error)
 	ObtenerProductoPorID(productoAFiltrar model.Producto) (model.Producto, error)
+	DescontarStockProducto(producto model.Producto) (*mongo.UpdateResult, error)
 }
 type ProductoRepository struct {
 	db DB
@@ -83,4 +84,13 @@ func (repo ProductoRepository) EliminarProducto(id primitive.ObjectID) (*mongo.D
 	filtro := bson.M{"_id": id}
 	resultado, err := lista.DeleteOne(context.TODO(), filtro)
 	return resultado, err
+}
+func (repo ProductoRepository) DescontarStockProducto(producto model.Producto) (*mongo.UpdateResult, error) { // hay q probarlo
+	var productoFiltrado, err = repo.ObtenerProductoPorID(producto)
+	if err != nil {
+		return nil, err
+	}
+	var total int = productoFiltrado.StockActual - producto.StockActual
+	productoFiltrado.StockActual = total
+	return repo.ModificarProducto(productoFiltrado)
 }
