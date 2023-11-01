@@ -66,7 +66,7 @@ func (service *EnvioService) ObtenerEnvios() []*dto.Envio {
 }
 
 func (service *EnvioService) VerificarPesoEnvio(envio *dto.Envio) (bool, error) {
-	camionConID := model.Camion{Patente: envio.IDcamion} // Busco el camion por patente
+	camionConID := model.Camion{Patente: envio.PatenteCamion} // Busco el camion por patente
 	//aca ocurre el error
 	camionEncontrado, err := service.camionRepository.ObtenerCamionPorPatente(camionConID)
 	if err != nil {
