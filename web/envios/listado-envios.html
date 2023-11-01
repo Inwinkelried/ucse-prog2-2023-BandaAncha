@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>Explorando Camiones</title>
+    <title>Explorando Envios</title>
     <meta name="referrer" content="origin">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -11,12 +11,12 @@
 </head>
 
 <body>
-    <h1 id="tituloTabla"> Lista de Camiones</h1>
+    <h1 id="tituloTabla"> Lista de Envíos</h1>
     <div class="filtros">
-        <h3>Filtro por patente</h3>
+        <h3>Filtros</h3>
         <div class="input-group">
-            <label for="filtroPatente">Patente:</label>
-            <input type="text" name="filtroPatente" id="filtroPatente">
+            <label for="filtroIDcamion">ID de Camión:</label>
+            <input type="text" name="filtroIDcamion" id="filtroIDcamion">
             <input type="button" value="Filtrar" id="botonFiltrar">
         </div>
     </div>
@@ -24,9 +24,11 @@
     <table id="elementosTable" cellspacing="1" cellpading "1">
         <thead>
             <tr>
-                <th>Patente</th>
-                <th>Peso Máximo</th>
-                <th>CostoKM</th>
+                <th>ID</th>
+                <th>ID de Camión</th>
+                <th>Pedidos</th>
+                <th>Paradas</th>
+                <th>Estado</th>
                 <th>Fecha Creacion</th>
                 <th>Fecha Modificacion</th>
             </tr>
@@ -36,14 +38,13 @@
         </tbody>
         <tfoot> <!-- Todas las filas de pie -->
             <tr>
-                <td colspan="6">
-                    <a href="form-camion.html"><button>Nuevo</button></a>
+                <td colspan="7">
+                    <a href="form-envio.html"><button>Nuevo</button></a>
                 </td>
             </tr>
         </tfoot>
     </table>
-    <script src="listado-camiones.js"></script>
+    <script src="listado-envios.js"></script>
 </body>
 
 </html>
-

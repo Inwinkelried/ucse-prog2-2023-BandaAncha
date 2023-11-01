@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="referrer" content="origin">
+    <title>Explorando Productos</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Young+Serif&display=swap" rel="stylesheet">
+
+</head>
+
+<body>
+    <h1 id="tituloTabla"> Lista de Productos</h1>
+    <div class="filtros">
+        <h3>Filtros</h3>
+        <div>
+            <button onclick="obtenerProductoFiltrado('stock')">PRODUCTOS CON BAJO STOCK</button> 
+        </div>
+        <div>
+            <label for="">Tipo de producto: </label>
+            <input type="text" name="filtroTipo" id="filtroTipo">
+            <input type="button" value="Buscar" onclick="obtenerProductoFiltrado('tipo')">
+        </div>
+    </div>
+
+    <table id="elementosTable" cellspacing="0" cellpadding="0">
+        <thead> <!-- engloba todas las filas de encabezado -->
+            <tr>
+                <th>Codigo</th>
+                <th>Tipo</th>
+                <th>Descripcion</th>
+                <th>Peso</th>
+                <th>Precio</th>
+                <th>Stock Minimo</th>
+                <th>Stock Actual</th>
+                <th>Fecha Creacion</th>
+                <th>Fecha Ultima Actualizacion</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody> <!-- Todas las filas de datos -->
+
+        </tbody>
+        <tfoot> <!-- Todas las filas de pie -->
+            <tr>
+                <td colspan="6">
+                    <a href="form-producto.html"><button>Nuevo</button></a>
+                </td>
+            </tr>
+        </tfoot>
+    </table>
+    <script src="listado-productos.js"></script>
+
+</body>
+
+</html>

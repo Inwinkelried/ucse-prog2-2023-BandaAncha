@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crear/Editar Producto</title>
+    <meta name="referrer" content="origin">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Young+Serif&display=swap" rel="stylesheet">
+</head>
+
+<body>
+        <h1 id="tituloFormulario"> Crear/Editar Producto </h1>
+        <a href="listado-productos.html">Volver</a>
+        <form action="/" method="post" id="formulario">
+            
+            <div>
+                <label for="codigo">Codigo</label>
+                <input type="text" name="codigo" id="codigo">
+            </div>
+            <div>
+                <label for="nombre">Nombre</label>
+                <input type="text" name="nombre" id="nombre">
+            </div>
+            <div>
+                <label for="tipo">Tipo</label>
+                <input type="text" name="tipo" id="tipo">
+            </div>
+            <div>
+                <label for="pesoUnitario">Peso Unitario</label>
+                <input type="text" name="pesoUnitario" id="pesUnitario">
+            </div>
+            <div>
+                <label for="precioUnitario">Precio Unitario</label>
+                <input type="text" name="precioUnitario" id="precioUnitario">
+            </div>
+            <div>
+                <label for="stockMinimo">Stock Minimo</label>
+                <input type="text" name="stockMinimo" id="stockMinimo">
+            </div>
+            <div>
+                <label for="stockActual">Stock Actual</label>
+                <input type="text" name="stockActual" id="stockActual">
+            </div>
+            <div>
+                <input type="submit" value="Enviar">
+            </div>
+        </form>
+        <script src="form-producto.js"></script>
+    </body>
+
+</html>
