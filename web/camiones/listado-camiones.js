@@ -1,47 +1,70 @@
-document.addEventListener("DOMContentLoaded", function (event) {
-    // if (!isUserLogged()) {
-    //   window.location.href =
-    //     window.location.origin + "/login.html?reason=login_required";
-    // }
-
-    obtenerCamiones();
+document.addEventListener("DOMContentLoaded", function () {
+    cargarDatos();
 });
 
-function obtenerCamiones() {
-    urlConFiltro = `http://localhost:8080/trucks`; //ver que url colocariamos
-    makeRequest(
-        `${urlConFiltro}`,
-        Method.GET,
-        null,
-        ContentType.JSON,
-        CallType.PRIVATE,
-        exitoObtenerCamiones,
-        errorObtenerCamiones
-    );
-}
+function cargarDatos() {
+    fetch("/trucks", { method: "GET" })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error("Error al obtener datos de camiones.");
+            }
+            return response.json();
+        })
+        .then(data => {
+            mostrarDatosTabla(data);
+        })
+        .catch(error => {
+            console.error("Error al obtener datos de camiones:", error);
+        });
+};
 
-function exitoObtenerCamiones(data) {
-    const elementosTable = document //tabla en la que se colocan los camiones que se obtienen
-        .getElementById("elementosTable")
-        .querySelector("tbody");
+function mostrarDatosTabla(datos) {
+    var table = document.getElementById("elementosTable");
+    var tbody = document.getElementById("bodyTable");
 
-    data.forEach((elemento) => {
-        const row = document.createElement("tr"); //crear una fila
+    function mostrarError() {
+        var row = document.createElement("tr");
+        var celdaError = document.createElement("td");
+        celdaError.colSpan = 6;
+        celdaError.textContent = "Error al obtener datos de camiones.";
+        row.appendChild(celdaError);
+        tbody.appendChild(row);
+    }
 
-        row.innerHTML = ` 
-                <td>${elemento.Patente}</td>
-                <td>${elemento.PesoMaximo}</td>
-                <td>${elemento.CostoPorKilometro}</td>
-                <td>${elemento.FechaCreacion}</td>
-                <td>${elemento.FechaModificacion}</td>
-                <td class="acciones"><a href="form.html?patente=${elemento.patente}&tipo=EDITAR">Editar</a> | <a href="form.html?patente=${elemento.patente}&tipo=ELIMINAR">Eliminar</a></td>
-            `;
-        elementosTable.appendChild(row);
+    datos.forEach(function (element) {
+        var row = document.createElement("tr");
+
+        var celdaId = document.createElement("td");
+        celdaId.textContent = element.ID;
+        celdaId.className = "nombreCelda";
+        row.appendChild(celdaId);
+
+        var celdaPatente = document.createElement("td");
+        celdaPatente.textContent = element.Patente;
+        row.appendChild(celdaPatente);
+
+        var celdaPeso = document.createElement("td");
+        celdaPeso.textContent = element.PesoMaximo;
+        row.appendChild(celdaPeso);
+
+        var celdaCosto = document.createElement("td");
+        celdaCosto.textContent = element.CostoKm;
+        row.appendChild(celdaCosto);
+
+        var celdaEditar = document.createElement("td");
+        var botonEditar = document.createElement("button");
+        botonEditar.className = "boton-editar";
+        botonEditar.innerHTML = `<i class="fa-solid fa-pen" style="color: #ffffff;"></i>`;
+        celdaEditar.appendChild(botonEditar);
+        row.appendChild(celdaEditar);
+
+        var celdaEliminar = document.createElement("td");
+        var botonEliminar = document.createElement("button");
+        botonEliminar.className = "boton-eliminar";
+        botonEliminar.innerHTML = `<i class="fa-solid fa-trash" style="color: #ffffff;"></i>`;
+        celdaEliminar.appendChild(botonEliminar);
+        row.appendChild(celdaEliminar);
+
+        tbody.appendChild(row);
     });
-}
-
-function errorObtenerCamiones(response) {
-    alert("Error en la solicitud al servidor.");
-    console.log(response.json());
-    throw new Error("Error en la solicitud al servidor.");
 }

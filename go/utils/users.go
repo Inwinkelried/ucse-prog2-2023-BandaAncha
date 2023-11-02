@@ -13,3 +13,9 @@ func GetUserInfoFromContext(c *gin.Context) *responses.UserInfo {
 	user, _ := userInfo.(*responses.UserInfo)
 	return user
 }
+
+const (
+	RolAdministrador = "Administrador"
+	RolUsuario       = "Usuario"
+	RolConductor     = "Conductor"
+)

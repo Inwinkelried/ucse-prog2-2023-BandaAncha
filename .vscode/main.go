@@ -48,7 +48,6 @@ func mappingRoutes() {
 	//ENVIO
 	groupEnvio.GET("/", envioHandler.ObtenerEnvios)
 	//hay que probar
-
 	groupEnvio.POST("/", envioHandler.InsertarEnvio)
 	// hay q probar
 	groupEnvio.PUT("/AddStop/:id", envioHandler.AgregarParada)
@@ -67,6 +66,7 @@ func mappingRoutes() {
 	groupPedido.PUT("/Send/:id", pedidoHandler.ParaEnviarPedido)
 	groupPedido.PUT("/Sent/:id", pedidoHandler.EnviadoPedido)
 	groupPedido.GET("/:id", pedidoHandler.ObtenerPedidoPorID)
+
 	//PRODUCTOS
 	groupProducto.GET("/", productoHandler.ObtenerProductos)
 	//group.GET("/:id", aulaHandler.ObtenerAulaPorID)
