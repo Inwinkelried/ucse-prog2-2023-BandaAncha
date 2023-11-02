@@ -114,7 +114,7 @@ func (repo PedidoRepository) AceptarPedido(pedido model.Pedido) (*mongo.UpdateRe
 func (repo PedidoRepository) CancelarPedido(pedido model.Pedido) (*mongo.UpdateResult, error) {
 	lista := repo.db.GetClient().Database("BandaAncha").Collection("Pedidos")
 	filtro := bson.M{"_id": pedido.ID}
-	entity := bson.M{"$set": bson.M{"Estado": "Cancelado"}}
+	entity := bson.M{"$set": bson.M{"estado": "Cancelado"}}
 	resultado, err := lista.UpdateOne(context.TODO(), filtro, entity)
 	return resultado, err
 }
