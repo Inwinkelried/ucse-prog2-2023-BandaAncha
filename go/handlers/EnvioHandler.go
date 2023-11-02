@@ -3,6 +3,7 @@ package handlers
 import (
 	"log"
 	"net/http"
+	"time"
 
 	"github.com/Inwinkelried/ucse-prog2-2023-BandaAncha/go/dto"
 	"github.com/Inwinkelried/ucse-prog2-2023-BandaAncha/go/services"
@@ -19,8 +20,48 @@ func NewEnvioHandler(envioService services.EnvioServiceInterface) *EnvioHandler 
 		envioService: envioService,
 	}
 }
+func (handler *EnvioHandler) ObtenerEnviosFiltrados(c *gin.Context) {
+	user := dto.NewUser(utils.GetUserInfoFromContext(c))
+	patente := c.DefaultQuery("patente", "")
+	ultimaParada := c.DefaultQuery("ultimaParada", "")
+	estado := c.DefaultQuery("estado", "")
+	fechaMenorStr := c.DefaultQuery("fechaMenor", "0001-01-01T00:00:00Z")
+	fechaMenor, err := time.Parse(time.RFC3339, fechaMenorStr)
+	if err != nil {
+		fechaMenor = time.Time{}
+	}
+	fechaMayorStr := c.DefaultQuery("fechaMayor", "0001-01-01T00:00:00Z")
+	fechaMayor, err := time.Parse(time.RFC3339, fechaMayorStr)
+	if err != nil {
+		fechaMayor = time.Time{}
+	}
+	//Creamos el filtro
+	filtro := utils.FiltroEnvio{
+		PatenteCamion: patente,
+		Estado:        estado,
+		UltimaParada:  ultimaParada,
+		FechaMenor:    fechaMenor,
+		FechaMayor:    fechaMayor,
+	}
 
-// FALTA PROBAR
+	//Llama al service
+	envios, err := handler.envioService.ObtenerEnviosFiltrados(filtro)
+
+	//Si hay un error, lo devolvemos
+	if err != nil {
+		log.Printf("[handler:EnvioHandler][method:ObtenerEnvios][envio:%+v][user:%s]", err.Error(), user.Codigo)
+
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	//Agregamos un log para indicar información relevante del resultado
+	log.Printf("[handler:AulaHandler][method:ObtenerEnvios][cantidad:%d][user:%s]", len(envios), user.Codigo)
+
+	c.JSON(http.StatusOK, envios)
+
+}
+
 func (handler *EnvioHandler) AgregarParada(c *gin.Context) {
 	user := dto.NewUser(utils.GetUserInfoFromContext(c))
 	id := c.Param("id")
