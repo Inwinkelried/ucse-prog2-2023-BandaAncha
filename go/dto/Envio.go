@@ -9,7 +9,7 @@ import (
 
 type Envio struct {
 	ID                string    `json:"id,omitempty"`
-	IDcamion          string    `json:"id_camion"`
+	PatenteCamion     string    `json:"patente_camion"`
 	Pedidos           []string  `json:"pedidos"`
 	Paradas           []Parada  `json:"paradas"`
 	Estado            string    `json:"estado"`
@@ -20,7 +20,7 @@ type Envio struct {
 func NewEnvio(envio model.Envio) *Envio {
 	return &Envio{
 		ID:                utils.GetStringIDFromObjectID(envio.ID),
-		IDcamion:          envio.IDcamion,
+		PatenteCamion:     envio.PatenteCamion,
 		Pedidos:           envio.Pedidos,
 		Paradas:           []Parada{},
 		Estado:            "A despachar",
@@ -31,7 +31,7 @@ func NewEnvio(envio model.Envio) *Envio {
 func (envio Envio) GetModel() model.Envio {
 	return model.Envio{
 		ID:                utils.GetObjectIDFromStringID(envio.ID),
-		IDcamion:          envio.IDcamion,
+		PatenteCamion:     envio.PatenteCamion,
 		Pedidos:           envio.Pedidos,
 		Paradas:           envio.getParadas(),
 		Estado:            envio.Estado,

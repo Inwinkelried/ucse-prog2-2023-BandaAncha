@@ -5,8 +5,8 @@ import (
 )
 
 type Parada struct {
-	Ciudad       string  `json:"ciudad"`
-	KmRecorridos float64 `json:"km_recorridos"`
+	Ciudad       string `json:"ciudad"`
+	KmRecorridos int    `json:"km_recorridos"`
 }
 
 func NewParada(parada model.Parada) *Parada {
