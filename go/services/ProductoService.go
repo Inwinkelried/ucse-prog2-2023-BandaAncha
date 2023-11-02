@@ -12,6 +12,7 @@ type ProductoInterface interface {
 	EliminarProducto(id string) bool
 	ModificarProducto(Producto *dto.Producto) bool
 	ObtenerProductoPorID(productoConID *dto.Producto) (*dto.Producto, error)
+	ObtenerProductosFiltrados(filtro utils.FiltroProducto) ([]dto.Producto, error)
 }
 type ProductoService struct {
 	ProductoRepository repositories.ProductoRepositoryInterface
@@ -55,4 +56,18 @@ func (service *ProductoService) ModificarProducto(Producto *dto.Producto) bool {
 func (service *ProductoService) EliminarProducto(id string) bool {
 	service.ProductoRepository.EliminarProducto(utils.GetObjectIDFromStringID(id))
 	return true
+}
+func (service *ProductoService) ObtenerProductosFiltrados(filtro utils.FiltroProducto) ([]dto.Producto, error) {
+	productos, err := service.ProductoRepository.ObtenerProductoFiltrados(filtro)
+	var producto *dto.Producto
+	var productosDTO []dto.Producto
+	if err != nil {
+		return nil, err
+	} else {
+		for _, productoDB := range productos {
+			producto = dto.NewProducto(productoDB)
+			productosDTO = append(productosDTO, *producto)
+		}
+	}
+	return productosDTO, nil
 }

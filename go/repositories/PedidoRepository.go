@@ -6,6 +6,7 @@ import (
 	"time"
 
 	"github.com/Inwinkelried/ucse-prog2-2023-BandaAncha/go/model"
+	"github.com/Inwinkelried/ucse-prog2-2023-BandaAncha/go/utils"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
 )
@@ -21,6 +22,7 @@ type PedidoRepositoryInterface interface {
 	ObtenerPedidoPorID(pedidoConId model.Pedido) (model.Pedido, error)
 	ObtenerPesoPedido(pedido model.Pedido) (int, error)
 	ActualizarPedido(pedido model.Pedido) (*mongo.UpdateResult, error)
+	ObtenerPedidosFiltrados(filtro utils.FiltroPedido) ([]model.Pedido, error)
 }
 type PedidoRepository struct {
 	db DB
@@ -132,5 +134,43 @@ func (repo PedidoRepository) EnviadoPedido(pedido model.Pedido) (*mongo.UpdateRe
 	resultado, err := lista.UpdateOne(context.TODO(), filtro, entity)
 	return resultado, err
 }
+func (repository *PedidoRepository) obtenerPedidos(filtro bson.M) ([]model.Pedido, error) {
+	collection := repository.db.GetClient().Database("BandaAncha").Collection("Pedidos")
+	cursor, err := collection.Find(context.Background(), filtro)
+	if err != nil {
+		return nil, err
+	}
+	var pedidos []model.Pedido
+	defer cursor.Close(context.Background())
+	for cursor.Next(context.Background()) {
+		var pedido model.Pedido
+		err := cursor.Decode(pedido)
+		if err != nil {
+			return nil, err
+		}
+		pedidos = append(pedidos, pedido)
+	}
+	if err := cursor.Err(); err != nil {
+		return nil, err
+	}
+	return pedidos, nil
+}
+func (repo PedidoRepository) ObtenerPedidosFiltrados(filtro utils.FiltroPedido) ([]model.Pedido, error) {
+	filtroGenerado := bson.M{}
+	if filtro.Estado != "" {
+		filtroGenerado["estado"] = filtro.Estado
+	}
+	if !filtro.FechaMenor.IsZero() || !filtro.FechaMayor.IsZero() {
+		filtroFecha := bson.M{}
+		if !filtro.FechaMenor.IsZero() {
+			filtroFecha["$gte"] = filtro.FechaMenor
+		}
+		if !filtro.FechaMayor.IsZero() {
+			filtroFecha["$lte"] = filtro.FechaMayor
+		}
+		filtroGenerado["fecha_creacion"] = filtroFecha
+	}
 
-// ------------------------------------------------------------------------------
+	return repo.obtenerPedidos(filtroGenerado)
+
+}

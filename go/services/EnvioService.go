@@ -15,6 +15,7 @@ type EnvioServiceInterface interface {
 	EnRutaEnvio(envio *dto.Envio) bool
 	DespachadoEnvio(envio *dto.Envio) (bool, error)
 	AgregarParada(envio *dto.Envio) (bool, error)
+	ObtenerEnviosFiltrados(filtro utils.FiltroEnvio) ([]dto.Envio, error)
 }
 type EnvioService struct {
 	envioRepository    repositories.EnvioRepositoryInterface
@@ -92,7 +93,7 @@ func (service *EnvioService) VerificarPesoEnvio(envio *dto.Envio) (bool, error) 
 	}
 }
 
-func (service *EnvioService) InsertarEnvio(envio *dto.Envio) bool { //falta probar
+func (service *EnvioService) InsertarEnvio(envio *dto.Envio) bool {
 
 	camionEsValido, err := service.VerificarPesoEnvio(envio)
 	if err != nil {
@@ -115,7 +116,7 @@ func (service *EnvioService) EnRutaEnvio(envio *dto.Envio) bool {
 	return true
 }
 
-func (service *EnvioService) DespachadoEnvio(envio *dto.Envio) (bool, error) { //hay que probar
+func (service *EnvioService) DespachadoEnvio(envio *dto.Envio) (bool, error) {
 	envioParaActualizar, err := service.ObtenerEnvioPorID(envio)
 	if err != nil {
 		return false, err
@@ -128,7 +129,7 @@ func (service *EnvioService) DespachadoEnvio(envio *dto.Envio) (bool, error) { /
 			return false, err
 		}
 
-		for _, productoPedido := range pedidoFiltrado.Productos { //en stock actual le asigno la cantidad la CANTIDAD del pedidoProducto
+		for _, productoPedido := range pedidoFiltrado.Productos {
 			productoADescontar := model.Producto{ID: utils.GetObjectIDFromStringID(productoPedido.CodigoProducto), StockActual: productoPedido.Cantidad} //Preguntarle a Maxi si esto esta bien
 			_, err := service.productoRepository.DescontarStockProducto(productoADescontar)
 			if err != nil {
@@ -138,4 +139,18 @@ func (service *EnvioService) DespachadoEnvio(envio *dto.Envio) (bool, error) { /
 	}
 	service.envioRepository.ActualizarEnvio(envioParaActualizar.GetModel())
 	return true, nil
+}
+func (service *EnvioService) ObtenerEnviosFiltrados(filtro utils.FiltroEnvio) ([]dto.Envio, error) {
+	envios, err := service.envioRepository.ObtenerEnviosFiltrados(filtro)
+	var envio *dto.Envio
+	var enviosDTO []dto.Envio
+	if err != nil {
+		return nil, err
+	} else {
+		for _, envioDB := range envios {
+			envio = dto.NewEnvio(envioDB)
+			enviosDTO = append(enviosDTO, *envio)
+		}
+	}
+	return enviosDTO, nil
 }

@@ -6,6 +6,7 @@ import (
 	"time"
 
 	"github.com/Inwinkelried/ucse-prog2-2023-BandaAncha/go/model"
+	"github.com/Inwinkelried/ucse-prog2-2023-BandaAncha/go/utils"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
 )
@@ -15,6 +16,7 @@ type EnvioRepositoryInterface interface {
 	InsertarEnvio(envio model.Envio) (*mongo.InsertOneResult, error)
 	ActualizarEnvio(envio model.Envio) (*mongo.UpdateResult, error)
 	ObtenerEnvioPorID(envio model.Envio) (model.Envio, error)
+	ObtenerEnviosFiltrados(filtro utils.FiltroEnvio) ([]model.Envio, error)
 }
 type EnvioRepository struct {
 	db DB
@@ -79,4 +81,48 @@ func (repo EnvioRepository) ActualizarEnvio(envio model.Envio) (*mongo.UpdateRes
 	entity := bson.M{"$set": envio}
 	resultado, err := lista.UpdateOne(context.TODO(), filtro, entity)
 	return resultado, err
+}
+func (repository *EnvioRepository) obtenerEnvios(filtro bson.M) ([]model.Envio, error) {
+	collection := repository.db.GetClient().Database("BandaAncha").Collection("Envios")
+	cursor, err := collection.Find(context.Background(), filtro)
+	if err != nil {
+		return nil, err
+	}
+	var envios []model.Envio
+	defer cursor.Close(context.Background())
+	for cursor.Next(context.Background()) {
+		var envio model.Envio
+		err := cursor.Decode(&envio) //aca
+		if err != nil {
+			return nil, err
+		}
+		envios = append(envios, envio)
+	}
+	if err := cursor.Err(); err != nil {
+		return nil, err
+	}
+	return envios, nil
+}
+func (repo EnvioRepository) ObtenerEnviosFiltrados(filtro utils.FiltroEnvio) ([]model.Envio, error) {
+	filtroGenerado := bson.M{}
+	if filtro.Estado != "" {
+		filtroGenerado["estado"] = filtro.Estado
+	}
+	if filtro.PatenteCamion != "" {
+		filtroGenerado["patente_camion"] = filtro.PatenteCamion
+	}
+	// falta hacer filtro paradas
+	if !filtro.FechaMenor.IsZero() || !filtro.FechaMayor.IsZero() {
+		filtroFecha := bson.M{}
+		if !filtro.FechaMenor.IsZero() {
+			filtroFecha["$gte"] = filtro.FechaMenor
+		}
+		if !filtro.FechaMayor.IsZero() {
+			filtroFecha["$lte"] = filtro.FechaMayor
+		}
+		filtroGenerado["fecha_creacion"] = filtroFecha
+	}
+
+	return repo.obtenerEnvios(filtroGenerado)
+
 }

@@ -7,6 +7,7 @@ import (
 	//"time"
 
 	"github.com/Inwinkelried/ucse-prog2-2023-BandaAncha/go/model"
+	"github.com/Inwinkelried/ucse-prog2-2023-BandaAncha/go/utils"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
@@ -18,6 +19,7 @@ type ProductoRepositoryInterface interface {
 	InsertarProducto(Producto model.Producto) (*mongo.InsertOneResult, error)
 	ModificarProducto(Producto model.Producto) (*mongo.UpdateResult, error)
 	ObtenerProductoPorID(productoAFiltrar model.Producto) (model.Producto, error)
+	ObtenerProductoFiltrados(filtro utils.FiltroProducto) ([]model.Producto, error)
 	DescontarStockProducto(producto model.Producto) (*mongo.UpdateResult, error)
 }
 type ProductoRepository struct {
@@ -93,4 +95,36 @@ func (repo ProductoRepository) DescontarStockProducto(producto model.Producto) (
 	var total int = productoFiltrado.StockActual - producto.StockActual
 	productoFiltrado.StockActual = total
 	return repo.ModificarProducto(productoFiltrado)
+}
+func (repo *ProductoRepository) obtenerProductos(filtro bson.M) ([]model.Producto, error) {
+	lista := repo.db.GetClient().Database("BandaAncha").Collection("Productos")
+	cursor, err := lista.Find(context.Background(), filtro)
+	if err != nil {
+		return nil, err
+	}
+	var productos []model.Producto
+	defer cursor.Close(context.Background())
+	for cursor.Next(context.Background()) {
+		var producto model.Producto
+		err := cursor.Decode(&producto)
+		if err != nil {
+			return nil, err
+		}
+		productos = append(productos, producto)
+	}
+	if err := cursor.Err(); err != nil {
+		return nil, err
+	}
+	return productos, nil
+}
+func (repo ProductoRepository) ObtenerProductoFiltrados(filtro utils.FiltroProducto) ([]model.Producto, error) {
+	filtroGenerado := bson.M{}
+	if filtro.TipoProducto != "" {
+		filtroGenerado["tipo"] = filtro.TipoProducto
+	}
+	if filtro.FiltroStockMinimo {
+		filtroGenerado["stock_minimo"] = bson.M{"$lt": filtro.FiltroStockMinimo}
+	}
+	return repo.obtenerProductos(filtroGenerado)
+
 }
