@@ -13,26 +13,48 @@
 <body>
     <h1 id="tituloTabla"> Lista de Envíos</h1>
     <div class="filtros">
-        <h3>Filtros</h3>
+        <h2>Filtros</h2>
         <div class="input-group">
-            <label for="filtroIDcamion">ID de Camión:</label>
-            <input type="text" name="filtroIDcamion" id="filtroIDcamion">
+            <label for="filtroPatenteCamion">Patente del camion: </label>
+            <input type="text" name="filtroPatenteCamion" id="filtroPatenteCamion">
             <input type="button" value="Filtrar" id="botonFiltrar">
         </div>
-    </div>
+        <div class="input-group">
+            <label for="filtroEstadoCamion">Estado del pedido: </label>
+            <input type="text" name="filtroEstadoCamion" id="filtroEstadoCamion">
+            <input type="button" value="Filtrar" id="botonFiltrar">
+        </div>
+        <div class="input-group">
+            <label for="filtroUltimaParada">Ultima Parada: </label>
+            <input type="text" name="filtroUltimaParada" id="filtroUltimaParada">
+            <input type="button" value="Filtrar" id="botonFiltrar">
+        </div>
+        <div class="input-group">
+            <label for="filtroFecha">Fecha de creacion: </label>
+            <div>
+                <label for="desde">Desde: </label>
+                <input type="date" name="desde" id="filtroFecha">
+                <label for="hasta">Hasta: </label>
+                <input type="date" name="hasta" id="filtroFecha">
+                <input type="button" value="Filtrar" id="botonFiltrar">
+            </div>
+        </div>
+        
+        </div>
 
-    <table id="elementosTable" cellspacing="1" cellpading "1">
+    <table id="elementosTable">
         <thead>
             <tr>
-                <th>ID</th>
-                <th>ID de Camión</th>
+                <th>IDpedido</th>
+                <th>IDcamion</th>
                 <th>Pedidos</th>
                 <th>Paradas</th>
                 <th>Estado</th>
-                <th>Fecha Creacion</th>
-                <th>Fecha Modificacion</th>
+                <th>Fecha de creacion</th>
+                <th>Fecha de ultima modificacion</th>
             </tr>
         </thead>
+
         <tbody> <!-- Todas las filas de datos -->
 
         </tbody>
@@ -47,4 +69,4 @@
     <script src="listado-envios.js"></script>
 </body>
 
-</html>
+</html> 

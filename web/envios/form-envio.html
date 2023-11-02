@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crear Envio</title>
+    <meta name="referrer" content="origin">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Young+Serif&display=swap" rel="stylesheet">
+</head>
+
+<body>
+    <a href="listado-productos.html">Volver</a>
+    <h1 id="tituloFormulario"> Nuevo Envio </h1>
+    <h2>Seleccione los pedidos para el envio</h2>
+    <form action="/" method="post" id="formulario">
+        <table>
+            <thead>
+                <tr>
+                    <th></th>
+                    <th>Codigo</th>
+                    <th>Productos</th>
+                    <th>Peso</th>
+                    <th>Destino</th>
+                    <th>Ultima Actualizacion</th>
+                </tr>
+            </thead>
+            <!-- este tbody esta hardcodeado, pero deberia ser dinamico -->
+            <tbody>
+                <tr>
+                    <td><input type="checkbox" name="pedido1"></td>
+                    <td>001</td>
+                    <td>Producto 1, Producto 2</td>
+                    <td>10 kg</td>
+                    <td>Buenos Aires</td>
+                    <td>2022-01-01</td>
+                </tr>
+                <tr>
+                    <td><input type="checkbox" name="pedido2"></td>
+                    <td>002</td>
+                    <td>Producto 3, Producto 4</td>
+                    <td>5 kg</td>
+                    <td>Cordoba</td>
+                    <td>2022-01-02</td>
+                </tr>
+        
+            </tbody>
+        </table>
+        <button type="submit">Enviar</button>
+
+
+
+    </form>
+    <script src="form-producto.js"></script>
+</body>
+    
+    </html>
