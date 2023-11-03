@@ -158,7 +158,7 @@ func (repository *PedidoRepository) obtenerPedidos(filtro bson.M) ([]model.Pedid
 func (repo PedidoRepository) ObtenerPedidosFiltrados(filtro utils.FiltroPedido) ([]model.Pedido, error) {
 	filtroGenerado := bson.M{}
 	if filtro.Estado != "" {
-		filtroGenerado["estado"] = filtro.Estado
+		filtroGenerado["Estado"] = filtro.Estado
 	}
 	if !filtro.FechaMenor.IsZero() || !filtro.FechaMayor.IsZero() {
 		filtroFecha := bson.M{}
@@ -170,7 +170,5 @@ func (repo PedidoRepository) ObtenerPedidosFiltrados(filtro utils.FiltroPedido) 
 		}
 		filtroGenerado["fecha_creacion"] = filtroFecha
 	}
-
 	return repo.obtenerPedidos(filtroGenerado)
-
 }

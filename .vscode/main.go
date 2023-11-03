@@ -55,9 +55,10 @@ func mappingRoutes() {
 	groupEnvio.PUT("/SetDelivered/:id", envioHandler.DespachadoEnvio)
 	groupEnvio.GET("/:id", envioHandler.ObtenerEnvioPorID)
 	groupEnvio.PUT("/SetSent/:id", envioHandler.EnRutaEnvio)
-
+	groupEnvio.GET("/Filter", envioHandler.ObtenerEnviosFiltrados)
 	//PEDIDOS
 	groupPedido.GET("/", pedidoHandler.ObtenerPedidos)
+	groupPedido.GET("/Filter", pedidoHandler.ObtenerPedidosFiltrados)
 	//group.GET("/:id", aulaHandler.ObtenerAulaPorID)
 	groupPedido.POST("/", pedidoHandler.InsertarPedido)
 	groupPedido.GET("/Approved", pedidoHandler.ObtenerPedidosAprobados)

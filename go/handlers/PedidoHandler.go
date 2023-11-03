@@ -23,12 +23,12 @@ func NewPedidoHandler(pedidoService services.PedidoServiceInterface) *PedidoHand
 func (handler *PedidoHandler) ObtenerPedidosFiltrados(c *gin.Context) {
 	user := dto.NewUser(utils.GetUserInfoFromContext(c))
 	estado := c.DefaultQuery("estado", "")
-	fechaMenorStr := c.DefaultQuery("fechaMenor", "0001-01-01T00:00:00Z")
+	fechaMenorStr := c.DefaultQuery("fecha_menor", "0001-01-01T00:00:00Z")
 	fechaMenor, err := time.Parse(time.RFC3339, fechaMenorStr)
 	if err != nil {
 		fechaMenor = time.Time{}
 	}
-	fechaMayorStr := c.DefaultQuery("fechaMayor", "0001-01-01T00:00:00Z")
+	fechaMayorStr := c.DefaultQuery("fecha_mayor", "0001-01-01T00:00:00Z")
 	fechaMayor, err := time.Parse(time.RFC3339, fechaMayorStr)
 	if err != nil {
 		fechaMayor = time.Time{}

@@ -106,7 +106,7 @@ func (repository *EnvioRepository) obtenerEnvios(filtro bson.M) ([]model.Envio, 
 func (repo EnvioRepository) ObtenerEnviosFiltrados(filtro utils.FiltroEnvio) ([]model.Envio, error) {
 	filtroGenerado := bson.M{}
 	if filtro.Estado != "" {
-		filtroGenerado["estado"] = filtro.Estado
+		filtroGenerado["Estado"] = filtro.Estado
 	}
 	if filtro.PatenteCamion != "" {
 		filtroGenerado["patente_camion"] = filtro.PatenteCamion
