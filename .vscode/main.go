@@ -4,6 +4,7 @@ import (
 	"log"
 
 	"github.com/Inwinkelried/ucse-prog2-2023-BandaAncha/go/handlers"
+	"github.com/Inwinkelried/ucse-prog2-2023-BandaAncha/go/middlewares"
 	"github.com/Inwinkelried/ucse-prog2-2023-BandaAncha/go/repositories"
 	"github.com/Inwinkelried/ucse-prog2-2023-BandaAncha/go/services"
 	"github.com/gin-gonic/gin"
@@ -19,6 +20,12 @@ var (
 
 func main() {
 	router = gin.Default()
+
+	// config := cors.DefaultConfig()
+	// config.AllowOrigins = []string{"http://localhost:8080"}
+	// config.AllowMethods = []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"}
+	// router.Use(cors.New(config))
+
 	//Iniciar objetos de handler
 	dependencies()
 	//Iniciar rutas
@@ -30,32 +37,30 @@ func main() {
 func mappingRoutes() {
 	//middleware para permitir peticiones del mismo server localhost
 
-	//cliente para api externa
-	//var authClient clients.AuthClientInterface
-	//authClient = clients.NewAuthClient()
-	//creacion de middleware de autenticacion
-	//authMiddleware := middlewares.NewAuthMiddleware(authClient)
-
 	//Listado de rutas
 	groupCamion := router.Group("/trucks")
 	groupProducto := router.Group("/products")
 	groupPedido := router.Group("/orders")
 	groupEnvio := router.Group("/shippings")
+
+	groupCamion.Use(middlewares.CORSMiddleware())
+	groupProducto.Use(middlewares.CORSMiddleware())
+	groupPedido.Use(middlewares.CORSMiddleware())
+	groupEnvio.Use(middlewares.CORSMiddleware())
 	//Uso del middleware para todas las rutas del grupo
-	//group.Use(authMiddleware.ValidateToken)
-	//group.Use(middlewares.CORSMiddleware())
+	// router.Use(authMiddleware.ValidateToken)
 
 	//ENVIO
 	groupEnvio.GET("/", envioHandler.ObtenerEnvios)
-	//hay que probar
+
 	groupEnvio.POST("/", envioHandler.InsertarEnvio)
-	// hay q probar
 	groupEnvio.PUT("/AddStop/:id", envioHandler.AgregarParada)
-	//hay que probar
+
 	groupEnvio.PUT("/SetDelivered/:id", envioHandler.DespachadoEnvio)
 	groupEnvio.GET("/:id", envioHandler.ObtenerEnvioPorID)
 	groupEnvio.PUT("/SetSent/:id", envioHandler.EnRutaEnvio)
 	groupEnvio.GET("/Filter", envioHandler.ObtenerEnviosFiltrados)
+
 	//PEDIDOS
 	groupPedido.GET("/", pedidoHandler.ObtenerPedidos)
 	groupPedido.GET("/Filter", pedidoHandler.ObtenerPedidosFiltrados)
@@ -69,20 +74,26 @@ func mappingRoutes() {
 	groupPedido.GET("/:id", pedidoHandler.ObtenerPedidoPorID)
 
 	//PRODUCTOS
+
 	groupProducto.GET("/", productoHandler.ObtenerProductos)
-	//group.GET("/:id", aulaHandler.ObtenerAulaPorID)
 	groupProducto.POST("/", productoHandler.InsertarProducto)
 	groupProducto.GET("/:id", productoHandler.ObtenerProductoPorID)
 	groupProducto.PUT("/:id", productoHandler.ModificarProducto)
 	groupProducto.DELETE("/:id", productoHandler.EliminarProducto)
 	groupProducto.GET("/Filter/", productoHandler.ObtenerProductosFiltrados) // hay q probar
+
 	//CAMIONES
+
 	groupCamion.GET("/", camionHandler.ObtenerCamiones)
 	groupCamion.GET("/:id", camionHandler.ObtenerCamionPorID)
-	//group.GET("/:id", aulaHandler.ObtenerAulaPorID)
 	groupCamion.POST("/", camionHandler.InsertarCamion)
 	groupCamion.PUT("/:id", camionHandler.ModificarCamion)
 	groupCamion.DELETE("/:id", camionHandler.EliminarCamion)
+
+	// //para PROBAR
+	// router.GET("/trucks", func(c *gin.Context) {
+	// 	c.HTML(http.StatusOK, "listado-camiones.html", nil)
+	// })
 
 }
 func dependencies() {

@@ -69,6 +69,7 @@ async function makeRequest(
   // Realizar la solicitud HTTP
   try {
     const response = await fetch(url, {
+      mode: "no-cors",
       method: method,
       body: makeBody(contentType, data),
       headers: {
