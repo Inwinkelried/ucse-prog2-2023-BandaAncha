@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Crear/Editar Pedido</title>
+    <title>Crear Pedido</title>
     <meta name="referrer" content="origin">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -12,40 +12,39 @@
 </head>
 
 <body>
-        <h1 id="tituloFormulario"> Crear/Editar Pedido </h1>
+        <h1 id="tituloFormulario"> Crear Pedido </h1>
         <a href="listado-pedidos.html">Volver</a>
         <form action="/" method="post" id="formulario">
             
             <div>
-                <label for="ID">ID</label>
-                <input type="text" name="ID" id="ID">
-            </div>
-            <div>
-                <label for="productos">Productos</label>
-                <input type="text" name="productos" id="productos">
-            </div>
-            <div>
                 <label for="destino">Destino</label>
                 <input type="text" name="destino" id="destino">
             </div>
-            <div>
-                <label for="estado">Estado</label>
-                <input type="text" name="estado" id="estado">
+            <div id="listaProductos">
+                <h2>Productos</h2>
+                <table id="elementosTable">
+                    <thead>
+                        <tr>
+                            <th>Seleccionar</th>
+                            <th>Código</th>
+                            <th>Descripcion</th>
+                            <th>Cantidad</th>
+                            <th>Precio Unitario</th>
+                            <th>Peso Unitario</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Todas las filas de datos -->
+                    </tbody>
+                </table>
             </div>
+           
             <div>
-                <label for="fechaCreacion">Fecha creacion</label>
-                <input type="text" name="fechaCreacion" id="fechaCreacion">
-            </div>
-            <div>
-                <label for="fechaModificacion">Fecha modificacion</label>
-                <input type="text" name="fechaModificacion" id="fechaModificacion">
-            </div>
-            <div>
-                <input type="submit" value="Enviar">
+                <input type="submit" id="botonGuardar" value="Enviar">
             </div>
         </form>
         <script src="form-pedido.js"></script>
-        <script src="../request.js"></script>
+        <!-- <script src="../request.js"></script> -->
     </body>
 
 </html>
