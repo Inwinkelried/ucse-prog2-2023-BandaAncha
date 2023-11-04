@@ -20,9 +20,7 @@ func NewCamionHandler(camionService services.CamionInterface) *CamionHandler {
 	}
 }
 func (handler *CamionHandler) ObtenerCamiones(c *gin.Context) {
-	user := dto.NewUser(utils.GetUserInfoFromContext(c))
 	camiones := handler.camionService.ObtenerCamiones()
-	log.Printf("[handler:AulaHandler][method:ObtenerAulas][cantidad:%d][user:%s]", len(camiones), user.Codigo)
 	c.JSON(http.StatusOK, camiones)
 }
 func (handler *CamionHandler) ObtenerCamionPorID(c *gin.Context) {

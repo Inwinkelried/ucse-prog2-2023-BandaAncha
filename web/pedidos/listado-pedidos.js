@@ -12,29 +12,17 @@ document.addEventListener("DOMContentLoaded", function (event) {
 
     obtenerCamiones();
 });
-
+const urlConFiltro = `http://localhost:8080/orders/`;
 function obtenerPedidos() {
-    const urlConFiltro = `http://localhost:8080/orders/`; 
-    fetch(urlConFiltro, {
-        method: "GET",
-        headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${localStorage.getItem("authToken")}`,
-        },
-    })
-        .then((response) => {
-            if (response.ok) {
-                return response.json();
-            } else {
-                throw new Error("Error en llamada");
-            }
-        })
-        .then((data) => {
-            exitoObtenerPedidos(data);
-        })
-        .catch((error) => {
-            errorObtenerPedidos(error);
-        });
+    makeRequest(
+    `${urlConFiltro}`,
+    Method.GET,
+    null,
+    ContentType.JSON,
+    CallType.PRIVATE,
+    exitoObtenerPedidos,
+    errorObtenerPedidos
+  );
 }
 
 function exitoObtenerPedidos(data) {

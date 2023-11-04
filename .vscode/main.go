@@ -4,7 +4,6 @@ import (
 	"log"
 
 	"github.com/Inwinkelried/ucse-prog2-2023-BandaAncha/go/handlers"
-	"github.com/Inwinkelried/ucse-prog2-2023-BandaAncha/go/middlewares"
 	"github.com/Inwinkelried/ucse-prog2-2023-BandaAncha/go/repositories"
 	"github.com/Inwinkelried/ucse-prog2-2023-BandaAncha/go/services"
 	"github.com/gin-gonic/gin"
@@ -35,7 +34,6 @@ func main() {
 	router.Run(":8080")
 }
 func mappingRoutes() {
-	//middleware para permitir peticiones del mismo server localhost
 
 	//Listado de rutas
 	groupCamion := router.Group("/trucks")
@@ -43,10 +41,10 @@ func mappingRoutes() {
 	groupPedido := router.Group("/orders")
 	groupEnvio := router.Group("/shippings")
 
-	groupCamion.Use(middlewares.CORSMiddleware())
-	groupProducto.Use(middlewares.CORSMiddleware())
-	groupPedido.Use(middlewares.CORSMiddleware())
-	groupEnvio.Use(middlewares.CORSMiddleware())
+	// groupCamion.Use(middlewares.CORSMiddleware())
+	// groupProducto.Use(middlewares.CORSMiddleware())
+	// groupPedido.Use(middlewares.CORSMiddleware())
+	// groupEnvio.Use(middlewares.CORSMiddleware())
 	//Uso del middleware para todas las rutas del grupo
 	// router.Use(authMiddleware.ValidateToken)
 
@@ -83,17 +81,12 @@ func mappingRoutes() {
 	groupProducto.GET("/Filter/", productoHandler.ObtenerProductosFiltrados) // hay q probar
 
 	//CAMIONES
-
-	groupCamion.GET("/", camionHandler.ObtenerCamiones)
+	router.GET("/trucks", camionHandler.ObtenerCamiones)
+	// groupCamion.GET("/", camionHandler.ObtenerCamiones)
 	groupCamion.GET("/:id", camionHandler.ObtenerCamionPorID)
 	groupCamion.POST("/", camionHandler.InsertarCamion)
 	groupCamion.PUT("/:id", camionHandler.ModificarCamion)
 	groupCamion.DELETE("/:id", camionHandler.EliminarCamion)
-
-	// //para PROBAR
-	// router.GET("/trucks", func(c *gin.Context) {
-	// 	c.HTML(http.StatusOK, "listado-camiones.html", nil)
-	// })
 
 }
 func dependencies() {

@@ -1,6 +1,6 @@
 const customHeaders = new Headers();
 customHeaders.append("User-Agent", "PostmanRuntime/7.33.0");
-customHeaders.append("Accept", "/");
+customHeaders.append("Accept", "*/*");
 customHeaders.append("Accept-Encoding", "gzip, deflate, br"); 
 customHeaders.append("Connection", "keep-alive");
 
@@ -15,27 +15,7 @@ document.addEventListener("DOMContentLoaded", function (event) {
 
 function obtenerCamiones() {
     const urlConFiltro = `http://localhost:8080/trucks`; 
-    // fetch(urlConFiltro, {
-    //     method: "GET",
-    //     headers: {
-    //         "Content-Type": "application/json",
-    //         Authorization: `Bearer ${localStorage.getItem("authToken")}`,
-    //     },
-    // })
-    //     .then((response) => {
-    //         if (response.ok) {
-    //             return response.json();
-    //         } else {
-    //             throw new Error("Error en llamada");
-    //         }
-    //     })
-    //     .then((data) => {
-    //         exitoObtenerCamiones(data);
-    //     })
-    //     .catch((error) => {
-    //         errorObtenerCamiones(error);
-    //     });
-    
+debugger;
     makeRequest(
         `${urlConFiltro}`,
         Method.GET,
@@ -57,7 +37,6 @@ function exitoObtenerCamiones(data) {
         const row = document.createElement("tr"); //crear una fila
 
         row.innerHTML = `   
-                            <td><input type="checkbox" name="camion" value="${elemento.patente}"></td>
                             <td>${elemento.patente}</td>
                             <td>${elemento.peso_maximo}</td>
                             <td>${elemento.costo_km}</td>
