@@ -7,10 +7,10 @@ import (
 )
 
 type CamionInterface interface {
-	ObtenerCamiones() []*dto.Camion
-	InsertarCamion(camion *dto.Camion) bool
-	EliminarCamion(id string) bool
-	ModificarCamion(camion *dto.Camion) bool
+	ObtenerCamiones() ([]*dto.Camion, error)
+	InsertarCamion(camion *dto.Camion) error
+	EliminarCamion(id string) error
+	ModificarCamion(camion *dto.Camion) error
 	ObtenerCamionPorID(camion *dto.Camion) (*dto.Camion, error)
 }
 type CamionService struct {
@@ -33,24 +33,24 @@ func (service *CamionService) ObtenerCamionPorID(camionConID *dto.Camion) (*dto.
 	}
 	return camion, nil
 }
-func (service *CamionService) ObtenerCamiones() []*dto.Camion {
-	camionesDB, _ := service.camionRepository.ObtenerCamiones()
+func (service *CamionService) ObtenerCamiones() ([]*dto.Camion, error) {
+	camionesDB, err := service.camionRepository.ObtenerCamiones()
 	var camiones []*dto.Camion
 	for _, camionesDB := range camionesDB {
 		camion := dto.NewCamion(camionesDB)
 		camiones = append(camiones, camion)
 	}
-	return camiones
+	return camiones, err
 }
-func (service *CamionService) InsertarCamion(camion *dto.Camion) bool {
-	service.camionRepository.InsertarCamion(camion.GetModel())
-	return true
+func (service *CamionService) InsertarCamion(camion *dto.Camion) error {
+	_, err := service.camionRepository.InsertarCamion(camion.GetModel())
+	return err
 }
-func (service *CamionService) ModificarCamion(camion *dto.Camion) bool {
-	service.camionRepository.ModificarCamion(camion.GetModel())
-	return true
+func (service *CamionService) ModificarCamion(camion *dto.Camion) error {
+	_, err := service.camionRepository.ModificarCamion(camion.GetModel())
+	return err
 }
-func (service *CamionService) EliminarCamion(id string) bool {
-	service.camionRepository.EliminarCamion(utils.GetObjectIDFromStringID(id))
-	return true
+func (service *CamionService) EliminarCamion(id string) error {
+	_, err := service.camionRepository.EliminarCamion(utils.GetObjectIDFromStringID(id))
+	return err
 }

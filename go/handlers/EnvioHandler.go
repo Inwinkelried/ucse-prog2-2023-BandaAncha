@@ -35,7 +35,6 @@ func (handler *EnvioHandler) ObtenerEnviosFiltrados(c *gin.Context) {
 	if err != nil {
 		fechaMayor = time.Time{}
 	}
-	//Creamos el filtro
 	filtro := dto.FiltroEnvio{
 		PatenteCamion: patente,
 		Estado:        estado,
@@ -43,25 +42,16 @@ func (handler *EnvioHandler) ObtenerEnviosFiltrados(c *gin.Context) {
 		FechaMenor:    fechaMenor,
 		FechaMayor:    fechaMayor,
 	}
-
-	//Llama al service
 	envios, err := handler.envioService.ObtenerEnviosFiltrados(filtro)
-
-	//Si hay un error, lo devolvemos
 	if err != nil {
 		log.Printf("[handler:EnvioHandler][method:ObtenerEnvios][envio:%+v][user:%s]", err.Error(), user.Codigo)
 
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
-
-	//Agregamos un log para indicar información relevante del resultado
 	log.Printf("[handler:AulaHandler][method:ObtenerEnvios][cantidad:%d][user:%s]", len(envios), user.Codigo)
-
 	c.JSON(http.StatusOK, envios)
-
 }
-
 func (handler *EnvioHandler) AgregarParada(c *gin.Context) {
 	user := dto.NewUser(utils.GetUserInfoFromContext(c))
 	id := c.Param("id")
@@ -79,7 +69,6 @@ func (handler *EnvioHandler) AgregarParada(c *gin.Context) {
 	operacion, err := handler.envioService.AgregarParada(&envio)
 	if err != nil {
 		log.Printf("[handler:EnvioHandler][method:AgregarParada][envio:%+v][user:%s]", err.Error(), user.Codigo)
-
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
@@ -88,9 +77,7 @@ func (handler *EnvioHandler) AgregarParada(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()}) //es correcto devolver bad request aca?
 		return
 	}
-
 	log.Printf("[handler:EnvioHandler][method:AgregarParada][envio:%+v][user:%s]", envio, user.Codigo)
-
 	c.JSON(http.StatusOK, envio)
 }
 
@@ -102,17 +89,22 @@ func (handler *EnvioHandler) ObtenerEnvioPorID(c *gin.Context) {
 	envio, err := handler.envioService.ObtenerEnvioPorID(&dto.Envio{ID: id})
 	if err != nil {
 		log.Printf("[handler:EnvioHandler][method:ObtenerEnvioPorId][envio:%+v][user:%s]", err.Error(), user.Codigo)
-
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
-	//Agregamos un log para indicar informacion
+	log.Printf("[handler:EnvioHandler][method:ObtenerEnvioPorId][envio:%+v][user:%s]", envio, user.Codigo)
 	c.JSON(http.StatusOK, envio)
 }
 
 func (handler *EnvioHandler) ObtenerEnvios(c *gin.Context) {
 	user := dto.NewUser(utils.GetUserInfoFromContext(c))
-	envios := handler.envioService.ObtenerEnvios()
+	envios, err := handler.envioService.ObtenerEnvios()
+	if err != nil {
+		log.Printf("[handler:EnvioHandler][method:ObtenerEnvios][error:%s][user:%s]", err.Error(), user.Codigo)
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
 	log.Printf("[handler:EnvioHandler][method:ObtenerEnvios][cantidad:%d][user:%s]", len(envios), user.Codigo)
 	c.JSON(http.StatusOK, envios)
 }
@@ -122,8 +114,20 @@ func (handler *EnvioHandler) InsertarEnvio(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
-	resultado := handler.envioService.InsertarEnvio(&envio)
-	c.JSON(http.StatusCreated, resultado)
+	resultado, err := handler.envioService.InsertarEnvio(&envio)
+	if err != nil {
+		log.Printf("[handler:EnvioHandler][method:InsertarEnvio][envio:%+v][error:%s]", envio, err.Error())
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+	if !resultado {
+		log.Printf("[handler:EnvioHandler][method:InsertarEnvio][envio:%+v][error:%s]", envio, err.Error())
+		c.JSON(http.StatusBadRequest, gin.H{"No se ha podido insertar el envio. Revise los datos de entrada": err.Error()})
+		return
+	}
+	log.Printf("[handler:EnvioHandler][method:InsertarEnvio][envio:%+v]", envio)
+	c.JSON(http.StatusCreated, gin.H{"status": "Creado correctamente"})
+
 }
 func (handler *EnvioHandler) DespachadoEnvio(c *gin.Context) {
 	var envio dto.Envio
@@ -132,8 +136,20 @@ func (handler *EnvioHandler) DespachadoEnvio(c *gin.Context) {
 		return
 	}
 	envio.ID = c.Param("id")
-	resultado, _ := handler.envioService.DespachadoEnvio(&envio)
-	c.JSON(http.StatusCreated, resultado)
+	resultado, err := handler.envioService.DespachadoEnvio(&envio)
+	if err != nil {
+		log.Printf("[handler:EnvioHandler][method:EnRutaEnvio][envio:%+v][error:%s]", envio, err.Error())
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+	if !resultado {
+		log.Printf("[handler:EnvioHandler][method:EnRutaEnvio][envio:%+v][error:%s]", envio, err.Error())
+		c.JSON(http.StatusBadRequest, gin.H{"ERROR: No se ha podido actualizar el envio": err.Error()})
+		return
+	}
+	log.Printf("[handler:EnvioHandler][method:EnRutaEnvio][envio:%+v]", envio)
+	c.JSON(http.StatusCreated, gin.H{"status": "Actualizado correctamente"})
+
 }
 func (handler *EnvioHandler) EnRutaEnvio(c *gin.Context) {
 	var envio dto.Envio
@@ -142,6 +158,17 @@ func (handler *EnvioHandler) EnRutaEnvio(c *gin.Context) {
 		return
 	}
 	envio.ID = c.Param("id")
-	resultado := handler.envioService.EnRutaEnvio(&envio)
-	c.JSON(http.StatusCreated, resultado)
+	resultado, err := handler.envioService.EnRutaEnvio(&envio)
+	if err != nil {
+		log.Printf("[handler:EnvioHandler][method:EnRutaEnvio][envio:%+v][error:%s]", envio, err.Error())
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+	if !resultado {
+		log.Printf("[handler:EnvioHandler][method:EnRutaEnvio][envio:%+v][error:%s]", envio, err.Error())
+		c.JSON(http.StatusBadRequest, gin.H{"ERROR: No se ha podido actualizar el envio": err.Error()})
+		return
+	}
+	log.Printf("[handler:EnvioHandler][method:EnRutaEnvio][envio:%+v]", envio)
+	c.JSON(http.StatusCreated, gin.H{"status": "Actualizado correctamente"})
 }

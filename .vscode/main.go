@@ -50,15 +50,12 @@ func mappingRoutes() {
 
 	//ENVIO
 	groupEnvio.GET("/", envioHandler.ObtenerEnvios)
-
 	groupEnvio.POST("/", envioHandler.InsertarEnvio)
 	groupEnvio.PUT("/AddStop/:id", envioHandler.AgregarParada)
-
 	groupEnvio.PUT("/SetDelivered/:id", envioHandler.DespachadoEnvio)
 	groupEnvio.GET("/:id", envioHandler.ObtenerEnvioPorID)
 	groupEnvio.PUT("/SetSent/:id", envioHandler.EnRutaEnvio)
 	groupEnvio.GET("/Filter", envioHandler.ObtenerEnviosFiltrados)
-
 	//PEDIDOS
 	groupPedido.GET("/", pedidoHandler.ObtenerPedidos)
 	groupPedido.GET("/Filter", pedidoHandler.ObtenerPedidosFiltrados)
@@ -70,19 +67,16 @@ func mappingRoutes() {
 	groupPedido.PUT("/Send/:id", pedidoHandler.ParaEnviarPedido)
 	groupPedido.PUT("/Sent/:id", pedidoHandler.EnviadoPedido)
 	groupPedido.GET("/:id", pedidoHandler.ObtenerPedidoPorID)
-
 	//PRODUCTOS
-
 	groupProducto.GET("/", productoHandler.ObtenerProductos)
 	groupProducto.POST("/", productoHandler.InsertarProducto)
 	groupProducto.GET("/:id", productoHandler.ObtenerProductoPorID)
 	groupProducto.PUT("/:id", productoHandler.ModificarProducto)
 	groupProducto.DELETE("/:id", productoHandler.EliminarProducto)
 	groupProducto.GET("/Filter/", productoHandler.ObtenerProductosFiltrados) // hay q probar
-
 	//CAMIONES
-	router.GET("/trucks", camionHandler.ObtenerCamiones)
-	// groupCamion.GET("/", camionHandler.ObtenerCamiones)
+	//router.GET("/trucks", camionHandler.ObtenerCamiones)
+	groupCamion.GET("/", camionHandler.ObtenerCamiones)
 	groupCamion.GET("/:id", camionHandler.ObtenerCamionPorID)
 	groupCamion.POST("/", camionHandler.InsertarCamion)
 	groupCamion.PUT("/:id", camionHandler.ModificarCamion)

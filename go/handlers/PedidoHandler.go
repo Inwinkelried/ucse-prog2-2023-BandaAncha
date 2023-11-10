@@ -49,7 +49,12 @@ func (handler *PedidoHandler) ObtenerPedidosFiltrados(c *gin.Context) {
 }
 func (handler *PedidoHandler) ObtenerPedidosAprobados(c *gin.Context) {
 	user := dto.NewUser(utils.GetUserInfoFromContext(c))
-	pedidos := handler.pedidoService.ObtenerPedidosAprobados()
+	pedidos, err := handler.pedidoService.ObtenerPedidosAprobados()
+	if err != nil {
+		log.Printf("[handler:PedidoHandler][method:ObtenerPedidos][error:%s][user:%s]", err.Error(), user.Codigo)
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
 	log.Printf("[handler:PedidoHandler][method:ObtenerPedidosAprobados][cantidad:%d][user:%s]", len(pedidos), user.Codigo)
 	c.JSON(http.StatusOK, pedidos)
 }
@@ -68,7 +73,12 @@ func (handler *PedidoHandler) ObtenerPedidoPorID(c *gin.Context) {
 }
 func (handler *PedidoHandler) ObtenerPedidos(c *gin.Context) {
 	user := dto.NewUser(utils.GetUserInfoFromContext(c))
-	pedidos := handler.pedidoService.ObtenerPedidos()
+	pedidos, err := handler.pedidoService.ObtenerPedidos()
+	if err != nil {
+		log.Printf("[handler:PedidoHandler][method:ObtenerPedidos][error:%s][user:%s]", err.Error(), user.Codigo)
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
 	log.Printf("[handler:PedidoHandler][method:ObtenerPedidos][cantidad:%d][user:%s]", len(pedidos), user.Codigo)
 	c.JSON(http.StatusOK, pedidos)
 }
@@ -78,8 +88,19 @@ func (handler *PedidoHandler) InsertarPedido(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
-	resultado := handler.pedidoService.InsertarPedido(&pedido)
-	c.JSON(http.StatusCreated, resultado)
+	resultado, err := handler.pedidoService.InsertarPedido(&pedido)
+	if err != nil {
+		log.Printf("[handler:PedidoHandler][method:InsertarPedido][pedido:%+v][error:%s]", pedido, err.Error())
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+	if !resultado {
+		log.Printf("[handler:PedidoHandler][method:InsertarPedido][pedido:%+v][error:%s]", pedido, err.Error())
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+	log.Printf("[handler:PedidoHandler][method:InsertarPedido][pedido:%+v]", pedido)
+	c.JSON(http.StatusCreated, gin.H{"status": "Creado correctamente"})
 }
 func (handler *PedidoHandler) AceptarPedido(c *gin.Context) {
 	var pedido dto.Pedido
@@ -88,8 +109,19 @@ func (handler *PedidoHandler) AceptarPedido(c *gin.Context) {
 		return
 	}
 	pedido.ID = c.Param("id")
-	resultado := handler.pedidoService.AceptarPedido(&pedido)
-	c.JSON(http.StatusCreated, resultado)
+	resultado, err := handler.pedidoService.AceptarPedido(&pedido)
+	if err != nil {
+		log.Printf("[handler:PedidoHandler][method:InsertarPedido][pedido:%+v][error:%s]", pedido, err.Error())
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+	if !resultado {
+		log.Printf("[handler:PedidoHandler][method:InsertarPedido][pedido:%+v][error:%s]", pedido, err.Error())
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+	log.Printf("[handler:PedidoHandler][method:InsertarPedido][pedido:%+v]", pedido)
+	c.JSON(http.StatusCreated, gin.H{"status": "Pedido aceptado"})
 }
 func (handler *PedidoHandler) CancelarPedido(c *gin.Context) {
 	var pedido dto.Pedido
@@ -98,8 +130,19 @@ func (handler *PedidoHandler) CancelarPedido(c *gin.Context) {
 		return
 	}
 	pedido.ID = c.Param("id")
-	resultado := handler.pedidoService.CancelarPedido(&pedido)
-	c.JSON(http.StatusCreated, resultado)
+	resultado, err := handler.pedidoService.CancelarPedido(&pedido)
+	if err != nil {
+		log.Printf("[handler:PedidoHandler][method:InsertarPedido][pedido:%+v][error:%s]", pedido, err.Error())
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+	if !resultado {
+		log.Printf("[handler:PedidoHandler][method:InsertarPedido][pedido:%+v][error:%s]", pedido, err.Error())
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+	log.Printf("[handler:PedidoHandler][method:InsertarPedido][pedido:%+v]", pedido)
+	c.JSON(http.StatusCreated, gin.H{"status": "Pedido cancelado"})
 }
 func (handler *PedidoHandler) EnviadoPedido(c *gin.Context) {
 	var pedido dto.Pedido
@@ -108,8 +151,19 @@ func (handler *PedidoHandler) EnviadoPedido(c *gin.Context) {
 		return
 	}
 	pedido.ID = c.Param("id")
-	resultado := handler.pedidoService.EnviadoPedido(&pedido)
-	c.JSON(http.StatusCreated, resultado)
+	resultado, err := handler.pedidoService.EnviadoPedido(&pedido)
+	if err != nil {
+		log.Printf("[handler:PedidoHandler][method:InsertarPedido][pedido:%+v][error:%s]", pedido, err.Error())
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+	if !resultado {
+		log.Printf("[handler:PedidoHandler][method:InsertarPedido][pedido:%+v][error:%s]", pedido, err.Error())
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+	log.Printf("[handler:PedidoHandler][method:InsertarPedido][pedido:%+v]", pedido)
+	c.JSON(http.StatusCreated, gin.H{"status": "Pedido enviado"})
 }
 func (handler *PedidoHandler) ParaEnviarPedido(c *gin.Context) {
 	var pedido dto.Pedido
@@ -118,6 +172,17 @@ func (handler *PedidoHandler) ParaEnviarPedido(c *gin.Context) {
 		return
 	}
 	pedido.ID = c.Param("id")
-	resultado := handler.pedidoService.ParaEnviarPedido(&pedido)
-	c.JSON(http.StatusCreated, resultado)
+	resultado, err := handler.pedidoService.ParaEnviarPedido(&pedido)
+	if err != nil {
+		log.Printf("[handler:PedidoHandler][method:InsertarPedido][pedido:%+v][error:%s]", pedido, err.Error())
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+	if !resultado {
+		log.Printf("[handler:PedidoHandler][method:InsertarPedido][pedido:%+v][error:%s]", pedido, err.Error())
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+	log.Printf("[handler:PedidoHandler][method:InsertarPedido][pedido:%+v]", pedido)
+	c.JSON(http.StatusCreated, gin.H{"status": "Pedido Para Enviar"})
 }

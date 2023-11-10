@@ -94,7 +94,8 @@ func (repository CamionRepository) ObtenercamionPorID(camionABuscar model.Camion
 func (repo CamionRepository) ModificarCamion(camion model.Camion) (*mongo.UpdateResult, error) {
 	lista := repo.db.GetClient().Database("BandaAncha").Collection("Camiones")
 	filtro := bson.M{"_id": camion.ID}
-	entity := bson.M{"$set": bson.M{"CostoPorKilometro": camion.CostoKm, "FechaModificacion": time.Now()}}
+	camion.FechaModificacion = time.Now()
+	entity := bson.M{"$set": camion}
 	resultado, err := lista.UpdateOne(context.TODO(), filtro, entity)
 	return resultado, err
 }

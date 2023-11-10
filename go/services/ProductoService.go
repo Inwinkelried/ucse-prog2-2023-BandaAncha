@@ -7,10 +7,10 @@ import (
 )
 
 type ProductoInterface interface {
-	ObtenerProductos() []*dto.Producto
-	InsertarProducto(Producto *dto.Producto) bool
-	EliminarProducto(id string) bool
-	ModificarProducto(Producto *dto.Producto) bool
+	ObtenerProductos() ([]*dto.Producto, error)
+	InsertarProducto(Producto *dto.Producto) error
+	EliminarProducto(id string) error
+	ModificarProducto(Producto *dto.Producto) error
 	ObtenerProductoPorID(productoConID *dto.Producto) (*dto.Producto, error)
 	ObtenerProductosFiltrados(filtro dto.FiltroProducto) ([]dto.Producto, error)
 }
@@ -23,14 +23,17 @@ func NewProductoService(ProductoRepository repositories.ProductoRepositoryInterf
 		ProductoRepository: ProductoRepository,
 	}
 }
-func (service *ProductoService) ObtenerProductos() []*dto.Producto {
-	ProductosDB, _ := service.ProductoRepository.ObtenerProductos()
+func (service *ProductoService) ObtenerProductos() ([]*dto.Producto, error) {
+	ProductosDB, err := service.ProductoRepository.ObtenerProductos()
 	var Productos []*dto.Producto
+	if err != nil {
+		return nil, err
+	}
 	for _, ProductosDB := range ProductosDB {
 		Producto := dto.NewProducto(ProductosDB)
 		Productos = append(Productos, Producto)
 	}
-	return Productos
+	return Productos, err
 } //cambio realizado aca, revisar
 func (service *ProductoService) ObtenerProductoPorID(productoConID *dto.Producto) (*dto.Producto, error) {
 	productoDB, err := service.ProductoRepository.ObtenerProductoPorID(productoConID.GetModel())
@@ -45,17 +48,17 @@ func (service *ProductoService) ObtenerProductoPorID(productoConID *dto.Producto
 	return producto, nil
 }
 
-func (service *ProductoService) InsertarProducto(Producto *dto.Producto) bool {
-	service.ProductoRepository.InsertarProducto(Producto.GetModel())
-	return true
+func (service *ProductoService) InsertarProducto(Producto *dto.Producto) error {
+	_, err := service.ProductoRepository.InsertarProducto(Producto.GetModel())
+	return err
 }
-func (service *ProductoService) ModificarProducto(Producto *dto.Producto) bool {
-	service.ProductoRepository.ModificarProducto(Producto.GetModel())
-	return true
+func (service *ProductoService) ModificarProducto(Producto *dto.Producto) error {
+	_, err := service.ProductoRepository.ModificarProducto(Producto.GetModel())
+	return err
 }
-func (service *ProductoService) EliminarProducto(id string) bool {
-	service.ProductoRepository.EliminarProducto(utils.GetObjectIDFromStringID(id))
-	return true
+func (service *ProductoService) EliminarProducto(id string) error {
+	_, err := service.ProductoRepository.EliminarProducto(utils.GetObjectIDFromStringID(id))
+	return err
 }
 func (service *ProductoService) ObtenerProductosFiltrados(filtro dto.FiltroProducto) ([]dto.Producto, error) {
 	productos, err := service.ProductoRepository.ObtenerProductoFiltrados(filtro)

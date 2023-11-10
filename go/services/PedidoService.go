@@ -6,13 +6,13 @@ import (
 )
 
 type PedidoServiceInterface interface {
-	ObtenerPedidos() []*dto.Pedido
-	InsertarPedido(pedido *dto.Pedido) bool
-	AceptarPedido(pedido *dto.Pedido) bool
-	CancelarPedido(pedido *dto.Pedido) bool
-	ParaEnviarPedido(pedido *dto.Pedido) bool
-	EnviadoPedido(pedido *dto.Pedido) bool
-	ObtenerPedidosAprobados() []*dto.Pedido
+	ObtenerPedidos() ([]*dto.Pedido, error)
+	InsertarPedido(pedido *dto.Pedido) (bool, error)
+	AceptarPedido(pedido *dto.Pedido) (bool, error)
+	CancelarPedido(pedido *dto.Pedido) (bool, error)
+	ParaEnviarPedido(pedido *dto.Pedido) (bool, error)
+	EnviadoPedido(pedido *dto.Pedido) (bool, error)
+	ObtenerPedidosAprobados() ([]*dto.Pedido, error)
 	ObtenerPedidosFiltrados(filtro dto.FiltroPedido) ([]dto.Pedido, error)
 	ObtenerPedidoPorID(pedido *dto.Pedido) (*dto.Pedido, error)
 }
@@ -46,50 +46,91 @@ func (service PedidoService) ObtenerPedidoPorID(pedidoConID *dto.Pedido) (*dto.P
 	return pedido, nil
 }
 
-func (service PedidoService) ObtenerPedidosAprobados() []*dto.Pedido {
-	pedidosDB, _ := service.pedidoRepository.ObtenerPedidosAprobados()
+func (service PedidoService) ObtenerPedidosAprobados() ([]*dto.Pedido, error) {
+	pedidosDB, err := service.pedidoRepository.ObtenerPedidosAprobados()
+	if err != nil {
+		return nil, err
+	}
 	var pedidos []*dto.Pedido
 	for _, pedidodDB := range pedidosDB {
 		pedido := dto.NewPedido(pedidodDB)
 		pedidos = append(pedidos, pedido)
 	}
-	return pedidos
+	return pedidos, err
 }
-func (service PedidoService) ObtenerPedidos() []*dto.Pedido {
-	pedidosDB, _ := service.pedidoRepository.ObtenerPedidos()
+func (service PedidoService) ObtenerPedidos() ([]*dto.Pedido, error) {
+	pedidosDB, err := service.pedidoRepository.ObtenerPedidos()
+	if err != nil {
+		return nil, err
+	}
 	var pedidos []*dto.Pedido
 	for _, pedidodDB := range pedidosDB {
 		pedido := dto.NewPedido(pedidodDB)
 		pedidos = append(pedidos, pedido)
 	}
-	return pedidos
+	return pedidos, err
 }
 
-func (service PedidoService) InsertarPedido(pedidoACrear *dto.Pedido) bool {
+func (service PedidoService) InsertarPedido(pedidoACrear *dto.Pedido) (bool, error) {
 
-	service.pedidoRepository.InsertarPedido(pedidoACrear.GetModel())
-	return true
+	resultado, err := service.pedidoRepository.InsertarPedido(pedidoACrear.GetModel())
+	if resultado == nil {
+		return false, err
+	}
+	if err != nil {
+
+		return false, err
+	}
+	return true, err
 }
 
-func (service PedidoService) AceptarPedido(pedido *dto.Pedido) bool {
-	service.pedidoRepository.AceptarPedido(pedido.GetModel())
-	return true
+func (service PedidoService) AceptarPedido(pedido *dto.Pedido) (bool, error) {
+	resultado, err := service.pedidoRepository.AceptarPedido(pedido.GetModel())
+	if resultado == nil {
+		return false, err
+	}
+	if err != nil {
+		return false, err
+	}
+
+	return true, err
 }
-func (service PedidoService) CancelarPedido(pedido *dto.Pedido) bool {
+
+func (service PedidoService) CancelarPedido(pedido *dto.Pedido) (bool, error) {
 	if pedido.Estado == "" { //Dejo el "" porque mi BDD tiene "" en vez de Pendiente
-		service.pedidoRepository.CancelarPedido(pedido.GetModel())
-		return true
+		resultado, err := service.pedidoRepository.CancelarPedido(pedido.GetModel())
+		if resultado == nil {
+			return false, err
+		}
+		if err != nil {
+			return false, err
+		}
+		return true, err
 	} else {
-		return false
+		return false, nil
 	}
 }
-func (service PedidoService) EnviadoPedido(pedido *dto.Pedido) bool {
-	service.pedidoRepository.EnviadoPedido(pedido.GetModel())
-	return true
+func (service PedidoService) EnviadoPedido(pedido *dto.Pedido) (bool, error) {
+	resultado, err := service.pedidoRepository.EnviadoPedido(pedido.GetModel())
+	if resultado == nil {
+		return false, err
+	}
+	if err != nil {
+		return false, err
+	}
+
+	return true, err
 }
-func (service PedidoService) ParaEnviarPedido(pedido *dto.Pedido) bool {
-	service.pedidoRepository.ParaEnviarPedido(pedido.GetModel())
-	return true
+func (service PedidoService) ParaEnviarPedido(pedido *dto.Pedido) (bool, error) {
+	resultado, err := service.pedidoRepository.ParaEnviarPedido(pedido.GetModel())
+	if resultado == nil {
+		return false, err
+	}
+	if err != nil {
+		return false, err
+	}
+
+	return true, err
 }
 func (service *PedidoService) ObtenerPedidosFiltrados(filtro dto.FiltroPedido) ([]dto.Pedido, error) {
 	pedidos, err := service.pedidoRepository.ObtenerPedidosFiltrados(filtro)

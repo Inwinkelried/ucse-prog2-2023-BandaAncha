@@ -21,7 +21,12 @@ func NewProductoHandler(productoService services.ProductoInterface) *ProductoHan
 	}
 }
 func (handler *ProductoHandler) ObtenerProductos(c *gin.Context) {
-	productos := handler.ProductoService.ObtenerProductos()
+	productos, err := handler.ProductoService.ObtenerProductos()
+	if err != nil {
+		log.Printf("[handler:ProductoHandler][method:ObtenerProductos][error:%s]", err.Error())
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
 	log.Printf("[handler:ProductoHandler][method:ObtenerProductos][productos:%v][cantidad:%d]", productos, len(productos))
 	c.JSON(http.StatusOK, productos)
 }
@@ -55,33 +60,49 @@ func (handler *ProductoHandler) ObtenerProductoPorID(c *gin.Context) {
 	producto, err := handler.ProductoService.ObtenerProductoPorID(&dto.Producto{ID: id})
 	if err != nil {
 		log.Printf("[handler:ProductoHandler][method:ObtenerProductoPorId][producto:%+v][user:%s]", err.Error(), user.Codigo)
-
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
+	log.Printf("[handler:ProductoHandler][method:ObtenerProductoPorId][producto:%+v][user:%s]", producto, user.Codigo)
 	c.JSON(http.StatusOK, producto)
 }
-func (handler *ProductoHandler) InsertarProducto(c *gin.Context) {
+func (handler *ProductoHandler) InsertarProducto(c *gin.Context) { // agregar log
 	var producto dto.Producto
 	if err := c.ShouldBindJSON(&producto); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
-	resultado := handler.ProductoService.InsertarProducto(&producto)
-	c.JSON(http.StatusCreated, resultado)
+	if err := handler.ProductoService.InsertarProducto(&producto); err != nil {
+		log.Printf("[handler:ProductoHandler][method:InsertarProducto][envio:%+v][error:%s]", producto, err.Error())
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+	log.Printf("[handler:ProductoHandler][method:InsertarProducto][producto:%+v]", producto)
+	c.JSON(http.StatusCreated, gin.H{"status": "Creado correctamente"})
 }
-func (handler *ProductoHandler) ModificarProducto(c *gin.Context) {
+func (handler *ProductoHandler) ModificarProducto(c *gin.Context) { // agregar log
 	var producto dto.Producto
 	if err := c.ShouldBindJSON(&producto); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 	producto.ID = c.Param("id")
-	resultado := handler.ProductoService.ModificarProducto(&producto)
-	c.JSON(http.StatusCreated, resultado)
+	if err := handler.ProductoService.ModificarProducto(&producto); err != nil {
+		log.Printf("[handler:ProductoHandler][method:ModificarProducto][envio:%+v][error:%s]", producto, err.Error())
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+	log.Printf("[handler:ProductoHandler][method:ModificarProducto][producto:%+v]", producto)
+	c.JSON(http.StatusCreated, gin.H{"status": "Modificado correctamente"})
+
 }
 func (handler *ProductoHandler) EliminarProducto(c *gin.Context) {
 	id := c.Param("id")
-	productos := handler.ProductoService.EliminarProducto(id)
-	c.JSON(http.StatusOK, productos)
+	if err := handler.ProductoService.EliminarProducto(id); err != nil {
+		log.Printf("[handler:ProductoHandler][method:EliminarProducto][id:%s][error:%s]", id, err.Error())
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+	log.Printf("[handler:ProductoHandler][method:EliminarProducto][id:%s]", id)
+	c.JSON(http.StatusOK, gin.H{"status": "Eliminado correctamente"})
 }
