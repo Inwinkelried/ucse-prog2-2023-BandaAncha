@@ -1,0 +1,77 @@
+body {
+    font-family: 'Young Serif', sans-serif;
+    background-color: #f2f2f2; /* Gris claro */
+    margin: 0;
+    padding: 0;
+}
+
+#tituloTabla {
+    text-align: center;
+    margin-top: 30px;
+}
+
+.filtros {
+    max-width: 600px;
+    margin: 20px auto;
+    background-color: #fff; /* Fondo blanco para el contenedor de filtros */
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.input-group {
+    display: flex;
+    align-items: center;
+}
+
+.input-group label {
+    margin-right: 10px;
+}
+
+.input-group input[type="text"] {
+    flex: 1;
+    padding: 8px;
+    box-sizing: border-box;
+}
+
+.input-group input[type="button"] {
+    background-color: #4caf50; /* Color de fondo verde */
+    color: #fff; /* Color de texto blanco */
+    padding: 8px;
+    cursor: pointer;
+}
+
+.input-group input[type="button"]:hover {
+    background-color: #45a049; /* Cambio de color al pasar el mouse */
+}
+
+table {
+    max-width: 800px;
+    margin: 20px auto;
+    background-color: #fff; /* Fondo blanco para la tabla */
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    border-collapse: collapse;
+}
+
+th, td {
+    padding: 10px;
+    border: 1px solid #ddd; /* Borde gris claro */
+    text-align: left;
+}
+
+tfoot {
+    background-color: #f2f2f2; /* Fondo gris claro para el pie de la tabla */
+}
+
+tfoot button {
+    background-color: #4caf50; /* Color de fondo verde */
+    color: #fff; /* Color de texto blanco */
+    padding: 8px;
+    cursor: pointer;
+}
+
+tfoot button:hover {
+    background-color: #45a049; /* Cambio de color al pasar el mouse */
+}
