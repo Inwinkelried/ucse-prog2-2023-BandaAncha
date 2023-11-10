@@ -1,4 +1,4 @@
-package utils
+package dto
 
 type FiltroProducto struct {
 	FiltroStockMinimo bool

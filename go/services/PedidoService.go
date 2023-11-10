@@ -2,11 +2,7 @@ package services
 
 import (
 	"github.com/Inwinkelried/ucse-prog2-2023-BandaAncha/go/dto"
-	"github.com/Inwinkelried/ucse-prog2-2023-BandaAncha/go/utils"
-
-	//"github.com/Inwinkelried/ucse-prog2-2023-BandaAncha/go/model"
 	"github.com/Inwinkelried/ucse-prog2-2023-BandaAncha/go/repositories"
-	//"github.com/Inwinkelried/ucse-prog2-2023-BandaAncha/go/utils"
 )
 
 type PedidoServiceInterface interface {
@@ -17,7 +13,7 @@ type PedidoServiceInterface interface {
 	ParaEnviarPedido(pedido *dto.Pedido) bool
 	EnviadoPedido(pedido *dto.Pedido) bool
 	ObtenerPedidosAprobados() []*dto.Pedido
-	ObtenerPedidosFiltrados(filtro utils.FiltroPedido) ([]dto.Pedido, error)
+	ObtenerPedidosFiltrados(filtro dto.FiltroPedido) ([]dto.Pedido, error)
 	ObtenerPedidoPorID(pedido *dto.Pedido) (*dto.Pedido, error)
 }
 
@@ -95,7 +91,7 @@ func (service PedidoService) ParaEnviarPedido(pedido *dto.Pedido) bool {
 	service.pedidoRepository.ParaEnviarPedido(pedido.GetModel())
 	return true
 }
-func (service *PedidoService) ObtenerPedidosFiltrados(filtro utils.FiltroPedido) ([]dto.Pedido, error) {
+func (service *PedidoService) ObtenerPedidosFiltrados(filtro dto.FiltroPedido) ([]dto.Pedido, error) {
 	pedidos, err := service.pedidoRepository.ObtenerPedidosFiltrados(filtro)
 	var pedido *dto.Pedido
 	var pedidosDTO []dto.Pedido

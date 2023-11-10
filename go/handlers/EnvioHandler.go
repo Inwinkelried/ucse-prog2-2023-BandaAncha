@@ -36,7 +36,7 @@ func (handler *EnvioHandler) ObtenerEnviosFiltrados(c *gin.Context) {
 		fechaMayor = time.Time{}
 	}
 	//Creamos el filtro
-	filtro := utils.FiltroEnvio{
+	filtro := dto.FiltroEnvio{
 		PatenteCamion: patente,
 		Estado:        estado,
 		UltimaParada:  ultimaParada,

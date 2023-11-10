@@ -5,8 +5,8 @@ import (
 	"fmt"
 	"time"
 
+	"github.com/Inwinkelried/ucse-prog2-2023-BandaAncha/go/dto"
 	"github.com/Inwinkelried/ucse-prog2-2023-BandaAncha/go/model"
-	"github.com/Inwinkelried/ucse-prog2-2023-BandaAncha/go/utils"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
 )
@@ -22,7 +22,7 @@ type PedidoRepositoryInterface interface {
 	ObtenerPedidoPorID(pedidoConId model.Pedido) (model.Pedido, error)
 	ObtenerPesoPedido(pedido model.Pedido) (int, error)
 	ActualizarPedido(pedido model.Pedido) (*mongo.UpdateResult, error)
-	ObtenerPedidosFiltrados(filtro utils.FiltroPedido) ([]model.Pedido, error)
+	ObtenerPedidosFiltrados(filtro dto.FiltroPedido) ([]model.Pedido, error)
 }
 type PedidoRepository struct {
 	db DB
@@ -155,7 +155,7 @@ func (repository *PedidoRepository) obtenerPedidos(filtro bson.M) ([]model.Pedid
 	}
 	return pedidos, nil
 }
-func (repo PedidoRepository) ObtenerPedidosFiltrados(filtro utils.FiltroPedido) ([]model.Pedido, error) {
+func (repo PedidoRepository) ObtenerPedidosFiltrados(filtro dto.FiltroPedido) ([]model.Pedido, error) {
 	filtroGenerado := bson.M{}
 	if filtro.Estado != "" {
 		filtroGenerado["Estado"] = filtro.Estado

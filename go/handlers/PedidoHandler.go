@@ -33,7 +33,7 @@ func (handler *PedidoHandler) ObtenerPedidosFiltrados(c *gin.Context) {
 	if err != nil {
 		fechaMayor = time.Time{}
 	}
-	filtro := utils.FiltroPedido{
+	filtro := dto.FiltroPedido{
 		Estado:     estado,
 		FechaMayor: fechaMayor,
 		FechaMenor: fechaMenor,

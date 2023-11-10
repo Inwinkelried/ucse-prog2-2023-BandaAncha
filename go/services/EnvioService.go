@@ -15,7 +15,7 @@ type EnvioServiceInterface interface {
 	EnRutaEnvio(envio *dto.Envio) bool
 	DespachadoEnvio(envio *dto.Envio) (bool, error)
 	AgregarParada(envio *dto.Envio) (bool, error)
-	ObtenerEnviosFiltrados(filtro utils.FiltroEnvio) ([]dto.Envio, error)
+	ObtenerEnviosFiltrados(filtro dto.FiltroEnvio) ([]dto.Envio, error)
 }
 type EnvioService struct {
 	envioRepository    repositories.EnvioRepositoryInterface
@@ -140,7 +140,7 @@ func (service *EnvioService) DespachadoEnvio(envio *dto.Envio) (bool, error) {
 	service.envioRepository.ActualizarEnvio(envioParaActualizar.GetModel())
 	return true, nil
 }
-func (service *EnvioService) ObtenerEnviosFiltrados(filtro utils.FiltroEnvio) ([]dto.Envio, error) {
+func (service *EnvioService) ObtenerEnviosFiltrados(filtro dto.FiltroEnvio) ([]dto.Envio, error) {
 	envios, err := service.envioRepository.ObtenerEnviosFiltrados(filtro)
 	var envio *dto.Envio
 	var enviosDTO []dto.Envio

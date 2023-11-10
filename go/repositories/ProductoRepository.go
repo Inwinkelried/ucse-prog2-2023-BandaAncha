@@ -5,9 +5,8 @@ import (
 	"fmt"
 
 	//"time"
-
+	"github.com/Inwinkelried/ucse-prog2-2023-BandaAncha/go/dto"
 	"github.com/Inwinkelried/ucse-prog2-2023-BandaAncha/go/model"
-	"github.com/Inwinkelried/ucse-prog2-2023-BandaAncha/go/utils"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
@@ -19,7 +18,7 @@ type ProductoRepositoryInterface interface {
 	InsertarProducto(Producto model.Producto) (*mongo.InsertOneResult, error)
 	ModificarProducto(Producto model.Producto) (*mongo.UpdateResult, error)
 	ObtenerProductoPorID(productoAFiltrar model.Producto) (model.Producto, error)
-	ObtenerProductoFiltrados(filtro utils.FiltroProducto) ([]model.Producto, error)
+	ObtenerProductoFiltrados(filtro dto.FiltroProducto) ([]model.Producto, error)
 	DescontarStockProducto(producto model.Producto) (*mongo.UpdateResult, error)
 }
 type ProductoRepository struct {
@@ -29,8 +28,6 @@ type ProductoRepository struct {
 func NewProductoRepository(db DB) *ProductoRepository {
 	return &ProductoRepository{db: db}
 }
-
-// Obtencion de todos los Productos
 func (repo ProductoRepository) ObtenerProductos() ([]model.Producto, error) {
 	lista := repo.db.GetClient().Database("BandaAncha").Collection("Productos")
 	filtro := bson.M{}
@@ -50,8 +47,6 @@ func (repo ProductoRepository) ObtenerProductos() ([]model.Producto, error) {
 	}
 	return productos, err
 }
-
-// Metodo para obtener un producto filtrado por ID
 func (repository *ProductoRepository) ObtenerProductoPorID(productoAFiltrar model.Producto) (model.Producto, error) {
 	collection := repository.db.GetClient().Database("BandaAncha").Collection("Productos")
 	filtro := bson.M{"_id": productoAFiltrar.ID}
@@ -63,15 +58,11 @@ func (repository *ProductoRepository) ObtenerProductoPorID(productoAFiltrar mode
 	}
 	return producto, err
 }
-
-// Metodo para instertar un Producto nuevo
 func (repo ProductoRepository) InsertarProducto(Producto model.Producto) (*mongo.InsertOneResult, error) {
 	lista := repo.db.GetClient().Database("BandaAncha").Collection("Productos")
 	resultado, err := lista.InsertOne(context.TODO(), Producto)
 	return resultado, err
 }
-
-// Metodo para modificar un Producto
 func (repo ProductoRepository) ModificarProducto(Producto model.Producto) (*mongo.UpdateResult, error) {
 	lista := repo.db.GetClient().Database("BandaAncha").Collection("Productos")
 	filtro := bson.M{"_id": Producto.ID}
@@ -79,8 +70,6 @@ func (repo ProductoRepository) ModificarProducto(Producto model.Producto) (*mong
 	resultado, err := lista.UpdateOne(context.TODO(), filtro, entity)
 	return resultado, err
 }
-
-// Metodo para eliminar un Producto
 func (repo ProductoRepository) EliminarProducto(id primitive.ObjectID) (*mongo.DeleteResult, error) {
 	lista := repo.db.GetClient().Database("BandaAncha").Collection("Productos")
 	filtro := bson.M{"_id": id}
@@ -117,8 +106,7 @@ func (repo *ProductoRepository) obtenerProductos(filtro bson.M) ([]model.Product
 	}
 	return productos, nil
 }
-
-func (repo ProductoRepository) ObtenerProductoFiltrados(filtro utils.FiltroProducto) ([]model.Producto, error) {
+func (repo ProductoRepository) ObtenerProductoFiltrados(filtro dto.FiltroProducto) ([]model.Producto, error) {
 	filtroGenerado := bson.M{}
 	if filtro.TipoProducto != "" {
 		filtroGenerado["tipo"] = filtro.TipoProducto

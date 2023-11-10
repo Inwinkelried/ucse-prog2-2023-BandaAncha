@@ -5,8 +5,8 @@ import (
 	"fmt"
 	"time"
 
+	"github.com/Inwinkelried/ucse-prog2-2023-BandaAncha/go/dto"
 	"github.com/Inwinkelried/ucse-prog2-2023-BandaAncha/go/model"
-	"github.com/Inwinkelried/ucse-prog2-2023-BandaAncha/go/utils"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
 )
@@ -16,7 +16,7 @@ type EnvioRepositoryInterface interface {
 	InsertarEnvio(envio model.Envio) (*mongo.InsertOneResult, error)
 	ActualizarEnvio(envio model.Envio) (*mongo.UpdateResult, error)
 	ObtenerEnvioPorID(envio model.Envio) (model.Envio, error)
-	ObtenerEnviosFiltrados(filtro utils.FiltroEnvio) ([]model.Envio, error)
+	ObtenerEnviosFiltrados(filtro dto.FiltroEnvio) ([]model.Envio, error)
 }
 type EnvioRepository struct {
 	db DB
@@ -103,7 +103,7 @@ func (repository *EnvioRepository) obtenerEnvios(filtro bson.M) ([]model.Envio, 
 	}
 	return envios, nil
 }
-func (repo EnvioRepository) ObtenerEnviosFiltrados(filtro utils.FiltroEnvio) ([]model.Envio, error) {
+func (repo EnvioRepository) ObtenerEnviosFiltrados(filtro dto.FiltroEnvio) ([]model.Envio, error) {
 	filtroGenerado := bson.M{}
 	if filtro.Estado != "" {
 		filtroGenerado["Estado"] = filtro.Estado

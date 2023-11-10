@@ -35,7 +35,7 @@ func (handler *ProductoHandler) ObtenerProductosFiltrados(c *gin.Context) {
 		return
 	}
 	tipoProducto := c.DefaultQuery("tipoProducto", "")
-	filtroProducto := utils.FiltroProducto{
+	filtroProducto := dto.FiltroProducto{
 		FiltroStockMinimo: filtrarPorStockMinimo,
 		TipoProducto:      tipoProducto,
 	}
