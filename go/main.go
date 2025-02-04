@@ -27,11 +27,14 @@ func main() {
 
 	//Iniciar objetos de handler
 	dependencies()
+	log.Println("Cargando dependencias...")
 	//Iniciar rutas
 	mappingRoutes()
+	log.Println("Mapeando rutas...")
 
 	log.Println("Iniciando el servidor...")
 	router.Run(":8080")
+	log.Print("Servidor iniciado en el puerto 8080")
 }
 func mappingRoutes() {
 

@@ -74,7 +74,6 @@ func (repository PedidoRepository) ObtenerPedidoPorID(pedidoABuscar model.Pedido
 	filtro := bson.M{"_id": pedidoABuscar.ID}
 	cursor, err := collection.Find(context.TODO(), filtro)
 	defer cursor.Close(context.Background())
-	// Itera a través de los resultados
 	var pedido model.Pedido
 	for cursor.Next(context.Background()) {
 		err := cursor.Decode(&pedido)

@@ -4,7 +4,6 @@ import (
 	"context"
 	"fmt"
 
-	//"time"
 	"github.com/Inwinkelried/ucse-prog2-2023-BandaAncha/go/dto"
 	"github.com/Inwinkelried/ucse-prog2-2023-BandaAncha/go/model"
 	"go.mongodb.org/mongo-driver/bson"
@@ -76,7 +75,7 @@ func (repo ProductoRepository) EliminarProducto(id primitive.ObjectID) (*mongo.D
 	resultado, err := lista.DeleteOne(context.TODO(), filtro)
 	return resultado, err
 }
-func (repo ProductoRepository) DescontarStockProducto(producto model.Producto) (*mongo.UpdateResult, error) { // hay q probarlo
+func (repo ProductoRepository) DescontarStockProducto(producto model.Producto) (*mongo.UpdateResult, error) { //TODO: probar
 	var productoFiltrado, err = repo.ObtenerProductoPorID(producto)
 	if err != nil {
 		return nil, err
