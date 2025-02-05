@@ -9,15 +9,22 @@ services:
     networks:
       - app-network
     volumes:
-      - volumen_tp:/data/db
-
+      - mongodb_data:/data/db
+    command: ["mongod", "--quiet", "--logpath", "/dev/null"]
+    healthcheck:
+      test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 5s
   go-app:
     build:
       context: ./go
       dockerfile: Dockerfile
     container_name: go-app-container
     depends_on:
-      - mongodb
+      mongodb:
+        condition: service_healthy
     ports:
       - "8080:8080"
     networks:
@@ -40,4 +47,4 @@ networks:
     driver: bridge
 
 volumes:
-  volumen_tp:
+  mongodb_data:
