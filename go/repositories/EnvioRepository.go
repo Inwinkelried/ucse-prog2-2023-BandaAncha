@@ -28,13 +28,12 @@ func NewEnvioRepository(db DB) *EnvioRepository {
 	}
 }
 
-// Falta probar
+// TODO: probar esta función
 func (repository EnvioRepository) ObtenerEnvioPorID(envioABuscar model.Envio) (model.Envio, error) {
 	collection := repository.db.GetClient().Database("BandaAncha").Collection("Envios")
 	filtro := bson.M{"_id": envioABuscar.ID}
 	cursor, err := collection.Find(context.TODO(), filtro)
 	defer cursor.Close(context.Background())
-	// Itera a través de los resultados
 	var envio model.Envio
 	for cursor.Next(context.Background()) {
 		err := cursor.Decode(&envio)
@@ -45,7 +44,6 @@ func (repository EnvioRepository) ObtenerEnvioPorID(envioABuscar model.Envio) (m
 	return envio, err
 }
 
-// Obtencion de todos los Envios
 func (repo EnvioRepository) ObtenerEnvios() ([]model.Envio, error) {
 	lista := repo.db.GetClient().Database("BandaAncha").Collection("Envios")
 	filtro := bson.M{}
@@ -66,14 +64,12 @@ func (repo EnvioRepository) ObtenerEnvios() ([]model.Envio, error) {
 	return envios, err
 }
 
-// Metodo para instertar un envio nueo
 func (repo EnvioRepository) InsertarEnvio(envio model.Envio) (*mongo.InsertOneResult, error) {
 	lista := repo.db.GetClient().Database("BandaAncha").Collection("Envios")
 	resultado, err := lista.InsertOne(context.TODO(), envio)
 	return resultado, err
 }
 
-// Metodo para modificar un envio. Este metodo es el que me permite actualizar el estado del envio
 func (repo EnvioRepository) ActualizarEnvio(envio model.Envio) (*mongo.UpdateResult, error) {
 	lista := repo.db.GetClient().Database("BandaAncha").Collection("Envios")
 	envio.FechaModificacion = time.Now()
@@ -92,7 +88,7 @@ func (repository *EnvioRepository) obtenerEnvios(filtro bson.M) ([]model.Envio, 
 	defer cursor.Close(context.Background())
 	for cursor.Next(context.Background()) {
 		var envio model.Envio
-		err := cursor.Decode(&envio) //aca
+		err := cursor.Decode(&envio)
 		if err != nil {
 			return nil, err
 		}
@@ -111,7 +107,8 @@ func (repo EnvioRepository) ObtenerEnviosFiltrados(filtro dto.FiltroEnvio) ([]mo
 	if filtro.PatenteCamion != "" {
 		filtroGenerado["patente_camion"] = filtro.PatenteCamion
 	}
-	// falta hacer filtro paradas
+	// TODO: agregar filtro para las paradas del camión
+
 	if !filtro.FechaMenor.IsZero() || !filtro.FechaMayor.IsZero() {
 		filtroFecha := bson.M{}
 		if !filtro.FechaMenor.IsZero() {

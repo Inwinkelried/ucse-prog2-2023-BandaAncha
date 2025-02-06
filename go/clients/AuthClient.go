@@ -1,11 +1,12 @@
 package clients
 
 import (
+	"context"
 	"encoding/json"
-	"errors"
 	"fmt"
-	"io/ioutil"
+	"io"
 	"net/http"
+	"time"
 
 	"github.com/Inwinkelried/ucse-prog2-2023-BandaAncha/go/clients/responses"
 )
@@ -15,61 +16,49 @@ type AuthClientInterface interface {
 }
 
 type AuthClient struct {
+	client  *http.Client
+	baseURL string
 }
 
 func NewAuthClient() *AuthClient {
-	return &AuthClient{}
+	return &AuthClient{
+		client: &http.Client{
+			Timeout: 10 * time.Second,
+		},
+		baseURL: "http://w220066.ferozo.com/tp_prog2/api",
+	}
 }
 
 func (auth *AuthClient) GetUserInfo(token string) (*responses.UserInfo, error) {
-	//Ruta donde apunta esta invocacion
-	apiUrl := "http://w220066.ferozo.com/tp_prog2/api/Account/UserInfo"
+	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	defer cancel()
 
-	// Crear un cliente HTTP
-	client := &http.Client{}
-
-	// Crear una solicitud GET
-	req, err := http.NewRequest("GET", apiUrl, nil)
+	req, err := http.NewRequestWithContext(ctx, "GET", auth.baseURL+"/Account/UserInfo", nil)
 	if err != nil {
-		fmt.Println("Error al crear la solicitud GET:", err)
-		return nil, err
+		return nil, fmt.Errorf("error creating request: %w", err)
 	}
 
-	// Agregar encabezado personalizado
 	req.Header.Add("Authorization", token)
 
-	// Realizar la solicitud GET
-	response, err := client.Do(req)
+	response, err := auth.client.Do(req)
 	if err != nil {
-		fmt.Println("Error al realizar la solicitud GET:", err)
-		return nil, err
+		return nil, fmt.Errorf("error making request: %w", err)
 	}
-
 	defer response.Body.Close()
-	// Lee el cuerpo de la respuesta como una cadena
-	responseBody, err := ioutil.ReadAll(response.Body)
-	//Si el codigo es distinto de 200, es porque dio un error.
-	if response.StatusCode != 200 {
-		fmt.Println("Error al realizar la solicitud GET:", responseBody)
-		return nil, errors.New("La peticion respondio con error")
-	}
 
+	body, err := io.ReadAll(response.Body)
 	if err != nil {
-		fmt.Println("Error al leer el cuerpo de la respuesta:", err)
-		return nil, err
+		return nil, fmt.Errorf("error reading response: %w", err)
 	}
 
-	// Convierte el cuerpo de la respuesta a una cadena
-	bodyString := string(responseBody)
+	if response.StatusCode != http.StatusOK {
+		return nil, fmt.Errorf("unexpected status code: %d, body: %s", response.StatusCode, body)
+	}
 
 	var userInfo responses.UserInfo
-
-	if err := json.Unmarshal([]byte(bodyString), &userInfo); err != nil {
-		fmt.Println("Error al deserializar el JSON:", err)
-		return nil, err
+	if err := json.Unmarshal(body, &userInfo); err != nil {
+		return nil, fmt.Errorf("error unmarshaling response: %w", err)
 	}
-
-	fmt.Println("Código de estado:", response.Status)
 
 	return &userInfo, nil
 }

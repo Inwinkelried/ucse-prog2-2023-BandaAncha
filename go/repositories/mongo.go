@@ -27,9 +27,8 @@ func (mongoDB *MongoDB) GetClient() *mongo.Client {
 	return mongoDB.Client
 }
 
-// La dejamos privada, se ejecuta cuando se crea el objeto
 func (mongoDB *MongoDB) Connect() error {
-	clientOptions := options.Client().ApplyURI("mongodb://localhost:27017")
+	clientOptions := options.Client().ApplyURI("mongodb://mongodb:27017")
 
 	client, err := mongo.Connect(context.Background(), clientOptions)
 
