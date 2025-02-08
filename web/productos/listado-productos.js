@@ -14,7 +14,7 @@ document.addEventListener("DOMContentLoaded", function (event) {
 });
 
 function obtenerProductos() {
-  const urlConFiltro = `http://localhost:8080/products`;
+  const urlConFiltro = `http://localhost:8080/products/`;
   makeRequest(
     urlConFiltro,
     Method.GET,

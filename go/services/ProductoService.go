@@ -24,13 +24,10 @@ func NewProductoService(ProductoRepository repositories.ProductoRepositoryInterf
 	}
 }
 func (service *ProductoService) ObtenerProductos() ([]*dto.Producto, error) {
-	ProductosDB, err := service.ProductoRepository.ObtenerProductos()
+	productosDb, err := service.ProductoRepository.ObtenerProductos()
 	var Productos []*dto.Producto
-	if err != nil {
-		return nil, err
-	}
-	for _, ProductosDB := range ProductosDB {
-		Producto := dto.NewProducto(ProductosDB)
+	for _, productosDb := range productosDb {
+		Producto := dto.NewProducto(productosDb)
 		Productos = append(Productos, Producto)
 	}
 	return Productos, err
