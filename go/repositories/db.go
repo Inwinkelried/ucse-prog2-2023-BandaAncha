@@ -6,6 +6,6 @@ import (
 
 type DB interface {
 	Connect() error
-	Disconect() error
+	Disconnect() error
 	GetClient() *mongo.Client
 }

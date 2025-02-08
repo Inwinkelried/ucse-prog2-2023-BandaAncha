@@ -12,8 +12,8 @@ type MongoDB struct {
 }
 
 // Disconect implements DB.
-func (*MongoDB) Disconect() error {
-	panic("unimplemented")
+func (mongoDB *MongoDB) Disconect() error {
+	return mongoDB.Client.Disconnect(context.Background())
 }
 
 func NewMongoDB() *MongoDB {

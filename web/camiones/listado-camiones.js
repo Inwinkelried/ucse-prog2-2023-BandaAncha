@@ -14,14 +14,13 @@ document.addEventListener("DOMContentLoaded", function (event) {
 });
 
 function obtenerCamiones() {
-  const urlConFiltro = `http://localhost:8080/trucks`;
-  debugger;
+  const urlConFiltro = `http://localhost:8080/trucks/`;
   makeRequest(
     `${urlConFiltro}`,
     Method.GET,
     null,
     ContentType.JSON,
-    CallType.PUBLIC, //ESTÁ EN PUBLIC PARA PROBAR. PONERLO EN PRIVADO
+    CallType.PUBLIC,
     exitoObtenerCamiones,
     errorObtenerCamiones
   );
@@ -47,8 +46,13 @@ function exitoObtenerCamiones(data) {
   });
 }
 
-function errorObtenerCamiones(response) {
-  alert("Error en la solicitud al servidor.");
-  console.log(response.json());
-  throw new Error("Error en la solicitud al servidor.");
+function errorObtenerCamiones(error) {
+  console.error("Error details:", error);
+  if (error.status === 404) {
+    alert("No se encontraron camiones.");
+  } else {
+    alert(
+      "Error al conectar con el servidor. Por favor, intente nuevamente más tarde."
+    );
+  }
 }
