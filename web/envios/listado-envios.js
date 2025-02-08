@@ -10,33 +10,36 @@ document.addEventListener("DOMContentLoaded", function (event) {
   //         window.location.origin + "/login.html?reason=login_required";
   // }
 
-  obtenerPedidos();
+  obtenerEnvios();
 });
-const urlConFiltro = `http://localhost:8080/orders/`;
-function obtenerPedidos() {
+
+const urlConFiltro = `http://localhost:8080/shippings/`;
+
+function obtenerEnvios() {
   makeRequest(
     `${urlConFiltro}`,
     Method.GET,
     null,
     ContentType.JSON,
     CallType.PUBLIC,
-    exitoObtenerPedidos,
-    errorObtenerPedidos
+    exitoObtenerEnvios,
+    errorObtenerEnvios
   );
 }
 
-function exitoObtenerPedidos(data) {
-  const elementosTable = document //tabla en la que se colocan los pedidos que se obtienen
+function exitoObtenerEnvios(data) {
+  const elementosTable = document
     .getElementById("elementosTable")
     .querySelector("tbody");
 
   data.forEach((elemento) => {
-    const row = document.createElement("tr"); //crear una fila
+    const row = document.createElement("tr");
 
     row.innerHTML = `   
-                            <td>${elemento.id}</td>
-                            <td>${elemento.productos}</td>
-                            <td>${elemento.destino}</td>
+                            <td>${elemento.idPedido}</td>
+                            <td>${elemento.idCamion}</td>
+                            <td>${elemento.pedidos}</td>
+                            <td>${elemento.paradas}</td>
                             <td>${elemento.estado}</td>
                             <td>${elemento.fecha_creacion}</td>
                             <td>${elemento.fecha_modificacion}</td>
@@ -45,7 +48,7 @@ function exitoObtenerPedidos(data) {
   });
 }
 
-function errorObtenerPedidos(response) {
+function errorObtenerEnvios(response) {
   alert("Error en la solicitud al servidor.");
   console.log(response.json());
   throw new Error("Error en la solicitud al servidor.");
