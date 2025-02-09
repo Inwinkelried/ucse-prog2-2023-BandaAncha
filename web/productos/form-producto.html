@@ -15,42 +15,44 @@
 <body>
         <h1 id="tituloFormulario"> Crear/Editar Producto </h1>
         <a href="listado-productos.html">Volver</a>
-        <form action="/" method="post" id="formulario">
-            
-            <div>
-                <label for="codigo">Codigo</label>
-                <input type="text" name="codigo" id="codigo">
-            </div>
+        <form action="/" method="post" id="form-producto">
+            <input type="hidden" id="id" name="id">
             <div>
                 <label for="nombre">Nombre</label>
                 <input type="text" name="nombre" id="nombre">
             </div>
             <div>
                 <label for="tipo">Tipo</label>
-                <input type="text" name="tipo" id="tipo">
+                <select name="tipo" id="tipo">
+                    <option value="Golosinas">Golosinas</option>
+                    <option value="Bebidas">Bebidas</option>
+                    <option value="Cigarrillos">Cigarrillos</option>
+                    <option value="Comestibles">Comestibles</option>
+                    <option value="Higiene y Salud">Higiene y Salud</option>
+                </select>
             </div>
             <div>
-                <label for="pesoUnitario">Peso Unitario</label>
-                <input type="text" name="pesoUnitario" id="pesUnitario">
+                <label for="peso_unitario">Peso Unitario</label>
+                <input type="text" name="peso_unitario" id="peso_unitario">
             </div>
             <div>
-                <label for="precioUnitario">Precio Unitario</label>
-                <input type="text" name="precioUnitario" id="precioUnitario">
+                <label for="precio_unitario">Precio Unitario</label>
+                <input type="text" name="precio_unitario" id="precio_unitario">
             </div>
             <div>
-                <label for="stockMinimo">Stock Minimo</label>
-                <input type="text" name="stockMinimo" id="stockMinimo">
+                <label for="stock_minimo">Stock Minimo</label>
+                <input type="text" name="stock_minimo" id="stock_minimo">
             </div>
             <div>
-                <label for="stockActual">Stock Actual</label>
-                <input type="text" name="stockActual" id="stockActual">
+                <label for="stock_actual">Stock Actual</label>
+                <input type="text" name="stock_actual" id="stock_actual">
             </div>
             <div>
                 <input type="submit" value="Enviar">
             </div>
         </form>
         <script src="form-producto.js"></script>
-        <script>"../request.js"</script>
+        <script src="../request.js"></script>
     </body>
 
 </html>
