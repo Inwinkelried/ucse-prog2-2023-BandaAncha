@@ -37,21 +37,26 @@ function exitoObtenerProductos(data) {
   if (data != null) {
     data.forEach((elemento) => {
       const row = document.createElement("tr"); //crear una fila
+      const fechaCreacion = new Date(elemento.fecha_creacion).toLocaleString();
+      const fechaModificacion = new Date(
+        elemento.fecha_modificacion
+      ).toLocaleString();
+
       row.innerHTML = ` 
-                    <td>${elemento.id}</td>
-                    <td>${elemento.tipo}</td>
-                    <td>${elemento.nombre}</td>
-                    <td>${elemento.peso_unitario}</td>
-                    <td>${elemento.precio_unitario}</td>
-                    <td>${elemento.stock_minimo}</td>
-                    <td>${elemento.stock_actual}</td>
-                    <td>${elemento.fecha_creacion}</td>
-                    <td>${elemento.fecha_modificacion}</td>
-                    <td class="acciones">
-                        <a class="eliminar" href="form-producto.html?id=${elemento.id}&tipo=ELIMINAR">Eliminar</a>
-                        <a class="editar" href="form-producto.html?id=${elemento.id}&tipo=EDITAR">Editar</a>
-                    </td>
-                    `;
+            <td>${elemento.id}</td>
+            <td>${elemento.tipo}</td>
+            <td>${elemento.nombre}</td>
+            <td>${elemento.peso_unitario}</td>
+            <td>${elemento.precio_unitario}</td>
+            <td>${elemento.stock_minimo}</td>
+            <td>${elemento.stock_actual}</td>
+            <td>${fechaCreacion}</td>
+            <td>${fechaModificacion}</td>
+            <td class="acciones">
+            <a class="eliminar" href="form-producto.html?id=${elemento.id}&tipo=ELIMINAR">Eliminar</a>
+            <a class="editar" href="form-producto.html?id=${elemento.id}&tipo=EDITAR">Editar</a>
+            </td>
+            `;
 
       elementosTable.appendChild(row);
     });
