@@ -35,14 +35,19 @@ function exitoObtenerEnvios(data) {
   data.forEach((elemento) => {
     const row = document.createElement("tr");
 
+    const fechaCreacion = new Date(elemento.fecha_creacion).toLocaleString();
+    const fechaModificacion = new Date(
+      elemento.fecha_modificacion
+    ).toLocaleString();
+
     row.innerHTML = `   
                             <td>${elemento.idPedido}</td>
                             <td>${elemento.idCamion}</td>
                             <td>${elemento.pedidos}</td>
                             <td>${elemento.paradas}</td>
                             <td>${elemento.estado}</td>
-                            <td>${elemento.fecha_creacion}</td>
-                            <td>${elemento.fecha_modificacion}</td>
+                            <td>${fechaCreacion}</td>
+                            <td>${fechaModificacion}</td>
                     `;
     elementosTable.appendChild(row);
   });

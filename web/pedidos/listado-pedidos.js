@@ -26,21 +26,26 @@ function obtenerPedidos() {
 }
 
 function exitoObtenerPedidos(data) {
-  const elementosTable = document //tabla en la que se colocan los pedidos que se obtienen
+  const elementosTable = document
     .getElementById("elementosTable")
     .querySelector("tbody");
 
   data.forEach((elemento) => {
     const row = document.createElement("tr"); //crear una fila
 
+    const fechaCreacion = new Date(elemento.fecha_creacion).toLocaleString();
+    const fechaModificacion = new Date(
+      elemento.fecha_modificacion
+    ).toLocaleString();
+
     row.innerHTML = `   
-                            <td>${elemento.id}</td>
-                            <td>${elemento.productos}</td>
-                            <td>${elemento.destino}</td>
-                            <td>${elemento.estado}</td>
-                            <td>${elemento.fecha_creacion}</td>
-                            <td>${elemento.fecha_modificacion}</td>
-                    `;
+      <td>${elemento.id}</td>
+      <td>${elemento.productos}</td>
+      <td>${elemento.destino}</td>
+      <td>${elemento.estado}</td>
+      <td>${fechaCreacion}</td>
+      <td>${fechaModificacion}</td>
+    `;
     elementosTable.appendChild(row);
   });
 }

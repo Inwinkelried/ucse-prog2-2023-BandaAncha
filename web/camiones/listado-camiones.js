@@ -27,19 +27,24 @@ function obtenerCamiones() {
 }
 
 function exitoObtenerCamiones(data) {
-  const elementosTable = document //tabla en la que se colocan los camiones que se obtienen
+  const elementosTable = document
     .getElementById("elementosTable")
     .querySelector("tbody");
 
   data.forEach((elemento) => {
-    const row = document.createElement("tr"); //crear una fila
+    const row = document.createElement("tr");
+
+    const fechaCreacion = new Date(elemento.fecha_creacion).toLocaleString();
+    const fechaModificacion = new Date(
+      elemento.fecha_modificacion
+    ).toLocaleString();
 
     row.innerHTML = `   
                             <td>${elemento.patente}</td>
                             <td>${elemento.peso_maximo}</td>
                             <td>${elemento.costo_km}</td>
-                            <td>${elemento.fecha_creacion}</td>
-                            <td>${elemento.fecha_modificacion}</td>
+                            <td>${fechaCreacion}</td>
+                            <td>${fechaModificacion}</td>
                             <td class="acciones"><a href="form.html?patente=${elemento.patente}&tipo=EDITAR">Editar</a> | <a href="form.html?patente=${elemento.patente}&tipo=ELIMINAR">Eliminar</a></td>
                     `;
     elementosTable.appendChild(row);

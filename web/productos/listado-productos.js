@@ -36,7 +36,7 @@ function exitoObtenerProductos(data) {
   // Llenar la tabla con los datos obtenidos
   if (data != null) {
     data.forEach((elemento) => {
-      const row = document.createElement("tr"); //crear una fila
+      const row = document.createElement("tr");
       const fechaCreacion = new Date(elemento.fecha_creacion).toLocaleString();
       const fechaModificacion = new Date(
         elemento.fecha_modificacion
