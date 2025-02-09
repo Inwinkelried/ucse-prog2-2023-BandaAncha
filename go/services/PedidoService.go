@@ -2,7 +2,9 @@ package services
 
 import (
 	"github.com/Inwinkelried/ucse-prog2-2023-BandaAncha/go/dto"
+	"github.com/Inwinkelried/ucse-prog2-2023-BandaAncha/go/model"
 	"github.com/Inwinkelried/ucse-prog2-2023-BandaAncha/go/repositories"
+	"github.com/Inwinkelried/ucse-prog2-2023-BandaAncha/go/utils"
 )
 
 type PedidoServiceInterface interface {
@@ -15,6 +17,7 @@ type PedidoServiceInterface interface {
 	ObtenerPedidosAprobados() ([]*dto.Pedido, error)
 	ObtenerPedidosFiltrados(filtro dto.FiltroPedido) ([]dto.Pedido, error)
 	ObtenerPedidoPorID(pedido *dto.Pedido) (*dto.Pedido, error)
+	ObtenerCantidadPedidosPorEstado() ([]utils.CantidadEstado, error) //nuevo
 }
 
 type PedidoService struct {
@@ -145,4 +148,49 @@ func (service *PedidoService) ObtenerPedidosFiltrados(filtro dto.FiltroPedido) (
 		}
 	}
 	return pedidosDTO, nil
+}
+
+// REPORTES
+func (service *PedidoService) ObtenerCantidadPedidosPorEstado() ([]utils.CantidadEstado, error) {
+	//Por cada estado posible de pedidos, obtengo la cantidad de pedidos en ese estado
+	cantidadPedidosPendientes, err := service.pedidoRepository.ObtenerCantidadPedidosPorEstado(model.Pendiente)
+
+	if err != nil {
+		return nil, err
+	}
+
+	cantidadPedidosAceptados, err := service.pedidoRepository.ObtenerCantidadPedidosPorEstado(model.Aceptado)
+
+	if err != nil {
+		return nil, err
+	}
+
+	cantidadPedidosCancelados, err := service.pedidoRepository.ObtenerCantidadPedidosPorEstado(model.Cancelado)
+
+	if err != nil {
+		return nil, err
+	}
+
+	cantidadPedidosParaEnviar, err := service.pedidoRepository.ObtenerCantidadPedidosPorEstado(model.ParaEnviar)
+
+	if err != nil {
+		return nil, err
+	}
+
+	cantidadPedidosEnviados, err := service.pedidoRepository.ObtenerCantidadPedidosPorEstado(model.Enviado)
+
+	if err != nil {
+		return nil, err
+	}
+
+	//Armo el array de CantidadEstado
+	cantidadPedidosPorEstados := []utils.CantidadEstado{
+		{Estado: string(model.Pendiente), Cantidad: cantidadPedidosPendientes},
+		{Estado: string(model.Aceptado), Cantidad: cantidadPedidosAceptados},
+		{Estado: string(model.Cancelado), Cantidad: cantidadPedidosCancelados},
+		{Estado: string(model.ParaEnviar), Cantidad: cantidadPedidosParaEnviar},
+		{Estado: string(model.Enviado), Cantidad: cantidadPedidosEnviados},
+	}
+
+	return cantidadPedidosPorEstados, nil
 }
