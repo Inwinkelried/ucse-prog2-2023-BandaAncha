@@ -46,7 +46,7 @@ function exitoObtenerProductos(data) {
                     <td>${elemento.stock_minimo}</td>
                     <td>${elemento.stock_actual}</td>
                     <td>${elemento.fecha_creacion}</td>
-                    <td>${elemento.fecha_ultima_actualizacion}</td>
+                    <td>${elemento.fecha_modificacion}</td>
                     <td class="acciones">
                         <a class="eliminar" href="form-producto.html?id=${elemento.id}&tipo=ELIMINAR">Eliminar</a>
                         <a class="editar" href="form-producto.html?id=${elemento.id}&tipo=EDITAR">Editar</a>
