@@ -5,30 +5,29 @@ customHeaders.append("Accept-Encoding", "gzip, deflate, br");
 customHeaders.append("Connection", "keep-alive");
 
 document.addEventListener("DOMContentLoaded", function (event) {
-//   if (!isUserLogged()) {
-//     window.location =
-//       document.location.origin + "/web/login/login.html?reason=login_required";
-//   }
+  //   if (!isUserLogged()) {
+  //     window.location =
+  //       document.location.origin + "/web/login/login.html?reason=login_required";
+  //   }
 
   obtenerProductos();
 });
 
 function obtenerProductos() {
-  urlConFiltro = `http://localhost:8080/products`;
-
+  const urlConFiltro = `http://localhost:8080/products/`;
   makeRequest(
-    `${urlConFiltro}`,
+    urlConFiltro,
     Method.GET,
     null,
     ContentType.JSON,
-    CallType.PRIVATE,
+    CallType.PUBLIC, //PUBLIC PARA PROBAR, DESPUES CAMBIAR A PRIVATE
     exitoObtenerProductos,
     errorObtenerProductos
   );
 }
 
 function exitoObtenerProductos(data) {
-  const elementosTable = document //tabla en la que se colocan los envios que se obtienen
+  const elementosTable = document
     .getElementById("elementosTable")
     .querySelector("tbody");
 
@@ -37,36 +36,46 @@ function exitoObtenerProductos(data) {
   // Llenar la tabla con los datos obtenidos
   if (data != null) {
     data.forEach((elemento) => {
-      const row = document.createElement("tr"); //crear una fila
-        row.innerHTML = ` 
-                    <td>${elemento.id}</td>
-                    <td>${elemento.tipo}</td>
-                    <td>${elemento.nombre}</td>
-                    <td>${elemento.peso_unitario}</td>
-                    <td>${elemento.precio_unitario}</td>
-                    <td>${elemento.stock_minimo}</td>
-                    <td>${elemento.stock_actual}</td>
-                    <td>${elemento.fecha_creacion}</td>
-                    <td>${elemento.fecha_ultima_actualizacion}</td>
-                    <td class="acciones">
-                        <a class="eliminar" href="form-producto.html?id=${elemento.id}&tipo=ELIMINAR">Eliminar</a>
-                        <a class="editar" href="form-producto.html?id=${elemento.id}&tipo=EDITAR">Editar</a>
-                    </td>
-                    `;
+      const row = document.createElement("tr");
+      const fechaCreacion = new Date(elemento.fecha_creacion).toLocaleString();
+      const fechaModificacion = new Date(
+        elemento.fecha_modificacion
+      ).toLocaleString();
+
+      row.innerHTML = ` 
+            <td>${elemento.id}</td>
+            <td>${elemento.tipo}</td>
+            <td>${elemento.nombre}</td>
+            <td>${elemento.peso_unitario}</td>
+            <td>${elemento.precio_unitario}</td>
+            <td>${elemento.stock_minimo}</td>
+            <td>${elemento.stock_actual}</td>
+            <td>${fechaCreacion}</td>
+            <td>${fechaModificacion}</td>
+            <td class="acciones">
+            <a class="eliminar" href="form-producto.html?id=${elemento.id}&tipo=ELIMINAR">Eliminar</a>
+            <a class="editar" href="form-producto.html?id=${elemento.id}&tipo=EDITAR">Editar</a>
+            </td>
+            `;
 
       elementosTable.appendChild(row);
     });
   }
 }
 
-function errorObtenerProductos(response) {
-  alert("Error en la solicitud al servidor.");
-  console.log(response.json());
-  throw new Error("Error en la solicitud al servidor.");
+function errorObtenerProductos(status, response) {
+  // Add status parameter
+  console.error("Error details:", response);
+  if (status === 404) {
+    alert("No se encontraron productos.");
+  } else {
+    alert("Error en la solicitud al servidor.");
+  }
 }
 
 function obtenerProductoFiltrado(tipo) {
-  var url = new URL(urlConFiltro);
+  const baseUrl = "http://localhost:8080";
+  var url = new URL(`${baseUrl}/products`);
 
   switch (tipo) {
     case "stock":
@@ -75,7 +84,7 @@ function obtenerProductoFiltrado(tipo) {
     case "tipo":
       url.searchParams.set(
         "tipoProducto",
-        document.getElementById("TipoProducto").value
+        document.getElementById("filtroTipo").value
       );
       break;
     default:
@@ -95,4 +104,3 @@ function obtenerProductoFiltrado(tipo) {
     errorObtenerProductos
   );
 }
-

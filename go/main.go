@@ -2,8 +2,10 @@ package main
 
 import (
 	"log"
+	"time"
 
 	"github.com/Inwinkelried/ucse-prog2-2023-BandaAncha/go/handlers"
+	"github.com/Inwinkelried/ucse-prog2-2023-BandaAncha/go/middlewares"
 	"github.com/Inwinkelried/ucse-prog2-2023-BandaAncha/go/repositories"
 	"github.com/Inwinkelried/ucse-prog2-2023-BandaAncha/go/services"
 	"github.com/gin-gonic/gin"
@@ -20,10 +22,20 @@ var (
 func main() {
 	router = gin.Default()
 
-	// config := cors.DefaultConfig()
-	// config.AllowOrigins = []string{"http://localhost:8080"}
-	// config.AllowMethods = []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"}
-	// router.Use(cors.New(config))
+	// Apply CORS middleware first
+	router.Use(middlewares.CORSMiddleware())
+
+	// Handle trailing slashes
+	router.RedirectTrailingSlash = true
+	router.RedirectFixedPath = true
+
+	// Add this temporary debug endpoint
+	router.GET("/debug", func(c *gin.Context) {
+		c.JSON(200, gin.H{
+			"status": "API is running",
+			"time":   time.Now(),
+		})
+	})
 
 	//Iniciar objetos de handler
 	dependencies()

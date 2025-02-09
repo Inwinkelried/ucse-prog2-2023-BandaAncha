@@ -10,23 +10,24 @@ document.addEventListener("DOMContentLoaded", function (event) {
   //         window.location.origin + "/login.html?reason=login_required";
   // }
 
-  obtenerCamiones();
+  obtenerEnvios();
 });
 
-function obtenerCamiones() {
-  const urlConFiltro = `http://localhost:8080/trucks/`;
+const urlConFiltro = `http://localhost:8080/shippings/`;
+
+function obtenerEnvios() {
   makeRequest(
     `${urlConFiltro}`,
     Method.GET,
     null,
     ContentType.JSON,
     CallType.PUBLIC,
-    exitoObtenerCamiones,
-    errorObtenerCamiones
+    exitoObtenerEnvios,
+    errorObtenerEnvios
   );
 }
 
-function exitoObtenerCamiones(data) {
+function exitoObtenerEnvios(data) {
   const elementosTable = document
     .getElementById("elementosTable")
     .querySelector("tbody");
@@ -40,24 +41,20 @@ function exitoObtenerCamiones(data) {
     ).toLocaleString();
 
     row.innerHTML = `   
-                            <td>${elemento.patente}</td>
-                            <td>${elemento.peso_maximo}</td>
-                            <td>${elemento.costo_km}</td>
+                            <td>${elemento.idPedido}</td>
+                            <td>${elemento.idCamion}</td>
+                            <td>${elemento.pedidos}</td>
+                            <td>${elemento.paradas}</td>
+                            <td>${elemento.estado}</td>
                             <td>${fechaCreacion}</td>
                             <td>${fechaModificacion}</td>
-                            <td class="acciones"><a href="form.html?patente=${elemento.patente}&tipo=EDITAR">Editar</a> | <a href="form.html?patente=${elemento.patente}&tipo=ELIMINAR">Eliminar</a></td>
                     `;
     elementosTable.appendChild(row);
   });
 }
 
-function errorObtenerCamiones(error) {
-  console.error("Error details:", error);
-  if (error.status === 404) {
-    alert("No se encontraron camiones.");
-  } else {
-    alert(
-      "Error al conectar con el servidor. Por favor, intente nuevamente más tarde."
-    );
-  }
+function errorObtenerEnvios(response) {
+  alert("Error en la solicitud al servidor.");
+  console.log(response.json());
+  throw new Error("Error en la solicitud al servidor.");
 }

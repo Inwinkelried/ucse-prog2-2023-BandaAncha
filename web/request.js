@@ -62,26 +62,29 @@ async function makeRequest(
   //Validar que si la pegada es privada exista bearer token, si existe lo agrega como header authorization, sino va a login.html
   const token = localStorage.getItem("authToken");
   if (isPrivateCall && !token) {
-    window.location = "login.html?reason=private_call_without_token";
+    window.location =
+      window.location.origin +
+      "/login/login.html?reason=private_call_without_token";
     return;
   }
 
   // Realizar la solicitud HTTP
   try {
     const response = await fetch(url, {
-      mode: "no-cors",
       method: method,
       body: makeBody(contentType, data),
       headers: {
         "Content-Type": contentType,
-        Authorization: (token && isPrivateCall) ? `Bearer ${token}` : null,
+        Authorization: token && isPrivateCall ? `Bearer ${token}` : null,
       },
+      credentials: "same-origin",
+      mode: "cors",
     });
 
     let responseBody = {};
     try {
       responseBody = await response.json();
-    }catch{}
+    } catch {}
 
     if ("access_token" in responseBody) {
       localStorage.setItem("authToken", responseBody.access_token);
@@ -102,12 +105,14 @@ async function makeRequest(
       );
 
       if (response.status === 401) {
-        window.location = "login.html?reason=token_invalid";
+        window.location =
+          window.location.origin + "/login/login.html?reason=token_invalid";
       }
 
       errorCallback(response.status, responseBody);
     }
   } catch (error) {
+    console.error("Fetch error:", error);
     throw new Error(`Request ERROR: ${error.message}`);
   }
 }
