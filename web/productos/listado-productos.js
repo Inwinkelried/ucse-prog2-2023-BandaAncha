@@ -33,7 +33,6 @@ function exitoObtenerProductos(data) {
 
   elementosTable.innerHTML = "";
 
-  // Llenar la tabla con los datos obtenidos
   if (data != null) {
     data.forEach((elemento) => {
       const row = document.createElement("tr");
@@ -53,7 +52,7 @@ function exitoObtenerProductos(data) {
             <td>${fechaCreacion}</td>
             <td>${fechaModificacion}</td>
             <td class="acciones">
-            <a class="eliminar" href="form-producto.html?id=${elemento.id}&tipo=ELIMINAR">Eliminar</a>
+            <button class="eliminar" onclick="confirmarEliminar('${elemento.id}', '${elemento.nombre}')">Eliminar</button>
             <a class="editar" href="form-producto.html?id=${elemento.id}&tipo=EDITAR">Editar</a>
             </td>
             `;
@@ -63,8 +62,31 @@ function exitoObtenerProductos(data) {
   }
 }
 
+function confirmarEliminar(id, nombre) {
+  if (confirm(`Seguro que quiere eliminar el objeto ${nombre}?`)) {
+    eliminarProducto(id);
+  }
+}
+
+function eliminarProducto(id) {
+  makeRequest(
+    `http://localhost:8080/products/${id}`,
+    Method.DELETE,
+    null,
+    ContentType.JSON,
+    CallType.PUBLIC,
+    function (data) {
+      alert("Producto eliminado exitosamente");
+      obtenerProductos();
+    },
+    function (status, response) {
+      console.error("Error al eliminar:", response);
+      alert("Error al eliminar el producto");
+    }
+  );
+}
+
 function errorObtenerProductos(status, response) {
-  // Add status parameter
   console.error("Error details:", response);
   if (status === 404) {
     alert("No se encontraron productos.");
@@ -99,7 +121,7 @@ function obtenerProductoFiltrado(tipo) {
     Method.GET,
     null,
     ContentType.JSON,
-    CallType.PRIVATE,
+    CallType.PUBLIC,
     exitoObtenerProductos,
     errorObtenerProductos
   );

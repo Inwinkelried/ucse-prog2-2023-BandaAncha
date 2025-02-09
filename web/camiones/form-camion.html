@@ -16,28 +16,26 @@
     <h1 id="tituloFormulario"> Crear/Editar Camión </h1>
     <a href="listado-camiones.html">Volver</a>
      
-    <form action="/" method="post" id="formulario">
+    <form action="/" method="post" id="form-camion">
+        <input type="hidden" id="id" name="id">
         <div>
             <label for="patente">Patente</label>
             <input type="text" name="patente" id="patente">
         </div>
         <div>
-            <label for="pesoMaximo">Peso Maximo</label>
-            <input type="text" name="pesoMaximo" id="pesoMaximo">
+            <label for="peso_maximo">Peso Maximo</label>
+            <input type="number" name="peso_maximo" id="peso_maximo">
         </div>
         <div>
-            <label for="idCreador">Id Creador</label>
-            <input type="text" name="idCreador" id="idCreador">
-        </div>
-        <div>
-            <label for="costoKM">Costo por Km</label>
-            <input type="text" name="costoKM" id="costoKM">
+            <label for="costo_km">Costo por Km</label>
+            <input type="number" name="costo_km" id="costo_km">
         </div>
         <div>
             <input type="submit" value="Enviar">
         </div>
     </form>
     <script src="form-camion.js"></script>
+    <script src="../request.js"></script>
 </body>
 
 </html>

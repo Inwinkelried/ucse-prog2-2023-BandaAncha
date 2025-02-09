@@ -14,18 +14,11 @@
 <body>
     <a href="../index.html">Volver</a>
     <h1 id="tituloTabla"> Lista de Camiones</h1>
-    <div class="filtros">
-        <h3>Filtro por patente</h3>
-        <div class="input-group">
-            <label for="filtroPatente">Patente:</label>
-            <input type="text" name="filtroPatente" id="filtroPatente">
-            <input type="button" value="Filtrar" id="botonFiltrar">
-        </div>
-    </div>
 
     <table id="elementosTable" cellspacing="0" cellpading = "0">
         <thead>
             <tr>
+                <th>ID</th>
                 <th>Patente</th>
                 <th>Peso Máximo</th>
                 <th>Costo KM</th>
@@ -35,10 +28,10 @@
                 
             </tr>
         </thead>
-        <tbody> <!-- Todas las filas de datos -->
+        <tbody> 
         
         </tbody>
-        <tfoot> <!-- Todas las filas de pie -->
+        <tfoot> 
             <tr>
                 <td colspan="6">
                     <a href="form-camion.html"><button>Nuevo</button></a>

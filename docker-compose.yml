@@ -11,12 +11,6 @@ services:
     volumes:
       - mongodb_data:/data/db
     command: ["mongod", "--quiet", "--logpath", "/dev/null"]
-    healthcheck:
-      test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
-      start_period: 5s
 
   go-app:
     build:
@@ -24,20 +18,13 @@ services:
       dockerfile: Dockerfile
     container_name: go-app-container
     depends_on:
-      mongodb:
-        condition: service_healthy
+      - mongodb
     ports:
       - "8080:8080"
     networks:
       - app-network
     environment:
       - GIN_MODE=debug
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:8080/trucks"]
-      interval: 30s
-      timeout: 10s
-      retries: 3
-      start_period: 10s
 
   web-app:
     build:
@@ -49,8 +36,7 @@ services:
     networks:
       - app-network
     depends_on:
-      go-app:
-        condition: service_healthy
+      - go-app
     environment:
       - API_URL=http://localhost:8080
 
