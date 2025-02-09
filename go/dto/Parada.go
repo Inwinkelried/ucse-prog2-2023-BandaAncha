@@ -9,7 +9,7 @@ type Parada struct {
 	KmRecorridos int    `json:"km_recorridos"`
 }
 
-func NewParada(parada model.Parada) *Parada {
+func NewParada(parada *model.Parada) *Parada {
 	return &Parada{
 		Ciudad:       parada.Ciudad,
 		KmRecorridos: parada.KmRecorridos,
