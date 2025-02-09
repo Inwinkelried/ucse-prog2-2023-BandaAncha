@@ -19,9 +19,9 @@ type Pedido struct {
 func NewPedido(pedido model.Pedido) *Pedido {
 	return &Pedido{
 		ID:                utils.GetStringIDFromObjectID(pedido.ID),
-		Productos:         []PedidoProducto{},
+		Productos:         NewProductosPedido(pedido.Productos),
 		Destino:           pedido.Destino,
-		Estado:            "Pendiente",
+		Estado:            pedido.Estado,
 		FechaCreacion:     time.Now(),
 		FechaModificacion: time.Now(),
 	}

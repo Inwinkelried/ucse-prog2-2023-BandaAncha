@@ -31,24 +31,56 @@ function exitoObtenerCamiones(data) {
     .getElementById("elementosTable")
     .querySelector("tbody");
 
-  data.forEach((elemento) => {
-    const row = document.createElement("tr");
+  elementosTable.innerHTML = "";
 
-    const fechaCreacion = new Date(elemento.fecha_creacion).toLocaleString();
-    const fechaModificacion = new Date(
-      elemento.fecha_modificacion
-    ).toLocaleString();
+  if (data != null) {
+    data.forEach((elemento) => {
+      const row = document.createElement("tr");
+      const fechaCreacion = new Date(elemento.fecha_creacion).toLocaleString();
+      const fechaModificacion = new Date(
+        elemento.fecha_modificacion
+      ).toLocaleString();
 
-    row.innerHTML = `   
-                            <td>${elemento.patente}</td>
-                            <td>${elemento.peso_maximo}</td>
-                            <td>${elemento.costo_km}</td>
-                            <td>${fechaCreacion}</td>
-                            <td>${fechaModificacion}</td>
-                            <td class="acciones"><a href="form.html?patente=${elemento.patente}&tipo=EDITAR">Editar</a> | <a href="form.html?patente=${elemento.patente}&tipo=ELIMINAR">Eliminar</a></td>
-                    `;
-    elementosTable.appendChild(row);
-  });
+      row.innerHTML = `
+        <td>${elemento.id}</td>      
+        <td>${elemento.patente}</td>
+        <td>${elemento.peso_maximo}</td>
+        <td>${elemento.costo_km}</td>
+        <td>${fechaCreacion}</td>
+        <td>${fechaModificacion}</td>
+        <td class="acciones">
+          <button class="eliminar" onclick="confirmarEliminar('${elemento.id}', '${elemento.patente}')">Eliminar</button>
+          <a class="editar" href="form-camion.html?id=${elemento.id}&tipo=EDITAR">Editar</a>
+        </td>
+      `;
+      elementosTable.appendChild(row);
+    });
+  }
+}
+
+function confirmarEliminar(id, patente) {
+  if (confirm(`Seguro que quiere eliminar el camión con patente ${patente}?`)) {
+    eliminarCamion(id);
+  }
+}
+
+function eliminarCamion(id) {
+  const baseUrl = `http://localhost:8080/trucks/`;
+  makeRequest(
+    `${baseUrl}${id}`,
+    Method.DELETE,
+    null,
+    ContentType.JSON,
+    CallType.PUBLIC,
+    function (data) {
+      alert("Camión eliminado exitosamente");
+      obtenerCamiones();
+    },
+    function (status, response) {
+      console.error("Error al eliminar:", response);
+      alert("Error al eliminar el camión");
+    }
+  );
 }
 
 function errorObtenerCamiones(error) {

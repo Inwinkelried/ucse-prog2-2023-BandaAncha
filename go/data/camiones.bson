@@ -1,0 +1,72 @@
+[
+    {
+        "patente": "ABC123",
+        "peso_maximo": 5000,
+        "costo_km": 150,
+        "fecha_creacion": "2023-10-14T12:00:00Z",
+        "fecha_modificacion": "2023-10-14T12:00:00Z"
+    },
+    {
+        "patente": "XYZ789",
+        "peso_maximo": 7500,
+        "costo_km": 120,
+        "fecha_creacion": "2023-10-14T13:30:00Z",
+        "fecha_modificacion": "2023-10-14T13:45:00Z"
+    },
+    {
+        "patente": "DEF456",
+        "peso_maximo": 6000,
+        "costo_km": 180,
+        "fecha_creacion": "2023-10-14T14:15:00Z",
+        "fecha_modificacion": "2023-10-14T14:20:00Z"
+    },
+    {
+        "patente": "GHI789",
+        "peso_maximo": 4500,
+        "costo_km": 130,
+        "fecha_creacion": "2023-10-14T15:00:00Z",
+        "fecha_modificacion": "2023-10-14T15:10:00Z"
+    },
+    {
+        "patente": "JKL012",
+        "peso_maximo": 8000,
+        "costo_km": 170,
+        "fecha_creacion": "2023-10-14T16:30:00Z",
+        "fecha_modificacion": "2023-10-14T16:45:00Z"
+    },
+    {
+        "patente": "MNO345",
+        "peso_maximo": 5500,
+        "costo_km": 160,
+        "fecha_creacion": "2023-10-14T17:00:00Z",
+        "fecha_modificacion": "2023-10-14T17:15:00Z"
+    },
+    {
+        "patente": "PQR678",
+        "peso_maximo": 7000,
+        "costo_km": 140,
+        "fecha_creacion": "2023-10-14T18:30:00Z",
+        "fecha_modificacion": "2023-10-14T18:45:00Z"
+    },
+    {
+        "patente": "STU901",
+        "peso_maximo": 6500,
+        "costo_km": 190,
+        "fecha_creacion": "2023-10-14T19:15:00Z",
+        "fecha_modificacion": "2023-10-14T19:30:00Z"
+    },
+    {
+        "patente": "VWX234",
+        "peso_maximo": 5500,
+        "costo_km": 110,
+        "fecha_creacion": "2023-10-14T20:00:00Z",
+        "fecha_modificacion": "2023-10-14T20:15:00Z"
+    },
+    {
+        "patente": "YZA567",
+        "peso_maximo": 7000,
+        "costo_km": 200,
+        "fecha_creacion": "2023-10-14T21:30:00Z",
+        "fecha_modificacion": "2023-10-14T21:45:00Z"
+    }
+]

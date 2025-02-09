@@ -23,6 +23,7 @@ type PedidoRepositoryInterface interface {
 	ObtenerPesoPedido(pedido model.Pedido) (int, error)
 	ActualizarPedido(pedido model.Pedido) (*mongo.UpdateResult, error)
 	ObtenerPedidosFiltrados(filtro dto.FiltroPedido) ([]model.Pedido, error)
+	ObtenerCantidadPedidosPorEstado(model.EstadoPedido) (int, error)
 }
 type PedidoRepository struct {
 	db DB
@@ -30,6 +31,21 @@ type PedidoRepository struct {
 
 func NewPedidoRepository(db DB) *PedidoRepository {
 	return &PedidoRepository{db: db}
+}
+
+// REPORTES
+func (repository *PedidoRepository) ObtenerCantidadPedidosPorEstado(estado model.EstadoPedido) (int, error) {
+	collection := repository.db.GetClient().Database("BandaAncha").Collection("Pedidos")
+
+	filtro := bson.M{"estado": estado}
+
+	cantidad, err := collection.CountDocuments(context.Background(), filtro)
+
+	if err != nil {
+		return 0, err
+	}
+
+	return int(cantidad), nil
 }
 
 func (repo PedidoRepository) ObtenerPesoPedido(pedido model.Pedido) (int, error) {
@@ -102,6 +118,7 @@ func (repo PedidoRepository) ObtenerPedidos() ([]model.Pedido, error) {
 }
 func (repo PedidoRepository) InsertarPedido(pedido model.Pedido) (*mongo.InsertOneResult, error) {
 	lista := repo.db.GetClient().Database("BandaAncha").Collection("Pedidos")
+	pedido.Estado = "Pendiente"
 	resultado, err := lista.InsertOne(context.TODO(), pedido)
 	return resultado, err
 }

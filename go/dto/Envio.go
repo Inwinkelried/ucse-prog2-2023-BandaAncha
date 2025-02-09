@@ -22,8 +22,8 @@ func NewEnvio(envio model.Envio) *Envio {
 		ID:                utils.GetStringIDFromObjectID(envio.ID),
 		PatenteCamion:     envio.PatenteCamion,
 		Pedidos:           envio.Pedidos,
-		Paradas:           []Parada{},
-		Estado:            "A despachar",
+		Paradas:           NewParadas(envio.Paradas),
+		Estado:            envio.Estado,
 		FechaCreacion:     time.Now(),
 		FechaModificacion: time.Now(),
 	}
@@ -43,6 +43,14 @@ func (envio Envio) getParadas() []model.Parada {
 	var paradasEnvio []model.Parada
 	for _, parada := range envio.Paradas {
 		paradasEnvio = append(paradasEnvio, parada.GetModel())
+	}
+	return paradasEnvio
+}
+
+func NewParadas(paradas []model.Parada) []Parada {
+	var paradasEnvio []Parada
+	for _, parada := range paradas {
+		paradasEnvio = append(paradasEnvio, *NewParada(&parada))
 	}
 	return paradasEnvio
 }
