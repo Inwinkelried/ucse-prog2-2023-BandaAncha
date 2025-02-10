@@ -125,7 +125,7 @@ func (repo PedidoRepository) InsertarPedido(pedido model.Pedido) (*mongo.InsertO
 func (repo PedidoRepository) AceptarPedido(pedido model.Pedido) (*mongo.UpdateResult, error) {
 	lista := repo.db.GetClient().Database("BandaAncha").Collection("Pedidos")
 	filtro := bson.M{"_id": pedido.ID}
-	entity := bson.M{"$set": bson.M{"Estado": "Aceptado"}}
+	entity := bson.M{"$set": bson.M{"estado": "Aceptado"}}
 	resultado, err := lista.UpdateOne(context.TODO(), filtro, entity)
 	return resultado, err
 }
@@ -139,14 +139,14 @@ func (repo PedidoRepository) CancelarPedido(pedido model.Pedido) (*mongo.UpdateR
 func (repo PedidoRepository) ParaEnviarPedido(pedido model.Pedido) (*mongo.UpdateResult, error) {
 	lista := repo.db.GetClient().Database("BandaAncha").Collection("Pedidos")
 	filtro := bson.M{"_id": pedido.ID}
-	entity := bson.M{"$set": bson.M{"Estado": "Para enviar"}}
+	entity := bson.M{"$set": bson.M{"estado": "Para enviar"}}
 	resultado, err := lista.UpdateOne(context.TODO(), filtro, entity)
 	return resultado, err
 }
 func (repo PedidoRepository) EnviadoPedido(pedido model.Pedido) (*mongo.UpdateResult, error) {
 	lista := repo.db.GetClient().Database("BandaAncha").Collection("Pedidos")
 	filtro := bson.M{"_id": pedido.ID}
-	entity := bson.M{"$set": bson.M{"Estado": "Enviado"}}
+	entity := bson.M{"$set": bson.M{"estado": "Enviado"}}
 	resultado, err := lista.UpdateOne(context.TODO(), filtro, entity)
 	return resultado, err
 }

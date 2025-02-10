@@ -187,6 +187,7 @@
     ],
     "destino": "Posadas",
     "estado": "Aceptado",
+    
     "fecha_creacion": {
       "$date": "2023-12-06T12:44:53.204Z"
     },

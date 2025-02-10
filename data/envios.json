@@ -25,7 +25,8 @@
     ],
     "pedidos": [
       "656e76e1dcaf41dfe5a8b41e"
-    ]
+    ],
+  "estado": "A Despachar"
   },
   {
     "_id": {
@@ -42,7 +43,8 @@
     "pedidos": [
       "65710cbd2b31ae7e970ba4df",
       "65710ce42b31ae7e970ba4e1"
-    ]
+    ],
+  "estado": "A Despachar"
   },
   {
     "_id": {
@@ -64,5 +66,6 @@
     "pedidos": [
       "656e6ab4f9ebe69bfc223e00",
       "656fa0640fa5a3ee5eedd878"
-    ]
+    ],
+  "estado": "A Despachar"
   }]
