@@ -71,6 +71,9 @@ func mappingRoutes() {
 	groupEnvio.GET("/:id", envioHandler.ObtenerEnvioPorID)
 	groupEnvio.PUT("/SetSent/:id", envioHandler.EnRutaEnvio)
 	groupEnvio.GET("/Filter", envioHandler.ObtenerEnviosFiltrados)
+	//REPORTES ENVIOS
+	router.GET("/envios/cantidadPorEstado", envioHandler.ObtenerCantidadEnviosPorEstado)
+
 	//PEDIDOS
 	groupPedido.GET("/", pedidoHandler.ObtenerPedidos)
 	groupPedido.GET("/Filter", pedidoHandler.ObtenerPedidosFiltrados)
@@ -82,8 +85,7 @@ func mappingRoutes() {
 	groupPedido.PUT("/Send/:id", pedidoHandler.ParaEnviarPedido)
 	groupPedido.PUT("/Sent/:id", pedidoHandler.EnviadoPedido)
 	groupPedido.GET("/:id", pedidoHandler.ObtenerPedidoPorID)
-
-	//reportes
+	//REPOORTES PEDIDOS
 	groupPedido.GET("/cantidadPorEstado", pedidoHandler.ObtenerCantidadPedidosPorEstado)
 	//PRODUCTOS
 	groupProducto.GET("/", productoHandler.ObtenerProductos)

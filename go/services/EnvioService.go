@@ -16,6 +16,7 @@ type EnvioServiceInterface interface {
 	DespachadoEnvio(envio *dto.Envio) (bool, error)
 	AgregarParada(envio *dto.Envio) (bool, error)
 	ObtenerEnviosFiltrados(filtro dto.FiltroEnvio) ([]dto.Envio, error)
+	ObtenerCantidadEnviosPorEstado() ([]utils.CantidadEstado, error)
 }
 type EnvioService struct {
 	envioRepository    repositories.EnvioRepositoryInterface
@@ -155,4 +156,35 @@ func (service *EnvioService) ObtenerEnviosFiltrados(filtro dto.FiltroEnvio) ([]d
 		}
 	}
 	return enviosDTO, nil
+}
+
+// reportes
+func (service *EnvioService) ObtenerCantidadEnviosPorEstado() ([]utils.CantidadEstado, error) {
+	//Por cada estado posible de envio, obtengo la cantidad de envios en ese estado
+	cantidadEnviosADespachar, err := service.envioRepository.ObtenerCantidadEnviosPorEstado(model.ADespachar)
+
+	if err != nil {
+		return nil, err
+	}
+
+	cantidadEnviosEnRuta, err := service.envioRepository.ObtenerCantidadEnviosPorEstado(model.EnRuta)
+
+	if err != nil {
+		return nil, err
+	}
+
+	cantidadEnviosDespachados, err := service.envioRepository.ObtenerCantidadEnviosPorEstado(model.Despachado)
+
+	if err != nil {
+		return nil, err
+	}
+
+	//Agrego los resultados a un array de CantidadEstado
+	cantidadEnviosPorEstados := []utils.CantidadEstado{
+		{Estado: string(model.ADespachar), Cantidad: cantidadEnviosADespachar},
+		{Estado: string(model.EnRuta), Cantidad: cantidadEnviosEnRuta},
+		{Estado: string(model.Despachado), Cantidad: cantidadEnviosDespachados},
+	}
+
+	return cantidadEnviosPorEstados, nil
 }

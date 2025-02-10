@@ -8,6 +8,7 @@ import (
 	"github.com/Inwinkelried/ucse-prog2-2023-BandaAncha/go/dto"
 	"github.com/Inwinkelried/ucse-prog2-2023-BandaAncha/go/services"
 	"github.com/Inwinkelried/ucse-prog2-2023-BandaAncha/go/utils"
+	"github.com/Inwinkelried/ucse-prog2-2023-BandaAncha/go/utils/logging"
 	"github.com/gin-gonic/gin"
 )
 
@@ -171,4 +172,19 @@ func (handler *EnvioHandler) EnRutaEnvio(c *gin.Context) {
 	}
 	log.Printf("[handler:EnvioHandler][method:EnRutaEnvio][envio:%+v]", envio)
 	c.JSON(http.StatusCreated, gin.H{"status": "Actualizado correctamente"})
+}
+
+//REPORTES
+
+func (handler *EnvioHandler) ObtenerCantidadEnviosPorEstado(c *gin.Context) {
+	user := dto.NewUser(utils.GetUserInfoFromContext(c))
+	//Obtenemos el array de cantidades del service
+	cantidades, err := handler.envioService.ObtenerCantidadEnviosPorEstado()
+	//Si hay un error, lo devolvemos
+	if err != nil {
+		logging.LoggearErrorYResponder(c, "EnvioHandler", "ObtenerCantidadEnviosPorEstado", err, &user)
+		return
+	}
+	//Agregamos un log para indicar información relevante del resultado
+	logging.LoggearResultadoYResponder(c, "EnvioHandler", "ObtenerCantidadEnviosPorEstado", cantidades, &user)
 }
