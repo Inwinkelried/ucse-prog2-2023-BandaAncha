@@ -17,6 +17,7 @@ type EnvioRepositoryInterface interface {
 	ActualizarEnvio(envio model.Envio) (*mongo.UpdateResult, error)
 	ObtenerEnvioPorID(envio model.Envio) (model.Envio, error)
 	ObtenerEnviosFiltrados(filtro dto.FiltroEnvio) ([]model.Envio, error)
+	ObtenerCantidadEnviosPorEstado(model.EstadoEnvio) (int, error)
 }
 type EnvioRepository struct {
 	db DB
@@ -122,4 +123,19 @@ func (repo EnvioRepository) ObtenerEnviosFiltrados(filtro dto.FiltroEnvio) ([]mo
 
 	return repo.obtenerEnvios(filtroGenerado)
 
+}
+
+// REPORTES
+func (repository EnvioRepository) ObtenerCantidadEnviosPorEstado(estado model.EstadoEnvio) (int, error) {
+	collection := repository.db.GetClient().Database("BandaAncha").Collection("Envios")
+
+	filtro := bson.M{"estado": estado}
+
+	cantidad, err := collection.CountDocuments(context.Background(), filtro)
+
+	if err != nil {
+		return 0, err
+	}
+
+	return int(cantidad), nil
 }
