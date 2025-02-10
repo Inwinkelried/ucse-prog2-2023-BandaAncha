@@ -31,20 +31,15 @@ function exitoObtenerPedidos(data) {
     .querySelector("tbody");
 
   data.forEach((elemento) => {
-    const row = document.createElement("tr"); //crear una fila
-
-    const fechaCreacion = new Date(elemento.fecha_creacion).toLocaleString();
-    const fechaModificacion = new Date(
-      elemento.fecha_modificacion
-    ).toLocaleString();
-
+    const row = document.createElement("tr");
+    const codigosProductos = elemento.productos
+      .map((producto) => producto.codigo_producto)
+      .join(", ");
     row.innerHTML = `   
       <td>${elemento.id}</td>
-      <td>${elemento.productos}</td>
+      <td>${codigosProductos}</td>
       <td>${elemento.destino}</td>
       <td>${elemento.estado}</td>
-      <td>${fechaCreacion}</td>
-      <td>${fechaModificacion}</td>
     `;
     elementosTable.appendChild(row);
   });

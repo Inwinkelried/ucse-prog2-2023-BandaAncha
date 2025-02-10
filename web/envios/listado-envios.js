@@ -34,20 +34,12 @@ function exitoObtenerEnvios(data) {
 
   data.forEach((elemento) => {
     const row = document.createElement("tr");
-
-    const fechaCreacion = new Date(elemento.fecha_creacion).toLocaleString();
-    const fechaModificacion = new Date(
-      elemento.fecha_modificacion
-    ).toLocaleString();
-
+    const paradas = elemento.paradas.map((parada) => parada.ciudad).join(", ");
     row.innerHTML = `   
-                            <td>${elemento.idPedido}</td>
-                            <td>${elemento.idCamion}</td>
-                            <td>${elemento.pedidos}</td>
-                            <td>${elemento.paradas}</td>
+                            <td>${elemento.id}</td>
+                            <td>${elemento.patente_camion}</td>
                             <td>${elemento.estado}</td>
-                            <td>${fechaCreacion}</td>
-                            <td>${fechaModificacion}</td>
+                            <td>${paradas}</td>
                     `;
     elementosTable.appendChild(row);
   });

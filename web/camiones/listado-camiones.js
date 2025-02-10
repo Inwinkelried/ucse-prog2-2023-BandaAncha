@@ -36,18 +36,12 @@ function exitoObtenerCamiones(data) {
   if (data != null) {
     data.forEach((elemento) => {
       const row = document.createElement("tr");
-      const fechaCreacion = new Date(elemento.fecha_creacion).toLocaleString();
-      const fechaModificacion = new Date(
-        elemento.fecha_modificacion
-      ).toLocaleString();
 
       row.innerHTML = `
         <td>${elemento.id}</td>      
         <td>${elemento.patente}</td>
         <td>${elemento.peso_maximo}</td>
         <td>${elemento.costo_km}</td>
-        <td>${fechaCreacion}</td>
-        <td>${fechaModificacion}</td>
         <td class="acciones">
           <button class="eliminar" onclick="confirmarEliminar('${elemento.id}', '${elemento.patente}')">Eliminar</button>
           <a class="editar" href="form-camion.html?id=${elemento.id}&tipo=EDITAR">Editar</a>
