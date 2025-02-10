@@ -96,7 +96,6 @@ func mappingRoutes() {
 	groupProducto.DELETE("/:id", productoHandler.EliminarProducto)
 	groupProducto.GET("/Filter/", productoHandler.ObtenerProductosFiltrados) // hay q probar
 	//CAMIONES
-	//router.GET("/trucks", camionHandler.ObtenerCamiones)
 	groupCamion.GET("/", camionHandler.ObtenerCamiones)
 	groupCamion.GET("/:id", camionHandler.ObtenerCamionPorID)
 	groupCamion.POST("/", camionHandler.InsertarCamion)
