@@ -70,7 +70,7 @@ func mappingRoutes() {
 	groupEnvio.PUT("/SetDelivered/:id", envioHandler.DespachadoEnvio)
 	groupEnvio.GET("/:id", envioHandler.ObtenerEnvioPorID)
 	groupEnvio.PUT("/SetSent/:id", envioHandler.EnRutaEnvio)
-	groupEnvio.GET("/Filter", envioHandler.ObtenerEnviosFiltrados)
+
 	//REPORTES ENVIOS
 	router.GET("/envios/cantidadPorEstado", envioHandler.ObtenerCantidadEnviosPorEstado)
 

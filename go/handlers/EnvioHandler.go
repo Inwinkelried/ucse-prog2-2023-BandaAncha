@@ -21,21 +21,13 @@ func NewEnvioHandler(envioService services.EnvioServiceInterface) *EnvioHandler 
 		envioService: envioService,
 	}
 }
-func (handler *EnvioHandler) ObtenerEnviosFiltrados(c *gin.Context) {
+func (handler *EnvioHandler) ObtenerEnvios(c *gin.Context) {
 	user := dto.NewUser(utils.GetUserInfoFromContext(c))
 	patente := c.DefaultQuery("patente", "")
 	ultimaParada := c.DefaultQuery("ultimaParada", "")
 	estado := c.DefaultQuery("estado", "")
-	fechaMenorStr := c.DefaultQuery("fechaMenor", "0001-01-01T00:00:00Z")
-	fechaMenor, err := time.Parse(time.RFC3339, fechaMenorStr)
-	if err != nil {
-		fechaMenor = time.Time{}
-	}
-	fechaMayorStr := c.DefaultQuery("fechaMayor", "0001-01-01T00:00:00Z")
-	fechaMayor, err := time.Parse(time.RFC3339, fechaMayorStr)
-	if err != nil {
-		fechaMayor = time.Time{}
-	}
+	fechaMenor := parseFechaQuery(c.DefaultQuery("fechaMenor", "0001-01-01T00:00:00Z"))
+	fechaMayor := parseFechaQuery(c.DefaultQuery("fechaMayor", "0001-01-01T00:00:00Z"))
 	filtro := dto.FiltroEnvio{
 		PatenteCamion: patente,
 		Estado:        estado,
@@ -43,15 +35,23 @@ func (handler *EnvioHandler) ObtenerEnviosFiltrados(c *gin.Context) {
 		FechaMenor:    fechaMenor,
 		FechaMayor:    fechaMayor,
 	}
-	envios, err := handler.envioService.ObtenerEnviosFiltrados(filtro)
+	envios, err := handler.envioService.ObtenerEnvios(filtro)
 	if err != nil {
-		log.Printf("[handler:EnvioHandler][method:ObtenerEnvios][envio:%+v][user:%s]", err.Error(), user.Codigo)
-
+		log.Printf("[handler:EnvioHandler][method:ObtenerEnvios][error:%s][user:%s]", err.Error(), user.Codigo)
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
-	log.Printf("[handler:AulaHandler][method:ObtenerEnvios][cantidad:%d][user:%s]", len(envios), user.Codigo)
+
+	log.Printf("[handler:EnvioHandler][method:ObtenerEnvios][cantidad:%d][user:%s]", len(envios), user.Codigo)
 	c.JSON(http.StatusOK, envios)
+}
+func parseFechaQuery(fechaStr string) time.Time {
+	fecha, err := time.Parse(time.RFC3339, fechaStr)
+	if err != nil {
+		log.Printf("[error:ParseFechaQuery] No se pudo parsear la fecha: %s - Usando valor por defecto", fechaStr)
+		return time.Time{}
+	}
+	return fecha
 }
 func (handler *EnvioHandler) AgregarParada(c *gin.Context) {
 	user := dto.NewUser(utils.GetUserInfoFromContext(c))
@@ -81,8 +81,6 @@ func (handler *EnvioHandler) AgregarParada(c *gin.Context) {
 	log.Printf("[handler:EnvioHandler][method:AgregarParada][envio:%+v][user:%s]", envio, user.Codigo)
 	c.JSON(http.StatusOK, envio)
 }
-
-// FALTA PROBAR
 func (handler *EnvioHandler) ObtenerEnvioPorID(c *gin.Context) {
 	user := dto.NewUser(utils.GetUserInfoFromContext(c))
 	id := c.Param("id")
@@ -95,19 +93,6 @@ func (handler *EnvioHandler) ObtenerEnvioPorID(c *gin.Context) {
 	}
 	log.Printf("[handler:EnvioHandler][method:ObtenerEnvioPorId][envio:%+v][user:%s]", envio, user.Codigo)
 	c.JSON(http.StatusOK, envio)
-}
-
-func (handler *EnvioHandler) ObtenerEnvios(c *gin.Context) {
-	user := dto.NewUser(utils.GetUserInfoFromContext(c))
-	envios, err := handler.envioService.ObtenerEnvios()
-	if err != nil {
-		log.Printf("[handler:EnvioHandler][method:ObtenerEnvios][error:%s][user:%s]", err.Error(), user.Codigo)
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-		return
-	}
-
-	log.Printf("[handler:EnvioHandler][method:ObtenerEnvios][cantidad:%d][user:%s]", len(envios), user.Codigo)
-	c.JSON(http.StatusOK, envios)
 }
 func (handler *EnvioHandler) InsertarEnvio(c *gin.Context) {
 	var envio dto.Envio
@@ -174,8 +159,7 @@ func (handler *EnvioHandler) EnRutaEnvio(c *gin.Context) {
 	c.JSON(http.StatusCreated, gin.H{"status": "Actualizado correctamente"})
 }
 
-//REPORTES
-
+// REPORTES
 func (handler *EnvioHandler) ObtenerCantidadEnviosPorEstado(c *gin.Context) {
 	user := dto.NewUser(utils.GetUserInfoFromContext(c))
 	//Obtenemos el array de cantidades del service
