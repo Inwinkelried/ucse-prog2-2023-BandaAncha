@@ -119,6 +119,8 @@ func (repo PedidoRepository) ObtenerPedidos() ([]model.Pedido, error) {
 func (repo PedidoRepository) InsertarPedido(pedido model.Pedido) (*mongo.InsertOneResult, error) {
 	lista := repo.db.GetClient().Database("BandaAncha").Collection("Pedidos")
 	pedido.Estado = "Pendiente"
+	pedido.FechaCreacion = time.Now()
+	pedido.FechaModificacion = time.Now()
 	resultado, err := lista.InsertOne(context.TODO(), pedido)
 	return resultado, err
 }

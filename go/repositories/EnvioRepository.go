@@ -67,6 +67,8 @@ func (repo EnvioRepository) ObtenerEnvios() ([]model.Envio, error) {
 
 func (repo EnvioRepository) InsertarEnvio(envio model.Envio) (*mongo.InsertOneResult, error) {
 	lista := repo.db.GetClient().Database("BandaAncha").Collection("Envios")
+	envio.FechaCreacion = time.Now()
+	envio.FechaModificacion = time.Now()
 	resultado, err := lista.InsertOne(context.TODO(), envio)
 	return resultado, err
 }
