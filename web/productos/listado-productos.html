@@ -17,13 +17,20 @@
     <h1 id="tituloTabla"> Lista de Productos</h1>
     <div class="filtros">
         <h3>Filtros</h3>
-        <div>
+        <div class="filter-row">
             <button onclick="obtenerProductoFiltrado('stock')">PRODUCTOS CON BAJO STOCK</button> 
         </div>
-        <div>
-            <label for="">Tipo de producto: </label>
-            <input type="text" name="filtroTipo" id="filtroTipo">
-            <input type="button" value="Buscar" onclick="obtenerProductoFiltrado('tipo')">
+        <div class="filter-row">
+            <label for="filtroTipo">Tipo de producto: </label>
+            <select name="filtroTipo" id="filtroTipo">
+                <option value="">Seleccione un tipo</option>
+                <option value="Golosinas">Golosinas</option>
+                <option value="Bebidas">Bebidas</option>
+                <option value="Cigarrillos">Cigarrillos</option>
+                <option value="Comestibles">Comestibles</option>
+                <option value="Higiene y Salud">Higiene y Salud</option>
+            </select>
+            <button onclick="obtenerProductoFiltrado('tipo')">Buscar</button>
         </div>
     </div>
 
@@ -37,8 +44,6 @@
                 <th>Precio</th>
                 <th>Stock Mínimo</th>
                 <th>Stock Actual</th>
-                <th>Fecha de Creación</th>
-                <th>Última Actualización</th>
                 <th>Acciones</th>
             </tr>
         </thead>
