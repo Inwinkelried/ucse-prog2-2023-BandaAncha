@@ -32,7 +32,7 @@ func NewCamionRepository(db DB) *CamionRepository {
 }
 func (repo CamionRepository) ObtenerCamionPorPatente(camion model.Camion) (model.Camion, error) {
 	lista := repo.db.GetClient().Database("BandaAncha").Collection("Camiones")
-	filtro := bson.M{"Patente": camion.Patente}
+	filtro := bson.M{"patente": camion.Patente}
 	cursor, err := lista.Find(context.Background(), filtro)
 	defer cursor.Close(context.Background())
 	var camionEncontrado model.Camion

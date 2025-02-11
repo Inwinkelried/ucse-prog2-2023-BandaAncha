@@ -100,6 +100,7 @@ func (handler *EnvioHandler) InsertarEnvio(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
+
 	resultado, err := handler.envioService.InsertarEnvio(&envio)
 	if err != nil {
 		log.Printf("[handler:EnvioHandler][method:InsertarEnvio][envio:%+v][error:%s]", envio, err.Error())
@@ -107,13 +108,13 @@ func (handler *EnvioHandler) InsertarEnvio(c *gin.Context) {
 		return
 	}
 	if !resultado {
-		log.Printf("[handler:EnvioHandler][method:InsertarEnvio][envio:%+v][error:%s]", envio, err.Error())
-		c.JSON(http.StatusBadRequest, gin.H{"No se ha podido insertar el envio. Revise los datos de entrada": err.Error()})
+		log.Printf("[handler:EnvioHandler][method:InsertarEnvio][envio:%+v]", envio)
+		c.JSON(http.StatusBadRequest, gin.H{"error": "No se ha podido insertar el envío. Revise los datos de entrada"})
 		return
 	}
+
 	log.Printf("[handler:EnvioHandler][method:InsertarEnvio][envio:%+v]", envio)
 	c.JSON(http.StatusCreated, gin.H{"status": "Creado correctamente"})
-
 }
 func (handler *EnvioHandler) DespachadoEnvio(c *gin.Context) {
 	var envio dto.Envio

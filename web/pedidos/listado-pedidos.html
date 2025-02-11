@@ -1,70 +1,73 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 
 <head>
     <meta charset="UTF-8">
-    <title>Explorando Pedidos</title>
-    <meta name="referrer" content="origin">
+    <title>Gestión de Pedidos</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
     <link href="../styles.css" rel="stylesheet">
-   
 </head>
 
 <body>
-    <a href="../index.html">Volver</a>
-    <h1 id="tituloTabla"> Lista de Pedidos</h1>
+    <div class="container">
+        <a href="../index.html" class="btn-volver">← Volver</a>
+        <h1>Gestión de Pedidos</h1>
 
-    <div class="filtros">
-        <h3>Filtros</h3>
-        <div class="input-group">
-            <label for="filtroCodigoEnvio">Codigo de Envio:</label>
-            <input type="text" name="filtroCodigoEnvio" id="filtroCodigoEnvio">
-            <input type="button" value="Filtrar" id="botonFiltrar">
+        <div class="filtros">
+            <h3>Filtros de Búsqueda</h3>
+            <form id="formFiltros">
+                <div class="input-group">
+                    <label for="filtroCodigoEnvio">Código de Envío:</label>
+                    <input type="text" id="filtroCodigoEnvio" placeholder="Ingrese código de envío">
+                </div>
+                <div class="input-group">
+                    <label for="filtroEstado">Estado:</label>
+                    <select id="filtroEstado">
+                        <option value="">Todos</option>
+                        <option value="Pendiente">Pendiente</option>
+                        <option value="Aceptado">Aceptado</option>
+                        <option value="Para Enviar">Para Enviar</option>
+                        <option value="Enviado">Enviado</option>
+                    </select>
+                </div>
+                <div class="input-group">
+                    <label>Fecha de Creación:</label>
+                    <div>
+                        <input type="date" id="filtroFechaDesde" placeholder="Desde">
+                        <input type="date" id="filtroFechaHasta" placeholder="Hasta">
+                    </div>
+                </div>
+                <div class="input-group">
+                    <button type="button" id="btnFiltrar">Aplicar Filtros</button>
+                    <button type="button" id="btnLimpiar">Limpiar Filtros</button>
+                </div>
+            </form>
         </div>
-        <div class="input-group">
-            <label for="filtroEstado">Estado del producto:</label>
-            <input type="text" name="filtroEstado" id="filtroEstado">
-            <input type="button" value="Filtrar" id="botonFiltrar">
-        </div>
-        <div class="input-group">
-            <label for="filtroFecha">Fecha de creacion: </label>
-            <div>
-                <label for="desde">Desde: </label>
-                <input type="date" name="desde" id="filtroFecha">
-                <label for="hasta">Hasta: </label>
-                <input type="date" name="hasta" id="filtroFecha">
-                <input type="button" value="Filtrar" id="botonFiltrar">
-            </div>
-        </div>
-       
+
+        <table id="tablaPedidos">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Productos</th>
+                    <th>Destino</th>
+                    <th>Estado</th>
+                    <th>Fecha Creación</th>
+                    <th>Fecha Modificación</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Los datos se cargarán dinámicamente -->
+            </tbody>
+        </table>
+
+        <a href="form-pedido.html" class="btn-nuevo">Nuevo Pedido</a>
     </div>
-
-    <table id="elementosTable" cellspacing="0" cellpading = "0">
-        <thead>
-            <tr>
-                <th>ID </th>
-                <th>Productos</th>
-                <th>Destino</th>
-                <th>Estado</th>
-                <th>Fecha Creacion</th>
-                <th>Fecha Modificacion</th>
-                <th>Seleccionar</th>
-            </tr>
-        </thead>
-        <tbody> <!-- Todas las filas de datos -->
-        
-        </tbody>
-        <tfoot> <!-- Todas las filas de pie -->
-            <tr>
-                <td colspan="6">
-                    <a href="form-pedido.html"><button>Nuevo</button></a>
-                </td>
-            </tr>
-        </tfoot>
-    </table>
-    <script src="listado-pedidos.js"></script>
     <script src="../request.js"></script>
+    <script src="listado-pedidos.js"></script>
 </body>
 
 </html>

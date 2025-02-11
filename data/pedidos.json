@@ -1,269 +1,119 @@
-[{
+[
+  {
     "_id": {
-      "$oid": "656e66a29ae0b0b8c03d9310"
+      "$oid": "657100030000000000000001"
     },
     "productos": [
       {
-        "codigo_producto": "656c9de138ee51867892005a",
-        "nombre_producto": "Caramelo",
-        "cantidad": 30,
-        "precio_unitario": 1,
-        "peso_unitario": 1
+        "codigo_producto": "657100010000000000000001",
+        "nombre_producto": "Alfajor Chocolate",
+        "cantidad": 100,
+        "precio_unitario": 500,
+        "peso_unitario": 50
       },
       {
-        "codigo_producto": "656e624f1270e691ea1c7dd4",
-        "nombre_producto": "Marlboro",
-        "cantidad": 20,
-        "precio_unitario": 800,
-        "peso_unitario": 1
+        "codigo_producto": "657100010000000000000002",
+        "nombre_producto": "Coca Cola 2L",
+        "cantidad": 50,
+        "precio_unitario": 1200,
+        "peso_unitario": 2000
       }
     ],
     "destino": "Rosario",
-    "estado": "Cancelado",
-    "fecha_creacion": {
-      "$date": "2023-12-04T23:54:10.079Z"
-    },
-    "fecha_modificacion": {
-      "$date": "2023-12-04T23:54:26.822Z"
-    }
-  },
-  {
-    "_id": {
-      "$oid": "656e6ab4f9ebe69bfc223e00"
-    },
-    "productos": [
-      {
-        "codigo_producto": "656c9de138ee51867892005a",
-        "nombre_producto": "Caramelo",
-        "cantidad": 0,
-        "precio_unitario": 1,
-        "peso_unitario": 1
-      },
-      {
-        "codigo_producto": "656e624f1270e691ea1c7dd4",
-        "nombre_producto": "Marlboro",
-        "cantidad": 0,
-        "precio_unitario": 800,
-        "peso_unitario": 1
-      }
-    ],
-    "destino": "Buenos Aires",
     "estado": "Para Enviar",
     "fecha_creacion": {
-      "$date": "2023-12-05T00:11:32.619Z"
+      "$date": "2025-02-11T00:00:00.000Z"
     },
     "fecha_modificacion": {
-      "$date": "2023-12-07T00:11:37.646Z"
+      "$date": "2025-02-11T00:00:00.000Z"
     }
   },
   {
     "_id": {
-      "$oid": "656e76e1dcaf41dfe5a8b41e"
+      "$oid": "657100030000000000000002"
     },
     "productos": [
       {
-        "codigo_producto": "656e627a1270e691ea1c7dd8",
-        "nombre_producto": "Vodka",
-        "cantidad": 2,
-        "precio_unitario": 2000,
-        "peso_unitario": 2
-      },
-      {
-        "codigo_producto": "656e7608dcaf41dfe5a8b41a",
-        "nombre_producto": "Pollo",
-        "cantidad": 3,
-        "precio_unitario": 3500,
-        "peso_unitario": 2
-      }
-    ],
-    "destino": "Purmamarca",
-    "estado": "Enviado",
-    "fecha_creacion": {
-      "$date": "2023-12-05T01:03:29.610Z"
-    },
-    "fecha_modificacion": {
-      "$date": "2023-12-06T12:18:08.694Z"
-    }
-  },
-  {
-    "_id": {
-      "$oid": "656e776adcaf41dfe5a8b420"
-    },
-    "productos": [
-      {
-        "codigo_producto": "656e624f1270e691ea1c7dd4",
-        "nombre_producto": "Marlboro",
+        "codigo_producto": "657100010000000000000003",
+        "nombre_producto": "Marlboro 20",
         "cantidad": 200,
-        "precio_unitario": 800,
-        "peso_unitario": 1
+        "precio_unitario": 1500,
+        "peso_unitario": 20
       }
     ],
-    "destino": "La Quiaca",
-    "estado": "Cancelado",
+    "destino": "Córdoba",
+    "estado": "Aceptado",
     "fecha_creacion": {
-      "$date": "2023-12-05T01:05:46.627Z"
+      "$date": "2025-02-11T00:00:00.000Z"
     },
     "fecha_modificacion": {
-      "$date": "2023-12-05T01:06:49.076Z"
+      "$date": "2025-02-11T00:00:00.000Z"
     }
   },
   {
     "_id": {
-      "$oid": "656e79131a69e8301a10fa65"
+      "$oid": "657100030000000000000003"
     },
     "productos": [
       {
-        "codigo_producto": "656e624f1270e691ea1c7dd4",
-        "nombre_producto": "Marlboro",
-        "cantidad": 121,
+        "codigo_producto": "657100010000000000000004",
+        "nombre_producto": "Arroz 1kg",
+        "cantidad": 100,
         "precio_unitario": 800,
-        "peso_unitario": 1
-      }
-    ],
-    "destino": "Laferrere",
-    "estado": "Pendiente",
-    "fecha_creacion": {
-      "$date": "2023-12-05T01:12:51.877Z"
-    },
-    "fecha_modificacion": {
-      "$date": "2023-12-05T01:12:51.877Z"
-    }
-  },
-  {
-    "_id": {
-      "$oid": "656f9c1434fd0cfac25d8f92"
-    },
-    "productos": null,
-    "destino": "La Matanza",
-    "estado": "Pendiente",
-    "fecha_creacion": {
-      "$date": "2023-12-05T21:54:28.375Z"
-    },
-    "fecha_modificacion": {
-      "$date": "2023-12-05T21:54:28.375Z"
-    }
-  },
-  {
-    "_id": {
-      "$oid": "656fa0640fa5a3ee5eedd878"
-    },
-    "productos": [
-      {
-        "codigo_producto": "656f9b7434fd0cfac25d8f8e",
-        "nombre_producto": "Whisky Gigante",
-        "cantidad": 3,
-        "precio_unitario": 20000,
         "peso_unitario": 1000
       }
     ],
-    "destino": "La Matanza",
+    "destino": "Mendoza",
     "estado": "Para Enviar",
     "fecha_creacion": {
-      "$date": "2023-12-05T22:12:52.796Z"
+      "$date": "2025-02-11T00:00:00.000Z"
     },
     "fecha_modificacion": {
-      "$date": "2023-12-07T00:11:37.649Z"
+      "$date": "2025-02-11T00:00:00.000Z"
     }
   },
   {
     "_id": {
-      "$oid": "65706cc58ba1e12aca195478"
+      "$oid": "657100030000000000000004"
     },
     "productos": [
       {
-        "codigo_producto": "656e75f0dcaf41dfe5a8b418",
-        "nombre_producto": "Jabon",
-        "cantidad": 10,
-        "precio_unitario": 200,
-        "peso_unitario": 1
-      },
-      {
-        "codigo_producto": "656f9bad34fd0cfac25d8f90",
-        "nombre_producto": "Preservativo con Tachas",
-        "cantidad": 20,
+        "codigo_producto": "657100010000000000000005",
+        "nombre_producto": "Jabón de Tocador",
+        "cantidad": 150,
         "precio_unitario": 300,
-        "peso_unitario": 1
+        "peso_unitario": 100
       }
     ],
-    "destino": "Posadas",
-    "estado": "Aceptado",
-    
+    "destino": "Tucumán",
+    "estado": "Enviado",
     "fecha_creacion": {
-      "$date": "2023-12-06T12:44:53.204Z"
+      "$date": "2025-02-11T00:00:00.000Z"
     },
     "fecha_modificacion": {
-      "$date": "2023-12-06T12:45:05.424Z"
+      "$date": "2025-02-11T00:00:00.000Z"
     }
   },
   {
     "_id": {
-      "$oid": "65710cbd2b31ae7e970ba4df"
+      "$oid": "657100030000000000000005"
     },
     "productos": [
       {
-        "codigo_producto": "6571082c2b31ae7e970ba4d7",
-        "nombre_producto": "Repollo Brasilero por kg",
-        "cantidad": 10,
-        "precio_unitario": 7000,
-        "peso_unitario": 1
-      },
-      {
-        "codigo_producto": "657108472b31ae7e970ba4d9",
-        "nombre_producto": "Ferrero Rocher",
-        "cantidad": 2,
-        "precio_unitario": 12000,
-        "peso_unitario": 1
-      },
-      {
-        "codigo_producto": "657108612b31ae7e970ba4db",
-        "nombre_producto": "Blue Label",
-        "cantidad": 3,
-        "precio_unitario": 175000,
-        "peso_unitario": 2
-      },
-      {
-        "codigo_producto": "657109a22b31ae7e970ba4dd",
-        "nombre_producto": "Super Cohiba",
-        "cantidad": 2,
-        "precio_unitario": 20000,
-        "peso_unitario": 3
+        "codigo_producto": "657100010000000000000001",
+        "nombre_producto": "Alfajor Chocolate",
+        "cantidad": 50,
+        "precio_unitario": 500,
+        "peso_unitario": 50
       }
     ],
-    "destino": "Tucuman",
-    "estado": "Para Enviar",
+    "destino": "Santa Fe",
+    "estado": "Pendiente",
     "fecha_creacion": {
-      "$date": "2023-12-07T00:07:25.565Z"
+      "$date": "2025-02-11T00:00:00.000Z"
     },
     "fecha_modificacion": {
-      "$date": "2023-12-07T00:10:54.442Z"
+      "$date": "2025-02-11T00:00:00.000Z"
     }
-  },
-  {
-    "_id": {
-      "$oid": "65710ce42b31ae7e970ba4e1"
-    },
-    "productos": [
-      {
-        "codigo_producto": "656f9bad34fd0cfac25d8f90",
-        "nombre_producto": "Preservativo con Tachas",
-        "cantidad": 20,
-        "precio_unitario": 300,
-        "peso_unitario": 1
-      },
-      {
-        "codigo_producto": "6571080a2b31ae7e970ba4d5",
-        "nombre_producto": "Shampoo Anticaida",
-        "cantidad": 40,
-        "precio_unitario": 2300,
-        "peso_unitario": 1
-      }
-    ],
-    "destino": "San Salvador de Jujuy",
-    "estado": "Para Enviar",
-    "fecha_creacion": {
-      "$date": "2023-12-07T00:08:04.466Z"
-    },
-    "fecha_modificacion": {
-      "$date": "2023-12-07T00:10:54.446Z"
-    }
-  }]
+  }
+]

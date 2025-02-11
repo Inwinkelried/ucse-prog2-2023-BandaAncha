@@ -1,6 +1,9 @@
 package services
 
 import (
+	"fmt"
+	"log"
+
 	"github.com/Inwinkelried/ucse-prog2-2023-BandaAncha/go/dto"
 	"github.com/Inwinkelried/ucse-prog2-2023-BandaAncha/go/model"
 	"github.com/Inwinkelried/ucse-prog2-2023-BandaAncha/go/repositories"
@@ -84,17 +87,75 @@ func (service *EnvioService) VerificarPesoEnvio(envio *dto.Envio) (bool, error) 
 }
 
 func (service *EnvioService) InsertarEnvio(envio *dto.Envio) (bool, error) {
+	// Validar que el envío tenga los campos requeridos
+	if envio.PatenteCamion == "" {
+		return false, fmt.Errorf("la patente del camión es requerida")
+	}
+	if len(envio.Pedidos) == 0 {
+		return false, fmt.Errorf("debe incluir al menos un pedido")
+	}
+	if envio.Estado == "" {
+		envio.Estado = string(model.ADespachar)
+	} else if envio.Estado != string(model.ADespachar) {
+		return false, fmt.Errorf("el estado inicial del envío debe ser A Despachar")
+	}
 
-	camionEsValido, err := service.VerificarPesoEnvio(envio)
+	// Verificar que el camión exista y tenga capacidad
+	camionConID := model.Camion{Patente: envio.PatenteCamion}
+	camionEncontrado, err := service.camionRepository.ObtenerCamionPorPatente(camionConID)
 	if err != nil {
-		return false, err
+		return false, fmt.Errorf("error al buscar el camión: %v", err)
 	}
-	if camionEsValido {
-		service.envioRepository.InsertarEnvio(envio.GetModel())
-		return true, nil
-	} else {
-		return false, err
+	if camionEncontrado.Patente == "" {
+		return false, fmt.Errorf("no se encontró el camión con patente %s", envio.PatenteCamion)
 	}
+
+	// Calcular peso total de los pedidos
+	var pesoTotal int = 0
+	for _, pedidoID := range envio.Pedidos {
+		pedidoModel := model.Pedido{ID: utils.GetObjectIDFromStringID(pedidoID)}
+		pedido, err := service.pedidoRepository.ObtenerPedidoPorID(pedidoModel)
+		if err != nil {
+			return false, fmt.Errorf("error al obtener el pedido %s: %v", pedidoID, err)
+		}
+
+		// Verificar que el pedido esté en estado ACEPTADO
+		if pedido.Estado != string(model.Aceptado) {
+			return false, fmt.Errorf("el pedido %s debe estar en estado Aceptado", pedidoID)
+		}
+
+		// Calcular peso del pedido
+		pesoPedido, err := service.pedidoRepository.ObtenerPesoPedido(pedido)
+		if err != nil {
+			return false, fmt.Errorf("error al calcular peso del pedido %s: %v", pedidoID, err)
+		}
+		pesoTotal += pesoPedido
+	}
+
+	// Verificar que no exceda el peso máximo del camión
+	if pesoTotal > camionEncontrado.PesoMaximo {
+		return false, fmt.Errorf("el peso total de los pedidos (%d) excede la capacidad del camión (%d)", pesoTotal, camionEncontrado.PesoMaximo)
+	}
+
+	// Crear el envío
+	_, err = service.envioRepository.InsertarEnvio(envio.GetModel())
+	if err != nil {
+		return false, fmt.Errorf("error al insertar el envío en la base de datos: %v", err)
+	}
+
+	// Actualizar estado de los pedidos a PARA ENVIAR
+	for _, pedidoID := range envio.Pedidos {
+		pedidoModel := model.Pedido{ID: utils.GetObjectIDFromStringID(pedidoID)}
+		pedido, _ := service.pedidoRepository.ObtenerPedidoPorID(pedidoModel)
+		pedido.Estado = string(model.ParaEnviar)
+		_, err := service.pedidoRepository.ActualizarPedido(pedido)
+		if err != nil {
+			// Aquí deberíamos hacer rollback del envío creado, pero por ahora solo logueamos el error
+			log.Printf("Error al actualizar estado del pedido %s: %v", pedidoID, err)
+		}
+	}
+
+	return true, nil
 }
 func (service *EnvioService) EnRutaEnvio(envio *dto.Envio) (bool, error) {
 	envioParaActualizar, err := service.ObtenerEnvioPorID(envio)

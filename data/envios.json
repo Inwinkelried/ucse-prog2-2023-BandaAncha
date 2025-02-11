@@ -1,71 +1,72 @@
-[{
+[
+  {
     "_id": {
-      "$oid": "656fa0c60fa5a3ee5eedd87a"
-    },
-    "fecha_creacion": {
-      "$date": "2023-12-05T22:14:30.613Z"
-    },
-    "fecha_modificacion": {
-      "$date": "2023-12-06T12:18:08.686Z"
+      "$oid": "657100040000000000000001"
     },
     "patente_camion": "ABC123",
+    "pedidos": [
+      "657100030000000000000001"
+    ],
     "paradas": [
       {
         "ciudad": "Rosario",
         "km_recorridos": 300
-      },
-      {
-        "ciudad": "Purmamarca",
-        "km_recorridos": 1500
-      },
-      {
-        "ciudad": "El Centro",
-        "km_recorridos": 20
       }
     ],
-    "pedidos": [
-      "656e76e1dcaf41dfe5a8b41e"
-    ],
-  "estado": "A Despachar"
+    "estado": "A Despachar",
+    "fecha_creacion": {
+      "$date": "2025-02-11T00:00:00.000Z"
+    },
+    "fecha_modificacion": {
+      "$date": "2025-02-11T00:00:00.000Z"
+    }
   },
   {
     "_id": {
-      "$oid": "65710d8e2b31ae7e970ba4e5"
+      "$oid": "657100040000000000000002"
     },
-    "fecha_creacion": {
-      "$date": "2023-12-07T00:10:54.470Z"
-    },
-    "fecha_modificacion": {
-      "$date": "2023-12-07T00:10:54.470Z"
-    },
-    "patente_camion": "TRE389",
-    "paradas": null,
+    "patente_camion": "XYZ789",
     "pedidos": [
-      "65710cbd2b31ae7e970ba4df",
-      "65710ce42b31ae7e970ba4e1"
+      "657100030000000000000003"
     ],
-  "estado": "A Despachar"
-  },
-  {
-    "_id": {
-      "$oid": "65710db92b31ae7e970ba4e7"
-    },
-    "fecha_creacion": {
-      "$date": "2023-12-07T00:11:37.665Z"
-    },
-    "fecha_modificacion": {
-      "$date": "2023-12-07T00:12:05.128Z"
-    },
-    "patente_camion": "HFK292",
     "paradas": [
       {
-        "ciudad": "Olmos",
-        "km_recorridos": 25
+        "ciudad": "Mendoza",
+        "km_recorridos": 1000
       }
     ],
+    "estado": "En Ruta",
+    "fecha_creacion": {
+      "$date": "2025-02-11T00:00:00.000Z"
+    },
+    "fecha_modificacion": {
+      "$date": "2025-02-11T00:00:00.000Z"
+    }
+  },
+  {
+    "_id": {
+      "$oid": "657100040000000000000003"
+    },
+    "patente_camion": "DEF456",
     "pedidos": [
-      "656e6ab4f9ebe69bfc223e00",
-      "656fa0640fa5a3ee5eedd878"
+      "657100030000000000000004"
     ],
-  "estado": "A Despachar"
-  }]
+    "paradas": [
+      {
+        "ciudad": "Córdoba",
+        "km_recorridos": 700
+      },
+      {
+        "ciudad": "Tucumán",
+        "km_recorridos": 500
+      }
+    ],
+    "estado": "Despachado",
+    "fecha_creacion": {
+      "$date": "2025-02-11T00:00:00.000Z"
+    },
+    "fecha_modificacion": {
+      "$date": "2025-02-11T00:00:00.000Z"
+    }
+  }
+]

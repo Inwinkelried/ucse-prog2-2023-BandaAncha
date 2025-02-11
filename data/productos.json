@@ -1,4 +1,5 @@
-[{
+[
+  {
     "_id": {
       "$oid": "656c9de138ee51867892005a"
     },
@@ -231,4 +232,90 @@
       "$date": "2023-12-06T23:54:10.630Z"
     },
     "id_creador": "638371277510195677"
-  }]
+  },
+  {
+    "_id": {
+      "$oid": "657100010000000000000001"
+    },
+    "tipo": "Golosinas",
+    "nombre": "Alfajor Chocolate",
+    "peso_unitario": 50,
+    "precio_unitario": 500,
+    "stock_minimo": 100,
+    "stock_actual": 1000,
+    "fecha_creacion": {
+      "$date": "2025-02-11T00:00:00.000Z"
+    },
+    "fecha_modificacion": {
+      "$date": "2025-02-11T00:00:00.000Z"
+    }
+  },
+  {
+    "_id": {
+      "$oid": "657100010000000000000002"
+    },
+    "tipo": "Bebidas",
+    "nombre": "Coca Cola 2L",
+    "peso_unitario": 2000,
+    "precio_unitario": 1200,
+    "stock_minimo": 50,
+    "stock_actual": 200,
+    "fecha_creacion": {
+      "$date": "2025-02-11T00:00:00.000Z"
+    },
+    "fecha_modificacion": {
+      "$date": "2025-02-11T00:00:00.000Z"
+    }
+  },
+  {
+    "_id": {
+      "$oid": "657100010000000000000003"
+    },
+    "tipo": "Cigarrillos",
+    "nombre": "Marlboro 20",
+    "peso_unitario": 20,
+    "precio_unitario": 1500,
+    "stock_minimo": 100,
+    "stock_actual": 500,
+    "fecha_creacion": {
+      "$date": "2025-02-11T00:00:00.000Z"
+    },
+    "fecha_modificacion": {
+      "$date": "2025-02-11T00:00:00.000Z"
+    }
+  },
+  {
+    "_id": {
+      "$oid": "657100010000000000000004"
+    },
+    "tipo": "Comestibles",
+    "nombre": "Arroz 1kg",
+    "peso_unitario": 1000,
+    "precio_unitario": 800,
+    "stock_minimo": 50,
+    "stock_actual": 150,
+    "fecha_creacion": {
+      "$date": "2025-02-11T00:00:00.000Z"
+    },
+    "fecha_modificacion": {
+      "$date": "2025-02-11T00:00:00.000Z"
+    }
+  },
+  {
+    "_id": {
+      "$oid": "657100010000000000000005"
+    },
+    "tipo": "Higiene y Salud",
+    "nombre": "Jabón de Tocador",
+    "peso_unitario": 100,
+    "precio_unitario": 300,
+    "stock_minimo": 80,
+    "stock_actual": 200,
+    "fecha_creacion": {
+      "$date": "2025-02-11T00:00:00.000Z"
+    },
+    "fecha_modificacion": {
+      "$date": "2025-02-11T00:00:00.000Z"
+    }
+  }
+]
