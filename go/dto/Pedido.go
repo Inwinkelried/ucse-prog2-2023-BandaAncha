@@ -22,8 +22,8 @@ func NewPedido(pedido model.Pedido) *Pedido {
 		Productos:         NewProductosPedido(pedido.Productos),
 		Destino:           pedido.Destino,
 		Estado:            pedido.Estado,
-		FechaCreacion:     time.Now(),
-		FechaModificacion: time.Now(),
+		FechaCreacion:     pedido.FechaCreacion,
+		FechaModificacion: pedido.FechaModificacion,
 	}
 }
 func (pedido Pedido) GetModel() model.Pedido {

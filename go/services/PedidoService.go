@@ -95,7 +95,6 @@ func (service PedidoService) AceptarPedido(pedido *dto.Pedido) (bool, error) {
 	if err != nil {
 		return false, err
 	}
-
 	return true, err
 }
 

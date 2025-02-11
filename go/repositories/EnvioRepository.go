@@ -12,11 +12,10 @@ import (
 )
 
 type EnvioRepositoryInterface interface {
-	ObtenerEnvios() ([]model.Envio, error)
 	InsertarEnvio(envio model.Envio) (*mongo.InsertOneResult, error)
 	ActualizarEnvio(envio model.Envio) (*mongo.UpdateResult, error)
 	ObtenerEnvioPorID(envio model.Envio) (model.Envio, error)
-	ObtenerEnviosFiltrados(filtro dto.FiltroEnvio) ([]model.Envio, error)
+	ObtenerEnvios(filtro dto.FiltroEnvio) ([]model.Envio, error)
 	ObtenerCantidadEnviosPorEstado(model.EstadoEnvio) (int, error)
 }
 type EnvioRepository struct {
@@ -45,28 +44,10 @@ func (repository EnvioRepository) ObtenerEnvioPorID(envioABuscar model.Envio) (m
 	return envio, err
 }
 
-func (repo EnvioRepository) ObtenerEnvios() ([]model.Envio, error) {
-	lista := repo.db.GetClient().Database("BandaAncha").Collection("Envios")
-	filtro := bson.M{}
-
-	cursor, err := lista.Find(context.TODO(), filtro)
-
-	defer cursor.Close(context.Background())
-
-	var envios []model.Envio
-	for cursor.Next(context.Background()) {
-		var envio model.Envio
-		err := cursor.Decode(&envio)
-		if err != nil {
-			fmt.Printf("Error: %v\n", err)
-		}
-		envios = append(envios, envio)
-	}
-	return envios, err
-}
-
 func (repo EnvioRepository) InsertarEnvio(envio model.Envio) (*mongo.InsertOneResult, error) {
 	lista := repo.db.GetClient().Database("BandaAncha").Collection("Envios")
+	envio.FechaCreacion = time.Now()
+	envio.FechaModificacion = time.Now()
 	resultado, err := lista.InsertOne(context.TODO(), envio)
 	return resultado, err
 }
@@ -79,50 +60,70 @@ func (repo EnvioRepository) ActualizarEnvio(envio model.Envio) (*mongo.UpdateRes
 	resultado, err := lista.UpdateOne(context.TODO(), filtro, entity)
 	return resultado, err
 }
+
+// Obtener envíos aplicando un filtro (si no hay filtros, trae todos los envíos)
+func (repo EnvioRepository) ObtenerEnvios(filtro dto.FiltroEnvio) ([]model.Envio, error) {
+	filtroGenerado := construirFiltroEnvio(filtro)
+	return repo.obtenerEnvios(filtroGenerado)
+}
+
+// Método generalizado para obtener envíos con un filtro (vacío si no se pasan filtros)
 func (repository *EnvioRepository) obtenerEnvios(filtro bson.M) ([]model.Envio, error) {
 	collection := repository.db.GetClient().Database("BandaAncha").Collection("Envios")
 	cursor, err := collection.Find(context.Background(), filtro)
 	if err != nil {
 		return nil, err
 	}
-	var envios []model.Envio
 	defer cursor.Close(context.Background())
+
+	var envios []model.Envio
 	for cursor.Next(context.Background()) {
 		var envio model.Envio
-		err := cursor.Decode(&envio)
-		if err != nil {
+		if err := cursor.Decode(&envio); err != nil {
 			return nil, err
 		}
 		envios = append(envios, envio)
 	}
+
 	if err := cursor.Err(); err != nil {
 		return nil, err
 	}
 	return envios, nil
 }
-func (repo EnvioRepository) ObtenerEnviosFiltrados(filtro dto.FiltroEnvio) ([]model.Envio, error) {
+
+func construirFiltroEnvio(filtro dto.FiltroEnvio) bson.M {
 	filtroGenerado := bson.M{}
+
+	// Filtrar por estado
 	if filtro.Estado != "" {
-		filtroGenerado["Estado"] = filtro.Estado
+		filtroGenerado["estado"] = filtro.Estado
 	}
+
+	// Filtrar por patente del camión (asegurando que coincida con el formato en MongoDB)
 	if filtro.PatenteCamion != "" {
 		filtroGenerado["patente_camion"] = filtro.PatenteCamion
 	}
-	// TODO: agregar filtro para las paradas del camión
 
+	// Filtrar por última parada (dentro del array `paradas`)
+	if filtro.UltimaParada != "" {
+		filtroGenerado["paradas.ciudad"] = filtro.UltimaParada
+	}
+
+	// Filtrar por rango de fechas en `fecha_creacion`
 	if !filtro.FechaMenor.IsZero() || !filtro.FechaMayor.IsZero() {
 		filtroFecha := bson.M{}
+
 		if !filtro.FechaMenor.IsZero() {
 			filtroFecha["$gte"] = filtro.FechaMenor
 		}
 		if !filtro.FechaMayor.IsZero() {
 			filtroFecha["$lte"] = filtro.FechaMayor
 		}
+
 		filtroGenerado["fecha_creacion"] = filtroFecha
 	}
 
-	return repo.obtenerEnvios(filtroGenerado)
-
+	return filtroGenerado
 }
 
 // REPORTES

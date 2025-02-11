@@ -9,13 +9,12 @@ import (
 )
 
 type EnvioServiceInterface interface {
-	ObtenerEnvios() ([]*dto.Envio, error)
 	ObtenerEnvioPorID(envio *dto.Envio) (*dto.Envio, error)
 	InsertarEnvio(envio *dto.Envio) (bool, error)
 	EnRutaEnvio(envio *dto.Envio) (bool, error)
 	DespachadoEnvio(envio *dto.Envio) (bool, error)
 	AgregarParada(envio *dto.Envio) (bool, error)
-	ObtenerEnviosFiltrados(filtro dto.FiltroEnvio) ([]dto.Envio, error)
+	ObtenerEnvios(filtro dto.FiltroEnvio) ([]dto.Envio, error)
 	ObtenerCantidadEnviosPorEstado() ([]utils.CantidadEstado, error)
 }
 type EnvioService struct {
@@ -55,19 +54,6 @@ func (service *EnvioService) ObtenerEnvioPorID(envioConID *dto.Envio) (*dto.Envi
 	}
 	var envio = dto.NewEnvio(envioDB)
 	return envio, nil
-}
-
-func (service *EnvioService) ObtenerEnvios() ([]*dto.Envio, error) {
-	enviosDB, err := service.envioRepository.ObtenerEnvios()
-	if err != nil {
-		return nil, err
-	}
-	var envios []*dto.Envio
-	for _, enviosDB := range enviosDB {
-		envio := dto.NewEnvio(enviosDB)
-		envios = append(envios, envio)
-	}
-	return envios, nil
 }
 
 func (service *EnvioService) VerificarPesoEnvio(envio *dto.Envio) (bool, error) {
@@ -143,19 +129,21 @@ func (service *EnvioService) DespachadoEnvio(envio *dto.Envio) (bool, error) {
 	service.envioRepository.ActualizarEnvio(envioParaActualizar.GetModel())
 	return true, nil
 }
-func (service *EnvioService) ObtenerEnviosFiltrados(filtro dto.FiltroEnvio) ([]dto.Envio, error) {
-	envios, err := service.envioRepository.ObtenerEnviosFiltrados(filtro)
-	var envio *dto.Envio
-	var enviosDTO []dto.Envio
+func (service *EnvioService) ObtenerEnvios(filtro dto.FiltroEnvio) ([]dto.Envio, error) {
+	enviosDB, err := service.envioRepository.ObtenerEnvios(filtro)
 	if err != nil {
 		return nil, err
-	} else {
-		for _, envioDB := range envios {
-			envio = dto.NewEnvio(envioDB)
-			enviosDTO = append(enviosDTO, *envio)
-		}
 	}
+	enviosDTO := convertirEnviosADTO(enviosDB)
 	return enviosDTO, nil
+}
+func convertirEnviosADTO(envios []model.Envio) []dto.Envio {
+	var enviosDTO []dto.Envio
+	for _, envioDB := range envios {
+		envio := dto.NewEnvio(envioDB)
+		enviosDTO = append(enviosDTO, *envio)
+	}
+	return enviosDTO
 }
 
 // reportes

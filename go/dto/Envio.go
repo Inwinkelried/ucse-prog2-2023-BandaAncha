@@ -24,8 +24,8 @@ func NewEnvio(envio model.Envio) *Envio {
 		Pedidos:           envio.Pedidos,
 		Paradas:           NewParadas(envio.Paradas),
 		Estado:            envio.Estado,
-		FechaCreacion:     time.Now(),
-		FechaModificacion: time.Now(),
+		FechaCreacion:     envio.FechaCreacion,
+		FechaModificacion: envio.FechaModificacion,
 	}
 }
 func (envio Envio) GetModel() model.Envio {
