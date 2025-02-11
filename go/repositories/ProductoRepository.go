@@ -111,7 +111,7 @@ func (repo ProductoRepository) ObtenerProductoFiltrados(filtro dto.FiltroProduct
 		filtroGenerado["tipo"] = filtro.TipoProducto
 	}
 	if filtro.FiltroStockMinimo {
-		filtroGenerado["$expr"] = bson.M{"$lt": []interface{}{"$stockActual", "$stockMinimo"}}
+		filtroGenerado["$expr"] = bson.M{"$lt": []interface{}{"$stock_actual", "$stock_minimo"}}
 	}
 	return repo.obtenerProductos(filtroGenerado)
 }
