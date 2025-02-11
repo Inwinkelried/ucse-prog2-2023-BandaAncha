@@ -11,7 +11,6 @@ type MongoDB struct {
 	Client *mongo.Client
 }
 
-// Disconect implements DB.
 func (mongoDB *MongoDB) Disconect() error {
 	return mongoDB.Client.Disconnect(context.Background())
 }

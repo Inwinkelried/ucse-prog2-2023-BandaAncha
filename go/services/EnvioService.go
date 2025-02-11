@@ -43,7 +43,6 @@ func (service *EnvioService) AgregarParada(envio *dto.Envio) (bool, error) {
 		}
 		envioDB.Paradas = append(envioDB.Paradas, envio.Paradas[0].GetModel())
 		service.envioRepository.ActualizarEnvio(envioDB)
-		//Actualizamos el envio en la base de datos, que ahora tiene la nueva parada
 		return true, err
 	} else {
 		return false, nil
@@ -60,13 +59,13 @@ func (service *EnvioService) ObtenerEnvioPorID(envioConID *dto.Envio) (*dto.Envi
 }
 
 func (service *EnvioService) VerificarPesoEnvio(envio *dto.Envio) (bool, error) {
-	camionConID := model.Camion{Patente: envio.PatenteCamion} // Busco el camion por patente
+	camionConID := model.Camion{Patente: envio.PatenteCamion}
 	//aca ocurre el error
 	camionEncontrado, err := service.camionRepository.ObtenerCamionPorPatente(camionConID)
 	if err != nil {
 		return false, err
 	}
-	if camionEncontrado.Patente == "" { // Si no encuentra el camion...
+	if camionEncontrado.Patente == "" {
 		return false, nil
 	}
 	var pesototal int = 0
@@ -87,7 +86,6 @@ func (service *EnvioService) VerificarPesoEnvio(envio *dto.Envio) (bool, error) 
 }
 
 func (service *EnvioService) InsertarEnvio(envio *dto.Envio) (bool, error) {
-	// Validar que el envío tenga los campos requeridos
 	if envio.PatenteCamion == "" {
 		return false, fmt.Errorf("la patente del camión es requerida")
 	}
@@ -100,7 +98,6 @@ func (service *EnvioService) InsertarEnvio(envio *dto.Envio) (bool, error) {
 		return false, fmt.Errorf("el estado inicial del envío debe ser A Despachar")
 	}
 
-	// Verificar que el camión exista y tenga capacidad
 	camionConID := model.Camion{Patente: envio.PatenteCamion}
 	camionEncontrado, err := service.camionRepository.ObtenerCamionPorPatente(camionConID)
 	if err != nil {
@@ -110,7 +107,6 @@ func (service *EnvioService) InsertarEnvio(envio *dto.Envio) (bool, error) {
 		return false, fmt.Errorf("no se encontró el camión con patente %s", envio.PatenteCamion)
 	}
 
-	// Calcular peso total de los pedidos
 	var pesoTotal int = 0
 	for _, pedidoID := range envio.Pedidos {
 		pedidoModel := model.Pedido{ID: utils.GetObjectIDFromStringID(pedidoID)}
@@ -119,12 +115,10 @@ func (service *EnvioService) InsertarEnvio(envio *dto.Envio) (bool, error) {
 			return false, fmt.Errorf("error al obtener el pedido %s: %v", pedidoID, err)
 		}
 
-		// Verificar que el pedido esté en estado ACEPTADO
 		if pedido.Estado != string(model.Aceptado) {
 			return false, fmt.Errorf("el pedido %s debe estar en estado Aceptado", pedidoID)
 		}
 
-		// Calcular peso del pedido
 		pesoPedido, err := service.pedidoRepository.ObtenerPesoPedido(pedido)
 		if err != nil {
 			return false, fmt.Errorf("error al calcular peso del pedido %s: %v", pedidoID, err)
@@ -132,18 +126,15 @@ func (service *EnvioService) InsertarEnvio(envio *dto.Envio) (bool, error) {
 		pesoTotal += pesoPedido
 	}
 
-	// Verificar que no exceda el peso máximo del camión
 	if pesoTotal > camionEncontrado.PesoMaximo {
 		return false, fmt.Errorf("el peso total de los pedidos (%d) excede la capacidad del camión (%d)", pesoTotal, camionEncontrado.PesoMaximo)
 	}
 
-	// Crear el envío
 	_, err = service.envioRepository.InsertarEnvio(envio.GetModel())
 	if err != nil {
 		return false, fmt.Errorf("error al insertar el envío en la base de datos: %v", err)
 	}
 
-	// Actualizar estado de los pedidos a PARA ENVIAR
 	for _, pedidoID := range envio.Pedidos {
 		pedidoModel := model.Pedido{ID: utils.GetObjectIDFromStringID(pedidoID)}
 		pedido, _ := service.pedidoRepository.ObtenerPedidoPorID(pedidoModel)
@@ -207,9 +198,8 @@ func convertirEnviosADTO(envios []model.Envio) []dto.Envio {
 	return enviosDTO
 }
 
-// reportes
 func (service *EnvioService) ObtenerCantidadEnviosPorEstado() ([]utils.CantidadEstado, error) {
-	//Por cada estado posible de envio, obtengo la cantidad de envios en ese estado
+
 	cantidadEnviosADespachar, err := service.envioRepository.ObtenerCantidadEnviosPorEstado(model.ADespachar)
 
 	if err != nil {
@@ -228,7 +218,6 @@ func (service *EnvioService) ObtenerCantidadEnviosPorEstado() ([]utils.CantidadE
 		return nil, err
 	}
 
-	//Agrego los resultados a un array de CantidadEstado
 	cantidadEnviosPorEstados := []utils.CantidadEstado{
 		{Estado: string(model.ADespachar), Cantidad: cantidadEnviosADespachar},
 		{Estado: string(model.EnRuta), Cantidad: cantidadEnviosEnRuta},

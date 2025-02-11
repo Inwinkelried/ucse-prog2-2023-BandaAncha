@@ -33,7 +33,6 @@ func NewPedidoRepository(db DB) *PedidoRepository {
 	return &PedidoRepository{db: db}
 }
 
-// REPORTES
 func (repository *PedidoRepository) ObtenerCantidadPedidosPorEstado(estado model.EstadoPedido) (int, error) {
 	collection := repository.db.GetClient().Database("BandaAncha").Collection("Pedidos")
 
@@ -49,7 +48,6 @@ func (repository *PedidoRepository) ObtenerCantidadPedidosPorEstado(estado model
 }
 
 func (repo PedidoRepository) ObtenerPesoPedido(pedido model.Pedido) (int, error) {
-	//Obtener el el pedido por id, luego tomar su lista de productos. A cada producto multiplicarle su peso por la cantidad. A eso sumarlo y retornar ese total
 	pedidoObtenido, err := repo.ObtenerPedidoPorID(pedido)
 	if err != nil {
 		return 0, err

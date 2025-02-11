@@ -27,8 +27,6 @@ func NewEnvioRepository(db DB) *EnvioRepository {
 		db: db,
 	}
 }
-
-// TODO: probar esta función
 func (repository EnvioRepository) ObtenerEnvioPorID(envioABuscar model.Envio) (model.Envio, error) {
 	collection := repository.db.GetClient().Database("BandaAncha").Collection("Envios")
 	filtro := bson.M{"_id": envioABuscar.ID}
@@ -60,14 +58,10 @@ func (repo EnvioRepository) ActualizarEnvio(envio model.Envio) (*mongo.UpdateRes
 	resultado, err := lista.UpdateOne(context.TODO(), filtro, entity)
 	return resultado, err
 }
-
-// Obtener envíos aplicando un filtro (si no hay filtros, trae todos los envíos)
 func (repo EnvioRepository) ObtenerEnvios(filtro dto.FiltroEnvio) ([]model.Envio, error) {
 	filtroGenerado := construirFiltroEnvio(filtro)
 	return repo.obtenerEnvios(filtroGenerado)
 }
-
-// Método generalizado para obtener envíos con un filtro (vacío si no se pasan filtros)
 func (repository *EnvioRepository) obtenerEnvios(filtro bson.M) ([]model.Envio, error) {
 	collection := repository.db.GetClient().Database("BandaAncha").Collection("Envios")
 	cursor, err := collection.Find(context.Background(), filtro)
@@ -94,22 +88,18 @@ func (repository *EnvioRepository) obtenerEnvios(filtro bson.M) ([]model.Envio, 
 func construirFiltroEnvio(filtro dto.FiltroEnvio) bson.M {
 	filtroGenerado := bson.M{}
 
-	// Filtrar por estado
 	if filtro.Estado != "" {
 		filtroGenerado["estado"] = filtro.Estado
 	}
 
-	// Filtrar por patente del camión (asegurando que coincida con el formato en MongoDB)
 	if filtro.PatenteCamion != "" {
 		filtroGenerado["patente_camion"] = filtro.PatenteCamion
 	}
 
-	// Filtrar por última parada (dentro del array `paradas`)
 	if filtro.UltimaParada != "" {
 		filtroGenerado["paradas.ciudad"] = filtro.UltimaParada
 	}
 
-	// Filtrar por rango de fechas en `fecha_creacion`
 	if !filtro.FechaMenor.IsZero() || !filtro.FechaMayor.IsZero() {
 		filtroFecha := bson.M{}
 
@@ -126,7 +116,6 @@ func construirFiltroEnvio(filtro dto.FiltroEnvio) bson.M {
 	return filtroGenerado
 }
 
-// REPORTES
 func (repository EnvioRepository) ObtenerCantidadEnviosPorEstado(estado model.EstadoEnvio) (int, error) {
 	collection := repository.db.GetClient().Database("BandaAncha").Collection("Envios")
 

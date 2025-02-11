@@ -69,7 +69,6 @@ func (handler *PedidoHandler) ObtenerPedidoPorID(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
-	//Agregamos un log para indicar informacion
 	c.JSON(http.StatusOK, pedido)
 }
 func (handler *PedidoHandler) ObtenerPedidos(c *gin.Context) {
@@ -177,14 +176,9 @@ func (handler *PedidoHandler) ParaEnviarPedido(c *gin.Context) {
 	c.JSON(http.StatusCreated, gin.H{"status": "Pedido Para Enviar"})
 }
 
-// REPORTES
 func (handler *PedidoHandler) ObtenerCantidadPedidosPorEstado(c *gin.Context) {
 	user := dto.NewUser(utils.GetUserInfoFromContext(c))
-
-	//Obtenemos el array de cantidades del service
 	cantidades, err := handler.pedidoService.ObtenerCantidadPedidosPorEstado()
-
-	//Si hay un error, lo devolvemos
 	if err != nil {
 		logging.LoggearErrorYResponder(c, "PedidoHandler", "ObtenerCantidadPedidosPorEstado", err, &user)
 		return

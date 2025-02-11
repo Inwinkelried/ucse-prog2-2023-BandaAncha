@@ -84,7 +84,6 @@ func (handler *EnvioHandler) AgregarParada(c *gin.Context) {
 func (handler *EnvioHandler) ObtenerEnvioPorID(c *gin.Context) {
 	user := dto.NewUser(utils.GetUserInfoFromContext(c))
 	id := c.Param("id")
-	//invocamos al metodo
 	envio, err := handler.envioService.ObtenerEnvioPorID(&dto.Envio{ID: id})
 	if err != nil {
 		log.Printf("[handler:EnvioHandler][method:ObtenerEnvioPorId][envio:%+v][user:%s]", err.Error(), user.Codigo)
@@ -160,16 +159,12 @@ func (handler *EnvioHandler) EnRutaEnvio(c *gin.Context) {
 	c.JSON(http.StatusCreated, gin.H{"status": "Actualizado correctamente"})
 }
 
-// REPORTES
 func (handler *EnvioHandler) ObtenerCantidadEnviosPorEstado(c *gin.Context) {
 	user := dto.NewUser(utils.GetUserInfoFromContext(c))
-	//Obtenemos el array de cantidades del service
 	cantidades, err := handler.envioService.ObtenerCantidadEnviosPorEstado()
-	//Si hay un error, lo devolvemos
 	if err != nil {
 		logging.LoggearErrorYResponder(c, "EnvioHandler", "ObtenerCantidadEnviosPorEstado", err, &user)
 		return
 	}
-	//Agregamos un log para indicar información relevante del resultado
 	logging.LoggearResultadoYResponder(c, "EnvioHandler", "ObtenerCantidadEnviosPorEstado", cantidades, &user)
 }
