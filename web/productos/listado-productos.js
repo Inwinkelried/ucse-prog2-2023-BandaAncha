@@ -97,7 +97,7 @@ function errorObtenerProductos(status, response) {
 
 function obtenerProductoFiltrado(tipo) {
   const baseUrl = "http://localhost:8080";
-  var url = new URL(`${baseUrl}/products`);
+  var url = new URL(`${baseUrl}/products/Filter`);
 
   switch (tipo) {
     case "stock":
@@ -110,14 +110,14 @@ function obtenerProductoFiltrado(tipo) {
       );
       break;
     default:
-      url.href = `http://localhost:8080/products`;
+      url = new URL(`${baseUrl}/products`);
       break;
   }
 
   console.log(url.href);
 
   makeRequest(
-    `${url.href}`,
+    url.href,
     Method.GET,
     null,
     ContentType.JSON,

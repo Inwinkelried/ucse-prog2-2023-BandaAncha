@@ -1,8 +1,14 @@
 body {
-    font-family: 'Young Serif', sans-serif;
-    background-color: #f2f2f2; /* Gris claro */
+    font-family: 'Roboto', sans-serif;
+    background-color: #f2f2f2;
     margin: 0;
     padding: 0;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
 }
 
 #tituloTabla {
@@ -11,67 +17,203 @@ body {
 }
 
 .filtros {
-    max-width: 600px;
+    max-width: 800px;
     margin: 20px auto;
-    background-color: #fff; /* Fondo blanco para el contenedor de filtros */
+    background-color: #fff;
     padding: 20px;
     border-radius: 8px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.filtros h3 {
+    margin-top: 0;
+    color: #333;
+    font-weight: 500;
 }
 
 .input-group {
     display: flex;
     align-items: center;
+    margin-bottom: 15px;
 }
 
 .input-group label {
+    display: inline-block;
+    width: 150px;
     margin-right: 10px;
+    color: #555;
 }
 
-.input-group input[type="text"] {
+.input-group input[type="text"],
+.input-group input[type="date"],
+.input-group select {
     flex: 1;
     padding: 8px;
-    box-sizing: border-box;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 14px;
+    max-width: 200px;
 }
 
-.input-group input[type="button"] {
-    background-color: #4caf50; /* Color de fondo verde */
-    color: #fff; /* Color de texto blanco */
-    padding: 8px;
+.input-group button,
+.btn-accion {
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    padding: 8px 15px;
+    border-radius: 4px;
     cursor: pointer;
+    font-size: 14px;
+    margin-left: 10px;
+    transition: background-color 0.3s ease;
 }
 
-.input-group input[type="button"]:hover {
-    background-color: #45a049; /* Cambio de color al pasar el mouse */
+.input-group button:hover,
+.btn-accion:hover {
+    background-color: #45a049;
 }
 
 table {
-    max-width: 800px;
+    width: 100%;
+    max-width: 1200px;
     margin: 20px auto;
-    background-color: #fff; /* Fondo blanco para la tabla */
-    padding: 20px;
+    background-color: #fff;
     border-radius: 8px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
     border-collapse: collapse;
 }
 
 th, td {
-    padding: 10px;
-    border: 1px solid #ddd; /* Borde gris claro */
+    padding: 12px;
     text-align: left;
+    border-bottom: 1px solid #ddd;
 }
 
-tfoot {
-    background-color: #f2f2f2; /* Fondo gris claro para el pie de la tabla */
+th {
+    background-color: #4CAF50;
+    color: white;
+    font-weight: 500;
 }
 
-tfoot button {
-    background-color: #4caf50; /* Color de fondo verde */
-    color: #fff; /* Color de texto blanco */
-    padding: 8px;
+tr:hover {
+    background-color: #f5f5f5;
+}
+
+.btn-nuevo {
+    background: #2196F3;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 4px;
     cursor: pointer;
+    text-decoration: none;
+    display: inline-block;
+    margin-top: 20px;
+    transition: background-color 0.3s ease;
 }
 
-tfoot button:hover {
-    background-color: #45a049; /* Cambio de color al pasar el mouse */
+.btn-nuevo:hover {
+    background: #1976D2;
+}
+
+.btn-volver {
+    background: #757575;
+    color: white;
+    text-decoration: none;
+    padding: 8px 15px;
+    border-radius: 4px;
+    display: inline-block;
+    margin-bottom: 20px;
+    transition: background-color 0.3s ease;
+}
+
+.btn-volver:hover {
+    background: #616161;
+}
+
+/* Estilos para los botones de acción en la tabla */
+.btn-accion {
+    margin: 0 2px;
+    font-size: 13px;
+    padding: 5px 10px;
+}
+
+.btn-accion.btn-ver {
+    background-color: #2196F3;
+}
+
+.btn-accion.btn-ver:hover {
+    background-color: #1976D2;
+}
+
+.btn-accion.btn-editar {
+    background-color: #FFC107;
+}
+
+.btn-accion.btn-editar:hover {
+    background-color: #FFA000;
+}
+
+.btn-accion.btn-eliminar {
+    background-color: #F44336;
+}
+
+.btn-accion.btn-eliminar:hover {
+    background-color: #D32F2F;
+}
+
+/* Estilos para mensajes de feedback */
+.mensaje {
+    padding: 15px;
+    margin: 20px auto;
+    max-width: 800px;
+    border-radius: 4px;
+    text-align: center;
+}
+
+.mensaje-error {
+    background-color: #ffebee;
+    color: #c62828;
+    border: 1px solid #ef9a9a;
+}
+
+.mensaje-exito {
+    background-color: #e8f5e9;
+    color: #2e7d32;
+    border: 1px solid #a5d6a7;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+    .container {
+        padding: 10px;
+    }
+
+    .input-group {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .input-group label {
+        width: 100%;
+        margin-bottom: 5px;
+    }
+
+    .input-group input[type="text"],
+    .input-group input[type="date"],
+    .input-group select {
+        max-width: 100%;
+        margin-bottom: 10px;
+    }
+
+    .input-group button {
+        width: 100%;
+        margin-left: 0;
+        margin-top: 5px;
+    }
+
+    table {
+        display: block;
+        overflow-x: auto;
+    }
 }
