@@ -15,60 +15,65 @@
     <h1 id="tituloTabla"> Lista de Envíos</h1>
     <div class="filtros">
         <h2>Filtros</h2>
-        <div class="input-group">
-            <label for="filtroPatenteCamion">Patente del camion: </label>
-            <input type="text" name="filtroPatenteCamion" id="filtroPatenteCamion">
-            <input type="button" value="Filtrar" id="botonFiltrar">
-        </div>
-        <div class="input-group">
-            <label for="filtroEstadoCamion">Estado del pedido: </label>
-            <input type="text" name="filtroEstadoCamion" id="filtroEstadoCamion">
-            <input type="button" value="Filtrar" id="botonFiltrar">
-        </div>
-        <div class="input-group">
-            <label for="filtroUltimaParada">Ultima Parada: </label>
-            <input type="text" name="filtroUltimaParada" id="filtroUltimaParada">
-            <input type="button" value="Filtrar" id="botonFiltrar">
-        </div>
-        <div class="input-group">
-            <label for="filtroFecha">Fecha de creacion: </label>
-            <div>
-                <label for="desde">Desde: </label>
-                <input type="date" name="desde" id="filtroFecha">
-                <label for="hasta">Hasta: </label>
-                <input type="date" name="hasta" id="filtroFecha">
-                <input type="button" value="Filtrar" id="botonFiltrar">
+        <form id="formFiltros">
+            <div class="input-group">
+                <label for="filtroPatenteCamion">Patente del camion: </label>
+                <input type="text" name="filtroPatenteCamion" id="filtroPatenteCamion">
             </div>
-        </div>
-        
-        </div>
+            <div class="input-group">
+                <label for="filtroEstado">Estado del envío: </label>
+                <select name="filtroEstado" id="filtroEstado">
+                    <option value="">Todos</option>
+                    <option value="A Despachar">A Despachar</option>
+                    <option value="En Ruta">En Ruta</option>
+                    <option value="Despachado">Despachado</option>
+                </select>
+            </div>
+            <div class="input-group">
+                <label for="filtroUltimaParada">Ultima Parada: </label>
+                <input type="text" name="filtroUltimaParada" id="filtroUltimaParada">
+            </div>
+            <div class="input-group">
+                <label for="filtroFecha">Fecha de creacion: </label>
+                <div>
+                    <label for="filtroFechaDesde">Desde: </label>
+                    <input type="date" name="desde" id="filtroFechaDesde">
+                    <label for="filtroFechaHasta">Hasta: </label>
+                    <input type="date" name="hasta" id="filtroFechaHasta">
+                </div>
+            </div>
+            <div class="botones-filtro">
+                <button type="button" id="botonFiltrar">Filtrar</button>
+                <button type="button" id="botonLimpiar">Limpiar Filtros</button>
+            </div>
+        </form>
+    </div>
 
     <table id="elementosTable">
         <thead>
             <tr>
-                <th>IDpedido</th>
-                <th>IDcamion</th>
+                <th>ID Envío</th>
+                <th>Patente Camión</th>
                 <th>Pedidos</th>
                 <th>Paradas</th>
                 <th>Estado</th>
-                <th>Fecha de creacion</th>
-                <th>Fecha de ultima modificacion</th>
+                <th>Fecha de creación</th>
+                <th>Fecha de última modificación</th>
             </tr>
         </thead>
 
-        <tbody> <!-- Todas las filas de datos -->
-
+        <tbody>
         </tbody>
-        <tfoot> <!-- Todas las filas de pie -->
+        <tfoot>
             <tr>
                 <td colspan="7">
-                    <a href="form-envio.html"><button>Nuevo</button></a>
+                    <a href="form-envio.html"><button type="button">Nuevo</button></a>
                 </td>
             </tr>
         </tfoot>
     </table>
-    <script src="listado-envios.js"></script>
     <script src="../request.js"></script>
+    <script src="listado-envios.js"></script>
 </body>
 
 </html> 

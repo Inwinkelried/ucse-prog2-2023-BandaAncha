@@ -4,127 +4,116 @@ customHeaders.append("Accept", "*/*");
 customHeaders.append("Accept-Encoding", "gzip, deflate, br");
 customHeaders.append("Connection", "keep-alive");
 
+const urlPedidos = "http://localhost:8080/orders/";
+const urlProductos = "http://localhost:8080/products/";
+
 document.addEventListener("DOMContentLoaded", function (event) {
-    //parametros de la url son correctos?
-    const urlParams = new URLSearchParams(window.location.search);
-    const idPedido = urlParams.get("id");
-    const operacion = urlParams.get("tipo");
-
-    if (idPedido != "" && idPedido != null && operacion == "ACEPTAR") {
-        aceptarPedido(idPedido);
-    } else if (idPedido != "" && idPedido != null && operacion == "CANCELAR") {
-        cancelarPedido(idPedido);
-    } else {
-        document
-            .getElementById("botonGuardar")
-            .addEventListener("click", function (event) {
-                guardarPedido(event);
-            });
-
-        obtenerProductos();
-    }
+    cargarProductos();
+    document.getElementById("formulario").addEventListener("submit", function (event) {
+        event.preventDefault();
+        guardarPedido();
+    });
 });
 
-//trae los productos de la db y los muestra en la tabla
-function obtenerProductos() {
-    const urlConFiltro = `http://localhost:8080/products`;
-
+function cargarProductos() {
     makeRequest(
-        `${urlConFiltro}`,
+        urlProductos,
         Method.GET,
         null,
         ContentType.JSON,
-        CallType.PRIVATE,
+        CallType.PUBLIC,
         exitoObtenerProductos,
-        errorPedido
+        errorObtenerProductos
     );
 }
 
-function exitoObtenerProductos(data) {
-    const elementosTable = document //tabla en la que se colocan los envios que se obtienen
-        .getElementById("elementosTable")
-        .querySelector("tbody");
+function exitoObtenerProductos(productos) {
+    const tbody = document.querySelector("#elementosTable tbody");
+    tbody.innerHTML = "";
 
-    data.forEach((elemento) => {
-        const row = document.createElement("tr"); //crear una fila
-
-        row.innerHTML = ` 
-                  <td><input type="checkbox" class="checkbox"></td>
-                  <td>${elemento.id}</td>
-                  <td>${elemento.nombre}</td>
-                  <td><input type="text" placeholder=" Ingrese cantidad"></td>
-                  <td>${elemento.precio_unitario}</td>
-                  <td>${elemento.peso_unitario}</td>
-                 `;
-        elementosTable.appendChild(row);
+    productos.forEach(producto => {
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+            <td>
+                <input type="checkbox" name="productos" value="${producto.id}" 
+                       onchange="toggleCantidadInput(this)">
+            </td>
+            <td>${producto.id}</td>
+            <td>${producto.nombre}</td>
+            <td>
+                <input type="number" name="cantidad_${producto.id}" 
+                       min="1" value="1" disabled 
+                       data-precio="${producto.precio_unitario}"
+                       data-peso="${producto.peso_unitario}">
+            </td>
+            <td>${producto.precio_unitario}</td>
+            <td>${producto.peso_unitario}</td>
+        `;
+        tbody.appendChild(tr);
     });
 }
 
-function obtenerProductosSeleccionados() {
-    var ProductosSeleccionados = [];
-    let checkboxes = document.querySelectorAll(".checkbox");
-    checkboxes.forEach(function (checkbox) {
-        if (checkbox.checked) {
-            // Agregar el producto seleccionado al objeto ProductosSeleccionados
-            var tr = checkbox.closest("tr");
-            var idProducto = tr.cells[1].textContent;
-            var nombreProducto = tr.cells[2].textContent;
-            var cantidad = parseInt(
-                tr.cells[3].getElementsByTagName("input")[0].value
-            );
-            var precioUnitario = parseFloat(tr.cells[4].textContent);
-            var pesoUnitario = parseFloat(tr.cells[5].textContent);
+function errorObtenerProductos(status, response) {
+    console.error("Error al obtener productos:", response);
+    alert("Error al obtener la lista de productos");
+}
 
-            var productoSeleccionado = {
-                id: idProducto,
-                nombre_producto: nombreProducto,
-                cantidad: cantidad,
-                precio_unitario: precioUnitario,
-                peso_unitario: pesoUnitario,
-            };
-
-            ProductosSeleccionados.push(productoSeleccionado);
-        }
-    });
-
-    return ProductosSeleccionados;
+function toggleCantidadInput(checkbox) {
+    const cantidadInput = checkbox.closest("tr").querySelector('input[type="number"]');
+    cantidadInput.disabled = !checkbox.checked;
 }
 
 function guardarPedido() {
-    // Obtiene la fecha y hora actuales
-    const fechaActual = new Date();
-    const fechaFormateada = fechaActual.toISOString(); // Formatea la fecha en formato ISO
+    const destino = document.getElementById("destino").value;
+    if (!destino) {
+        alert("Por favor, ingrese un destino");
+        return;
+    }
 
-    // Arma la data a enviar con las fechas y horas actuales
-    const data = {
-        id: "",
-        productos: obtenerProductosSeleccionados(),
-        destino: document.getElementById("destino").value,
-        estado: "Pendiente",
-        fecha_creacion: fechaFormateada, // Usa la fecha y hora actuales como fecha_creacion
-        modificacion: fechaFormateada, // Usa la fecha y hora actuales como fecha_modificacion
+    const productosSeleccionados = [];
+    const checkboxes = document.querySelectorAll('input[name="productos"]:checked');
+    
+    if (checkboxes.length === 0) {
+        alert("Por favor, seleccione al menos un producto");
+        return;
+    }
+
+    checkboxes.forEach(checkbox => {
+        const tr = checkbox.closest("tr");
+        const cantidadInput = tr.querySelector('input[type="number"]');
+        const idProducto = tr.cells[1].textContent;
+        
+        productosSeleccionados.push({
+            codigo_producto: idProducto,
+            cantidad: parseInt(cantidadInput.value)
+        });
+    });
+
+    const pedido = {
+        destino: destino,
+        productos: productosSeleccionados,
+        estado: "PENDIENTE"
     };
 
-    const urlConFiltro = `http://localhost:8080/orders`;
     makeRequest(
-        `${urlConFiltro}`,
+        urlPedidos,
         Method.POST,
-        data,
+        pedido,
         ContentType.JSON,
-        CallType.PRIVATE,
-        exitoPedido,
-        errorPedido
+        CallType.PUBLIC,
+        exitoGuardarPedido,
+        errorGuardarPedido
     );
 }
 
-function exitoPedido(data) {
-    window.location = window.location.origin + "/web/pedidos/listado-pedidos.html";
+function exitoGuardarPedido(response) {
+    alert("Pedido creado exitosamente");
+    window.location.href = "listado-pedidos.html";
 }
 
-function errorPedido(response) {
-    alert("Error en la solicitud al servidor.");
-    console.log(response.json());
-    throw new Error("Error en la solicitud al servidor.");
+function errorGuardarPedido(status, response) {
+    console.error("Error al guardar pedido:", response);
+    alert("Error al guardar el pedido");
 }
 
 function aceptarPedido(id) {
