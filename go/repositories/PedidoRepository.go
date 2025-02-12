@@ -69,19 +69,28 @@ func (repo PedidoRepository) ActualizarPedido(pedido model.Pedido) (*mongo.Updat
 }
 func (repo PedidoRepository) ObtenerPedidosAprobados() ([]model.Pedido, error) {
 	lista := repo.db.GetClient().Database("BandaAncha").Collection("Pedidos")
-	filtro := bson.M{"Estado": "Aceptado"}
+	filtro := bson.M{"estado": "Aceptado"}
 	cursor, err := lista.Find(context.TODO(), filtro)
+	if err != nil {
+		return nil, err
+	}
 	defer cursor.Close(context.Background())
+
 	var Pedidos []model.Pedido
 	for cursor.Next(context.Background()) {
 		var Pedido model.Pedido
 		err := cursor.Decode(&Pedido)
 		if err != nil {
-			fmt.Printf("Error: %v\n", err)
+			return nil, err
 		}
 		Pedidos = append(Pedidos, Pedido)
 	}
-	return Pedidos, err
+
+	if err := cursor.Err(); err != nil {
+		return nil, err
+	}
+
+	return Pedidos, nil
 }
 func (repository PedidoRepository) ObtenerPedidoPorID(pedidoABuscar model.Pedido) (model.Pedido, error) {
 	collection := repository.db.GetClient().Database("BandaAncha").Collection("Pedidos")

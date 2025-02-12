@@ -127,9 +127,9 @@ function mostrarPedidos(pedidosAMostrar) {
         ${
           pedido.estado === "Pendiente"
             ? `
-            <button onclick="editarPedido('${
+            <button onclick="aceptarPedido('${
               pedido.id || pedido._id
-            }')" class="btn-accion btn-editar">Editar</button>
+            }')" class="btn-accion btn-aceptar">Aceptar</button>
             <button onclick="eliminarPedido('${
               pedido.id || pedido._id
             }')" class="btn-accion btn-eliminar">Eliminar</button>
@@ -193,28 +193,51 @@ function limpiarFiltros() {
 }
 
 // Funciones de acciones
-function editarPedido(id) {
-  window.location.href = `form-pedido.html?id=${id}`;
-}
-
-function eliminarPedido(id) {
-  if (!confirm("¿Está seguro de que desea eliminar este pedido?")) {
+function aceptarPedido(id) {
+  if (!confirm("¿Está seguro de que desea aceptar este pedido?")) {
     return;
   }
 
   makeRequest(
-    `${API_URL}/orders/${id}`,
-    Method.DELETE,
-    null,
+    `${API_URL}/orders/Confirm/${id}`,
+    Method.PUT,
+    {},
     ContentType.JSON,
     CallType.PUBLIC,
     () => {
-      cargarPedidos();
-      mostrarMensaje("Pedido eliminado correctamente");
+      mostrarMensaje("Pedido aceptado correctamente");
+      setTimeout(() => {
+        window.location.reload();
+      }, 1000);
     },
     (error) => {
       console.error("Error:", error);
-      mostrarError("Error al eliminar el pedido");
+      mostrarError("Error al aceptar el pedido");
+    }
+  );
+}
+
+function eliminarPedido(id) {
+  if (!confirm("¿Está seguro de que desea cancelar este pedido?")) {
+    return;
+  }
+
+  makeRequest(
+    `${API_URL}/orders/Cancel/${id}`,
+    Method.PUT,
+    {},
+    ContentType.JSON,
+    CallType.PUBLIC,
+    () => {
+      mostrarMensaje("Pedido cancelado correctamente");
+      // Esperamos un momento para que se vea el mensaje antes de recargar
+      setTimeout(() => {
+        window.location.reload();
+      }, 1000);
+    },
+    (error) => {
+      console.error("Error:", error);
+      mostrarError("Error al cancelar el pedido");
     }
   );
 }
